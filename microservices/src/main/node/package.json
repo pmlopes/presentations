@@ -1,0 +1,11 @@
+{
+  "name": "eventbus-greeting",
+
+  "dependencies": {
+      "vertx3-eventbus-client": "^3.4.1"
+  },
+
+  "scripts": {
+      "start": "node ./index.js"
+  }
+}
