@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Codemotion Amsterdam 2017 - Going React(ive) Fullstack</title>
+
+	<meta name="description" content="What if someone told you that you could use the full capacity of your server? That you could have the same performance on the backend as your react frontend? Don't you believe it? That you could choose the best language/tool for the task and you were not limited by what you already know? In this talk, I'll show you that you can use the full power of React on the frontend and Vert.x on the backend. You will see a fast full stack development workflow with Rollup/Webpack + Babel + React. How you can mix JavaScript with any other language. Build microservice applications in minutes.">
+	<meta name="author" content="Paulo Lopes">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+	<style>
+		.reveal code { font-family: "Fira Code"; }
+		.hl-yellow { color: #cc0; }
+	</style>
+
+	<!-- Theme used for syntax highlighting of code -->
+	<link rel="stylesheet" href="lib/css/atom-one-dark.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+
+	<div class="reveal">
+
+		<div class="slides">
+			<section data-background="img/splash.png">
+			<aside data-markdown class="notes">
+				Hello everyone, my name is Paulo and I am a core developer of the Vert.x project.
+
+				I'm not a Frontend Developer so bear with me on my HTML skills will you? Other than
+				that I will be saying the word reactive a lot during this talk but you shouldn't be
+				afraid.
+			</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h2>Reactive</h2>
+				<ul>
+					<li class="fragment">Message Driven</li>
+					<li class="fragment">Responsive</li>
+				</ul>
+				<aside data-markdown class="notes">
+					Let start with the question: "What is a Reactive"?
+					
+					Google is your friend so you will find that most articles state that:
+
+					* If you adopt a message driven development architecture,
+					* And adopt a programming style around data flows, _or events if you like_
+
+					You're reactive... _(pause)_
+					
+					And this isn't something new, **in fact** it is quite boring...
+				</aside>
+			</section>
+
+			<section data-background="img/boring.jpeg">
+				<aside data-markdown class="notes">
+					Nowadays everyone should have heard about `node.js`, node implements these **2** features.
+
+					These 2 traits are in the so called "**event loop**". The event loop is a **single thread**
+					that watches for events and dispatches then to the right javascript function.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h2>Reactive <span class="hl-yellow">Programming</span></h2>
+				<ul>
+					<li>Message Driven</li>
+					<li>Responsive</li>
+				</ul>
+				<aside data-markdown class="notes">
+					Lets stop here for a moment, we all know that in computer science there are only 2 hard things:
+
+					* cache invalidation
+					* naming things
+
+					What we just describes is in fact, reactive programming. It is a programming paradigm oriented around
+					data flows and the propagation of change. This is the programming model of Node.JS for example.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h2>Reactive <span class="hl-yellow">System</span></h2>
+				<ul>
+					<li>Message Driven</li>
+					<li>Responsive</li>
+					<li class="fragment hl-yellow">Resilient</li>
+					<li class="fragment hl-yellow">Elastic</li>
+				</ul>
+
+				<aside data-markdown class="notes">
+					Reactive systems as described on the reactive manifesto have 2 more traits:
+
+					* It states that the system is resilient against failure
+					* and elastic so it can scale with the load.
+					
+					One project that implements all these traits is `Vert.x`.
+					
+					These 2 traits are provided by vert.x native cluster capabilities and the eventbus that
+					allows distributed messaging, simple and to the point.
+					
+					Vert.x improves the event loop pattern by implementing the **multi event loop pattern**.
+				</aside>				
+			</section>
+
+			<section data-background-video="img/multieventloop.mp4" data-background-video-loop="true" data-background-video-muted="true">
+				<aside data-markdown class="notes">
+					Let me explain what the multi event loop pattern is. Say that my laptop has 4 cores...
+
+					Vert.x will use the full capacity of your environment, all available cores will be used.
+					
+					To solve multi-threading programming issues we guarantee that a message handled in one
+					event loop will sticky to that event loop until it is finished. This guarantees that no
+					other threads interfere with your handlers, saving you many hours of debug and bringing
+					back the fun to programming.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h2>Why Reactive Systems?</h2>
+				<aside data-markdown class="notes">
+					Let's imagine that we want to build an application to calculate Pi using
+					the Gregory-Leibniz Series. The reason for this is that I wanted something to
+					use some CPU and I'm to keep it simple for demo purposes.
+					
+					Sound like a simple app right? (don't worry the Series algorithm is on the Wikipedia!)
+				</aside>
+			</section>
+
+			<section>
+				<section data-background="img/bg.png">
+					<h3>Typical Java app...</h3>
+					<pre style="width: 100%"><code data-trim class="java">
+final String PID = ManagementFactory.getRuntimeMXBean().getName();
+
+@RequestMapping(value = "/work", method = RequestMethod.GET)
+public @ResponseBody String work(HttpServletResponse resp) {
+    resp.setContentType("text/plain");
+    resp.setCharacterEncoding("UTF-8");
+    return "Pi is: " + Pi.calculate(100_000_000);
+}
+
+@RequestMapping(value = "/", method = RequestMethod.GET)
+public @ResponseBody String home(HttpServletResponse resp) {
+    resp.setContentType("text/plain");
+    resp.setCharacterEncoding("UTF-8");
+    return "Current PID: " + PID;
+}
+					</code></pre>
+					<aside data-markdown class="notes">
+						For the untrained eye, you are watching a small **Spring Boot** snippet that implements the application I've just described.
+
+						It sets up 2 method that will handle the request to `"work"` and `"/"`. Under `"work"` it will calculate Pi and under `"/"` it just returns the process id.
+					</aside>
+				</section>
+				<section data-background="img/bg.png">
+					<h3>Typical Node app...</h3>
+					<pre style="width: 100%"><code data-trim class="js">
+var process = require('process');
+var app = require('express')();
+var pi = require('./pi');
+
+app.get('/', function (req, res) {
+  res.send('Request served by ' + process.pid);
+});
+
+app.get('/work', function (req, res) {
+  res.send('Pi = (' + process.pid + ') ' + pi(100000000));
+});
+
+app.listen(8080, function () {
+  console.log('Pi server listening on port 8080!')
+});
+					</code></pre>
+					<aside data-markdown class="notes">
+						For the untrained eye, you are watching a small **Express.JS** app that implements the application I've just described.
+
+						It sets up 2 method that will handle the request to `work` and `/`. Under `work` it will calculate Pi and under `/` it just returns the process id.
+					</aside>
+				</section>
+			</section>
+
+			<section data-background="img/willitbereactive.jpg">
+				<aside data-markdown class="notes">
+					Let's make a small DEMO...
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<video class="stretch" data-autoplay src="img/spring-demo.webm"></video>
+				<aside data-markdown class="notes">
+					Let's run a small demo
+
+					* start the spring boot application
+					* verify that the API works
+					* generate load to our application
+					* attempt to make a call to the API
+
+					As you can see the application is totally unresponsive under load. This point by itself shows that Spring applications are not reactive.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>Typical Vert.x app...</h3>
+				<div style="display: inline-block; width: 50%; float: left;"> 
+				<div><small>
+				<pre style="width: 100%"><code data-trim class="java">
+// Initial Setup                               //
+
+final String PID = ManagementFactory
+    .getRuntimeMXBean().getName();
+
+final Router app = Router.router(vertx);
+				</code></pre></small></div>
+				<div class="fragment"><small>
+				<pre style="width: 100%"><code data-trim class="java">
+// Reactive Trait: RESPONSIVE                  //
+
+// responsive, even under high load this handler
+// can respond to requests
+app.get("/").handler(ctx -> {
+  ctx.response()
+  .putHeader("content-type", "text/plain")
+				</code></pre></small></div>
+				<div class="fragment"><small>
+				<pre style="width: 100%"><code data-trim class="java">
+  // Reactive Trait: RESILIENT                 //
+
+  // resilient, in case of failure the system
+  // recovers
+  .end("Current PID: " + PID);
+});
+				</code></pre></small></div>
+				</div>
+				<div style="display: inline-block; width: 50%;"> 
+				<div class="fragment"><small>
+				<pre style="width: 100%"><code data-trim class="java">
+// Reactive Trait: MESSAGE DRIVEN              //
+
+app.get("/work").handler(ctx -> {
+  // message driven, events can cross boundaries
+  // using a message driven architecture
+  vertx.eventBus().send("pi", null, reply -> {
+    if (reply.failed()) {
+      ctx.fail(reply.cause());
+    } else {
+      ctx.response()
+        .putHeader("content-type", "text/plain")
+        .end("Pi = " + reply.result().body());
+    }
+  });
+});
+				</code></pre></small></div>
+				<div class="fragment"><small>
+				<pre style="width: 100%"><code data-trim class="java">
+// Reactive Trait: ELASTIC                     //
+
+// elastic we can deploy several consumers to
+// scale the application
+vertx.eventBus().consumer("pi", m -> {
+  // can mix blocking and non-blocking code
+  vertx.executeBlocking(
+    fut -> fut.complete(Pi.calculate(100000000)),
+    false,
+    fut -> m.reply(PID + ": " + fut.result()));
+});
+				</code></pre></small></div>
+				</div>
+
+				<aside data-markdown class="notes">
+					Vert.x is a toolkit. It’s not a framework for reactive applications.
+					
+					It’s not a complete solution and we’ll often need to use more libraries with it to
+					form any solution.
+					
+					It is unopionated, it does not assume anything about the other parts in any full solution.
+					
+					It focuses on just one thing, and on doing that thing very well.
+
+					* Let's start with some setup
+					* we make it responsive, even under high load this handler can respond to requests
+					* we make it resilient, in case of failure the system recovers
+					* we make it message-driven by communicating over vert.x eventbus
+					* and we make it elastic, we can deploy several consumers to scale the application
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<video class="stretch" data-autoplay src="img/vertx-demo.webm"></video>
+				<aside data-markdown class="notes">
+					Let's run a small demo
+
+					* start the vertx application
+					* generate load to our application
+					* attempt to make a call to the API, takes some time but eventually will respond
+					* create a new empty node in the cluster
+					* check the current application PID
+					* kill it
+					* observe that the application respawns on the empty node
+					* PID changed
+					* start the first node
+					* observe that the work is now shared across nodes
+
+					This shows that vertx 100% reactive. 
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h2>Reactive Applications</h2>
+				<aside data-markdown class="notes">
+					Up to now I've been covering backend programming, but this talk is full stack, let's look
+					to frontend reactive applications.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>React.js</h3>
+				<ul>
+					<li class="fragment">Simplicity</li>
+					<li class="fragment">Component Based Approach</li>
+					<li class="fragment">Performance and Virtual DOM</li>
+					<li class="fragment">Awesome for SEO</li>
+					<li class="fragment">Testability/Developers tools</li>
+					<li class="fragment">Bonus: Mobile apps with react native</li>
+				</ul>
+				<aside data-markdown class="notes">
+					React.js is taking over front-end development, you all read that on the news, but why?
+
+					* React is a JavaScript library. It’s not a framework. It’s not a complete solution and
+						we’ll often need to use more libraries with React to form any solution. React does not
+						assume anything about the other parts in any full solution. It focuses on just one
+						thing, and on doing that thing very well.
+					* The thing that React does really well is building User Interfaces. A User Interface
+					  is anything we put in front of users to have them interact with a machine.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>React.js</h3>
+				<ul>
+					<li>Simplicity</li>
+					<li>Component Based Approach</li>
+					<li>Performance and Virtual DOM</li>
+					<li class="hl-yellow">Awesome for SEO</li>
+					<li class="hl-yellow">Testability/Developers tools</li>
+					<li class="hl-yellow">Bonus: Mobile apps with react native</li>
+				</ul>
+				<aside data-markdown class="notes">
+					The inquiring minds would be asking: you need Node on the server side to support the last 3 items not a JVM toolkit right?!
+
+					* SEO
+					* Testability
+					* native
+				</aside>
+			</section>
+			
+			<section data-background="img/dawg.jpg">
+				<aside data-markdown class="notes">
+					Not really, I haven't mentioned before but Vert.x is a **polyglot** toolkit, this means you can use other
+					languages than just Java as long as they run on the JVM.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>With Vert.x you can...</h3>
+				<ul>
+					<li>Run JS with your Java,Scala,Kotlin,Groovy,Ruby,etc...</li>
+					<li class="fragment">Mix <b class="hl-yellow">CPU intensive</b> tasks with non CPU intensive</li>
+					<li class="fragment">Call <b>EventBus</b> remote services as if they were local</li>
+					<li class="fragment hl-yellow">drop Node.JS</li>
+				</ul>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>Vert.x Universal App</h3>
+				<div style="display: inline-block; width: 50%; float: left;"> 
+				<div><small>
+				<pre style="width: 100%"><code data-trim class="javascript">
+// Initial Setup                               //
+const Router = require("vertx-web-js/router")
+const StaticHandler = 
+    require("vertx-web-js/static_handler")
+
+import React from 'react'
+import {renderToString} from 'react-dom/server'
+import {match, RouterContext} from 'react-router'
+import routes from '../shared/components/routes'
+
+const app = Router.router(vertx)
+				</code></pre></small></div>
+				<div class="fragment"><small>
+				<pre style="width: 100%"><code data-trim class="javascript">
+// Rest API (Similar to Express.JS)            //
+app.get('/api/post').handler((ctx) => {
+  ctx.response()
+    .putHeader("content-type", "application/json")
+    .end(JSON.stringify(posts))
+})
+
+app.get('/api/post/:id').handler((ctx) => {
+  const id = ctx.request().getParam('id')
+  const post = posts.filter(p => p.id == id)
+  if (post) {
+    ctx.response()
+      .putHeader(
+          "content-type", "application/json")
+      .end(JSON.stringify(post[0]))
+  } else {
+    ctx.fail(404)
+  }
+})
+				</code></pre></small></div>
+				</div>
+				<div style="display: inline-block; width: 50%;"> 
+				<div class="fragment"><small>
+				<pre style="width: 100%"><code data-trim class="javascript">
+// Mix React.JS with Vert.x                    //
+app.get().handler((ctx) => {
+  match({
+      routes: routes,
+      location: ctx.request().uri()
+  }, (err, redirect, props) => {
+
+    if (err) {
+      ctx.fail(err.message);
+    } else if (redirect) {
+      ctx.response()
+        .putHeader("Location",
+          redirect.pathname + redirect.search)
+        .setStatusCode(302)
+        .end();
+    } else if (props) {
+      const routerContextWithData = (
+        &lt;RouterContext
+          {...props}
+          createElement={(Component, props) => {
+            return &lt;Component
+                posts={posts} {...props} /&gt;
+          }}
+        /&gt;)
+				</code></pre></small></div>
+				</div>
+				<aside data-markdown class="notes">
+					I'm writing a React.JS application with Server Side Rendering.
+					
+					Probably you did't noticed but there's no `express.js` or any `node` 
+					specific libraries. What you can see is these `vert.x` requires.
+					
+					* We then define the API, it looks quite similar to `express.js`
+					* and then we mix and match react render and routing code with vert.x code.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>Vert.x Universal App</h3>
+				<div style="display: inline-block; width: 50%; float: left;"> 
+				<div><small>
+				<pre style="width: 100%"><code data-trim class="javascript">
+// Mix React.JS with Vert.x                    //
+app.get().handler((ctx) => {
+  match({
+      routes: routes,
+      location: ctx.request().uri()
+  }, (err, redirect, props) => {
+
+    if (err) {
+      ctx.fail(err.message);
+    } else if (redirect) {
+      ctx.response()
+        .putHeader("Location",
+          redirect.pathname + redirect.search)
+        .setStatusCode(302)
+        .end();
+    } else if (props) {
+      const routerContextWithData = (
+        &lt;RouterContext
+          {...props}
+          createElement={(Component, props) => {
+            return &lt;Component
+                posts={posts} {...props} /&gt;
+          }}
+        /&gt;)
+				</code></pre></small></div>
+				</div>
+				<div style="display: inline-block; width: 50%;"> 
+				<div class="fragment"><small>
+				<pre style="width: 100%"><code data-trim class="javascript">
+// Render React.js without Node                //
+      const appHtml =
+          renderToString(routerContextWithData)
+
+      ctx.response()
+        .putHeader("content-type", "text/html")
+        .end(`&lt;!DOCTYPE html&gt;
+              &lt;html lang="en"&gt;
+              &lt;head&gt;
+                &lt;meta charset="UTF-8"&gt;
+                &lt;title&gt;Universal Blog&lt;/title&gt;
+              &lt;/head&gt;
+              &lt;body&gt;
+                &lt;div id="app"&gt;${appHtml}&lt;/div&gt;
+                &lt;script
+                    src="/bundle.js"&gt;&lt;/script&gt;
+              &lt;/body&gt;
+              &lt;/html&gt;`)
+    } else {
+      ctx.next()
+    }
+  })
+})
+				</code></pre></small></div>
+				<div class="fragment"><small>
+				<pre style="width: 100%"><code data-trim class="javascript">
+// Serve resources and start                   //
+app.get().handler(StaticHandler.create().handle)
+
+vertx.createHttpServer()
+    .requestHandler(app.accept).listen(8080)
+				</code></pre></small></div>
+				</div>
+				<aside data-markdown class="notes">
+					Remember what I've said about Vert.x and React.js?
+
+					* They are both just a library, not a framework.
+					* They're not a complete solution and we’ll often need to use more libraries to form any solution.
+					* They do not assume anything about the other parts in any full solution.
+					* They focus on just one thing, and on doing that thing very well.
+
+					So we do backend very well and frontend also very well.
+
+					Finally we just need to serve the resources to the browser and bind to a HTTP server.
+				</aside>
+			</section>
+			
+			<section data-background="img/bg.png">
+				<video class="stretch" data-autoplay src="img/serversiderendering-slow.webm"></video>
+				<aside data-markdown class="notes">
+					Let's run a small demo
+
+					* here is my browser with the app
+					* verify that the html contains the base application, you'll need this for search engine optimization
+					* and now lets look at the timeline
+					* the application html is rendered from the beginning, your users will not have to wait to see content
+					* the js is loading and takes some time
+					* once loaded you see that the html is re-hydrated and regenerated from the REST call to the server.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<img class="stretch" src="img/fastsite1.png" />
+				<aside data-markdown class="notes">
+					It is important to be fast, not just for the sake of it! but because...
+				</aside>
+			</section>
+
+			<section data-background="img/was-that-it.gif">
+				<h2>What about microservices?</h2>
+
+				<aside data-markdown class="notes">
+					All I can say about microservices is that Vert.x and its reactive features are a great match. We go
+					even further and allow you to mix any language you like as well any platform you like.
+
+					Say for example that you have a application composed of:
+					
+					* A microservice in vert.x
+					* React.js realtime frontend
+					* And a microservice in Node.JS
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>In your Vert.x app...</h3>
+				<pre style="width: 100%"><code data-trim data-noescape class="java">
+final Router router = Router.router(vertx);
+
+// Allow events for the designated addresses
+BridgeOptions sockjsConfig = new BridgeOptions()
+  .addInboundPermitted(new PermittedOptions().setAddress("greetings"))
+  .addOutboundPermitted(new PermittedOptions().setAddress("greetings"));
+
+// Create the event bus bridge and add it to the router.
+router
+  .route("/eventbus/*")
+  .handler(SockJSHandler.create(vertx).bridge(sockjsConfig));
+
+router.route().handler(StaticHandler.create());
+vertx.createHttpServer().requestHandler(router::accept).listen(8080);
+				</code></pre>
+				<aside data-markdown class="notes">
+					1. In this application we create a web router
+					2. It accepts `sockJS` connections bridges them to the eventbus.
+					3. It allows messages on the eventbus addressed to `greetings`, to
+					   be both sent and received on the bridged clients.
+					4. Finally we server some static content and start a HTTP server.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>In your Vert.x app (2)...</h3>
+				<pre style="width: 100%"><code data-trim data-noescape class="java">
+...
+router.route().handler(StaticHandler.create());
+vertx.createHttpServer().requestHandler(router::accept).listen(8080);
+
+EventBus eb = vertx.eventBus();
+
+vertx.setPeriodic(500, t ->
+  eb.send("greetings",
+    new JsonObject().put("msg", "Greetings from Vert.x!")));
+				</code></pre>
+				<aside data-markdown class="notes">
+					Since this is just a small demo we need to produce a stream of data,
+					for this we just add a timer to periodically send a message to the eventbus
+					address `greetings` with a simple json message: `Greetings from Vert.x!`
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>In your React app...</h3>
+				<pre style="width: 100%"><code data-trim data-noescape class="js">
+import EventBus from 'vertx3-eventbus-client'
+
+const eb = new EventBus(`//${window.location.host}/eventbus`)
+
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { messages: [] }
+  }
+  render() {
+    let listItems = this.state.messages.map(message => {
+      return ( &lt;li>{ `${message}` }&lt;/li> )
+    })
+    return ( &lt;div>&lt;ul>{listItems}&lt;/ul>&lt;/div> )
+  }
+				</code></pre>
+				<aside data-markdown class="notes">
+					1. We then create a minimal react application
+					2. We get a reference to the server Eventbus
+					3. We create a component
+					4. We specify that it should have a state that consists of
+					   an array of messages
+					5. And we implement a render function with JSX
+					6. But there is no code to get the realtime data yet...
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>In your React app (2)...</h3>
+				<pre style="width: 100%"><code data-trim class="js">
+...
+class App extends React.Component {
+  ...
+  componentWillMount() {
+    Rx.Observable
+      .create((observer) => {
+        eb.registerHandler('greetings', (err, msg) => {
+          observer.next(msg.body.msg);
+        });
+      })
+      .subscribe(message => {
+        this.state.messages.unshift(message);
+        this.setState({ messages: this.state.messages });
+      });
+  }
+				</code></pre>
+				<aside data-markdown class="notes">
+					1. We will use Reactive Extensions to fetch the data
+					2. We register a handler for `greetings`
+					3. On a greeting we pass it to the observer
+					4. On changes we update the react state
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>In your Node app...</h3>
+				<pre style="width: 100%"><code data-trim class="js">
+var EventBus = require('vertx3-eventbus-client');
+
+var eb = new EventBus('http://localhost:8080/eventbus');
+
+eb.onerror = function (err) {
+  console.error(err);
+};
+
+eb.onopen = function () {
+  setInterval(function () {
+    eb.send('greetings', {msg: 'Hello from Node.js!'});
+  }, 500);
+};
+				</code></pre>
+				<aside data-markdown class="notes">
+					So lets add some native Node.JS to the application
+
+					1. First we create a link to the eventBus
+					2. then we connect to it
+					3. we do some error handling
+					4. once we are connected we start sending `greeting` messages from node
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h3>In your React app (3)...</h3>
+				<pre style="width: 100%"><code data-trim data-noescape class="js">
+...
+class App extends React.Component {
+...
+  static sayHello(e) {
+    e.preventDefault();
+    eb.send('greetings', {msg: 'Hello from React.js!'})
+  }
+
+  render() {
+    return (
+      ...
+      &lt;button onClick={App.sayHello}>Say Hello!&lt;/button>
+				</code></pre>
+				<aside data-markdown class="notes">
+					Lets make things more interesting and also allow greetings from your browser.
+
+					Have you seen what just happend? No? This just shows that you can create a cluster with all your clients!
+
+					Browsers plus Servers are not both producers and consumers of the eventbus all actors can provide computational power to your application.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<video class="stretch" data-autoplay src="img/multiarch.webm"></video>
+				<aside data-markdown class="notes">
+					Final demo
+
+					* we compile the react code and bundle the vertx app
+					* start the web application
+					* note that the messages are received in realtime, through websockets, no pooling
+					* start the nodejs application
+					* this is really node running
+					* and we can play with it by starting/stopping node
+				</aside>
+			</section>
+
+			<section data-background="img/Oprah.gif">
+				<h2 class="fragment">You get a the FREE book!</h2>
+				<div class="fragment" style="display: inline-block; width: 50%; float: left;"> 
+					<img src="img/book.png"/>
+				</div>
+				<div class="fragment" style="display: inline-block; width: 50%"> 
+					<a href="https://developers.redhat.com/promotions/building-reactive-microservices-in-java/"><img src="img/vertx-book.svg"/></a>
+				</div>
+
+				<aside data-markdown class="notes">
+					You know what? I feel like Oprah!
+					You get a book, you get a book, and you get a book!
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h2>What about callback hell?</h2>
+				<aside data-markdown class="notes">
+					Probably you're not yet convinced that Reactive development is fun. You're probably thinking of:
+					
+					`What about callback hell?` We've all seen it on blog and articles complaining that async programming is unreadable.
+				</aside>
+			</section>
+
+
+			<section data-background="img/bg.png"data-transition="slide-in fade-out">
+				<h3>Async code:</h3>
+				<pre style="width: 100%"><code data-trim data-noescape class="java">
+route().handler(ctx -> {
+    ctx.user().isAuthorized("READ", res -> {
+        db.getConnection(conn -> {
+            conn.query("select * from test", rs -> {
+                conn.close( v -> {
+                    ctx.response.end(rs.encode());
+                });
+            });
+        });
+    });
+});
+				</code></pre>
+				<aside data-markdown class="notes">
+					You can see right away that as your application logic get more complex this piramid of doom will arise...
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png" data-transition="fade-in fade-out">
+				<h3>RX to the rescue</h3>
+				<pre style="width: 100%"><code data-trim data-noescape class="java">
+route().handler(ctx -> {
+  ctx.user().rxIsAuthorized("READ")
+    .flatMap(r -> db.rxGetConnection(conn))
+    .flatMap(c -> c.rxQuery("select * from test"))
+    .doAfterTerminate(c::close)
+    .subscribe(rs -> ctx.response.end(rs.encode()));
+});
+				</code></pre>
+				<aside data-markdown class="notes">
+					I've good news, it's a solved problem, remember I used RX with React before?
+
+					RX can be used on the server side too. We can flatten the callbacks to a chain of method invocations quite easily.
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png" data-transition="fade-in fade-out">
+				<h3>Or with (JS) Vert.x app...</h3>
+				<pre style="width: 100%"><code data-trim data-noescape class="js">
+route().handler(async (ctx) -> {
+  if (await ctx.user().isAuthorized("READ")) {
+    try {
+      let c = await db.getConnection()
+      let rs = await c.query("select * from test")
+      ctx.response.end(rs.encode())
+    } finally {
+      c.close()
+    }
+  }
+});
+				</code></pre>
+				<aside data-markdown class="notes">
+					And for the braves you can even use ES7 async-await to make you code flat again!
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png" data-transition="fade-in slide-out">
+				<h3>Or with (Vert.x Sync) Vert.x app...</h3>
+				<pre style="width: 100%"><code data-trim data-noescape class="java">
+route().handler(fiberHandler(ctx -> {
+  if (awaitResult(h -> ctx.user().isAuthorized("READ", h))) {
+    try (SQLConnection conn = awaitResult(jdbc::getConnection)) {
+      ResultSet res =
+        awaitResult(h -> conn.query("select * from test", h));
+      ctx.response.end(rs.encode());
+    }			
+  }
+}));
+				</code></pre>
+				<aside data-markdown class="notes">
+					Or use fibers on the JVM if you prefer!
+				</aside>
+			</section>
+
+			<section data-background="img/fun.gif">
+			  <h2 class="fragment">Reactive is Fun!</h2>
+				<aside data-markdown class="notes">
+					So let me just conclude that Vert.x brings the fun to server side programming again!
+
+					This is just the tip of the iceberg, reactive systems and applications are here to stay!
+
+					You can use small libraries like `vert.x` + `react.js` for building great things!
+				</aside>
+			</section>
+
+			<section data-background="img/bg.png">
+				<h2>How do I start?</h2>
+				<ul>
+					<li><a href="http://vertx.io">http://vertx.io</a></li>
+					<li class="fragment"><Group></Group> <a href="https://groups.google.com/forum/#!forum/vertx">https://groups.google.com/forum/#!forum/vertx</a></li>
+					<li class="fragment">Github <a href="https://github.com/vert-x3/">https://github.com/vert-x3</a></li>
+					<li class="fragment">Twitter <a href="https://twitter.com/vertx_project">@vertx_project</a></li>
+					<li class="fragment">Youtube <a href="https://www.youtube.com/vertx_project">https://www.youtube.com/vertx_project</a></li>
+					<li class="fragment">Book <a href="https://developers.redhat.com/promotions/building-reactive-microservices-in-java/">https://t.co/m2w7puPba8</a>
+				</ul>
+			</section>
+
+			<section data-background="img/bg.png" style="text-align: left">
+				<h1>The End</h1>
+				<ul>
+					<li>Thanks you!</li>
+					<li>Follow me on twitter <a href="https://twitter.com/jetdrone">@jetdrone</a></li>
+					<li>Visit my blog <a href="http://jetdrone.xyz">http://jetdrone.xyz</a></li>
+					<li>Start your project <a href="http://jetdrone.xyz/vertx-starter">http://jetdrone.xyz/vertx-starter</a></li>
+				</ul>
+			</section>
+		</div>
+
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+						  // More info https://github.com/hakimel/reveal.js#configuration
+						  Reveal.initialize({
+							  // width: "60%",
+							  // height: "60%",
+
+							  controls: true,
+							  progress: true,
+							  history: true,
+							  center: true,
+
+							  transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+							  // More info https://github.com/hakimel/reveal.js#dependencies
+							  dependencies: [
+								  { src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+								  { src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+								  { src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+								  { src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+								  { src: 'plugin/zoom-js/zoom.js', async: true },
+								  { src: 'plugin/notes/notes.js', async: true }
+							  ]
+						  });
+	</script>
+
+</body>
+
+</html>
