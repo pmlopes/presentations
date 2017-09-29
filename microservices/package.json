@@ -1,0 +1,20 @@
+{
+  "name": "reactive",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Paulo Lopes",
+  "license": "MIT",
+  "dependencies": {
+    "vertx3-eventbus-client": "3.4.1",
+    "rxjs": "^5.3.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "devDependencies": {
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "webpack": "^2.2.0"
+  }
+}
