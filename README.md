@@ -1,9 +1,3 @@
-=========================
-
-* Speaker   : [Paulo Lopes](https://pixels.camp/pmlopes)
-* Length    : *~30 mins*
-* Language  : *English*
-
 Description
 -----------
 
