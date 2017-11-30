@@ -1,0 +1,16 @@
+{
+  "name": "test",
+  "version": "0.0.1",
+  "private": true,
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-react": "^6.24.1",
+    "react": "15.6.1",
+    "react-dom": "15.6.1",
+    "react-router": "3.0.5",
+    "webpack": "2.5.1",
+    "webpack-vertx-plugin": "^0.0.5"
+  }
+}

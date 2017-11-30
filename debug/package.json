@@ -1,0 +1,9 @@
+{
+  "name": "debug",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "vertx.d": "mvn -DoutputDirectory=. -Dmdep.unpack.includes=node_modules/**/* dependency:unpack-dependencies",
+    "test": "mvn compile exec:java"
+  }
+}
