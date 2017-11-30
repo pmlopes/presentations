@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+
+				<section>
+					<h2>Scale to the next million with JavaScript</h2>
+					<h4>Paulo Lopes <small>@jetdrone</small></h4>
+				</section>
+
+				<section>
+					<h3>Agenda</h3>
+					<ul>
+						<li>Who am I?</li>
+						<li>Debunk myths about javascript on the JVM!</li>
+						<li>Making JavaScript great again!</li>
+					</ul>
+				</section>
+
+				<section>
+					<h3>I am...</h3>
+					<ul>
+						<li>Paulo Lopes</li>
+						<li class="fragment">Principal Software Engineer @ RedHat</li>
+						<li class="fragment">Eclipse Vert.x Core Developer</li>
+						<li class="fragment">Twitter: @jetdrone</li>
+						<li class="fragment">Github: pmlopes</li>
+					</ul>
+				</section>
+
+				<section>
+					<h1>Section 1</h1>
+					<h3>MythBusters</h3>
+				</section>
+
+				<section data-background-video="giphy.mp4">
+					<aside class="notes">
+						Debunk myths about javascript on the JVM!
+					</aside>
+					<aside class="notes" data-markdown>
+						In this section I'll talk about a couple of things young developers say about
+						the JVM but are utterly wrong!
+					</aside>
+				</section>
+
+				<section>
+					<h1>1. Java is slow!</h1>
+					<aside class="notes" data-markdown>
+						```
+						cd slow
+
+						mvn clean package
+						java -jar target/slow-0.0.1-fat.jar
+						wrk -t12 -c400 -d30s http://127.0.0.1:8080
+
+						cd src/main/node
+						node index.js
+						wrk -t12 -c400 -d30s http://127.0.0.1:3000
+						```
+					</aside>
+				</section>
+
+				<section data-background-iframe="https://www.techempower.com/benchmarks/previews/round15/#section=data-r15&hw=ph&test=db">
+					<aside class="notes" data-markdown>
+						I know you will not trust me as I wrote the code but
+						let me show you something...
+					</aside>
+				</section>
+
+				<section>
+					<h1>2. Java uses too much RAM!</h1>
+					<aside class="notes" data-markdown>
+						```
+						cd reactive
+						sudo ./run-server.sh
+						sudo ./run-client.sh
+
+						sudo jps
+						../ps_mem.py -p pid
+
+						sudo ./run-server.sh
+						sudo ./run-node.sh
+						sudo ps -ef|grep "node index.js"
+						../ps_mem.py -p pid
+						```
+					</aside>
+				</section>
+
+				<section>
+					<h1>3. Java is too verbose</h1>
+					<aside class="notes">
+						This is another one, since we're talking JS lets compare the
+						hello world of a HTTP server both in Node and Vert.x
+					</aside>
+				</section>
+
+				<section>
+					<h3>Node</h3>
+					<pre><code class="js" data-trim>
+							const express = require('express')
+							const app = express()
+							
+							app.get('/', (req, res) =>
+							  res.send(JSON.stringify({msg: 'Hello World!'})))
+							
+							app.listen(3000, () =>
+							  console.log('Example app listening on port 3000!'))
+					</code></pre>
+				</section>
+
+				<section>
+					<h3>Vert.x</h3>
+					<pre><code class="js" data-trim>
+							vertx
+							.createHttpServer()
+							.requestHandler(function (req) {
+							  req.response().end(JSON.stringify({msg: 'Hello World!'}))
+							})
+							.listen(8080);
+						  
+						  console.log('Server listening: http://127.0.0.1:8080/');
+					</code></pre>
+				</section>
+
+				<section>
+					<h1>4. You can't use</h1>
+					<pre style="text-align:center; white-space:nowrap;">${js framework here}</pre>
+					<h2>server side rendering!</h2>
+					<aside class="notes" data-markdown>
+						```
+						cd ssr
+						npm i
+						webpack
+						java -jar target/ssr-0.0.1-fat.jar
+						```
+					</aside>
+				</section>
+
+				<section>
+					<h1>Section 2</h1>
+					<h3>Make JS Great Again</h3>
+				</section>
+
+				<section>
+					<h1>1. IDE support is s&amp;#$!<small>*</small></h1>
+					<aside class="notes" data-markdown>
+						```
+						cd ide
+						2 comments on top
+						1 comment on bottom
+						add the line: /// &lt;reference types="vertx-runtime" /&gt;
+						```
+					</aside>
+				</section>
+
+				<section>
+					<h1>3. Callback hell is hell!</h1>
+					<aside class="notes" data-markdown>
+						```
+						cd async-await
+						webpack
+						java -jar target/async-await-0.0.1-fat.jar
+						http localhost:8080
+						```
+					</aside>
+				</section>
+
+				<section>
+					<h1>3. You can't debug JS on the JVM!</h1>
+					<aside class="notes" data-markdown>
+						```
+						IntelliJ
+						cd debug
+						create runner: io.vertx.core.Launcher run main.js
+						http localhost:8080/api
+						stop, start in debug
+						http localhost:8080/api
+						stop
+						npm test
+						```
+					</aside>
+				</section>
+
+				<section>
+					<h1>3. Starting a Java project is hard</h1>
+					<h2>   Compile is a waste of time!</h2>
+					<aside class="notes" data-markdown>
+						Let me show you something...
+					</aside>
+				</section>
+
+				<section>
+					<a href="http://vertx-starter.jetdrone.xyz">http://vertx-starter.jetdrone.xyz</a>
+				</section>
+
+				<section data-background-iframe="http://vertx-starter.jetdrone.xyz">
+					<aside class="notes" data-markdown>
+						Let's create a vuejs app in kotlin
+						```
+						unzip boring.zip
+						sudo sysctl fs.inotify.max_user_watches=524288
+						npm i
+						webpack --config webpack.config.vendor.js
+						webpack
+						xdg-open http://localhost:8080
+						stop
+						webpack --watch
+						xdg-open http://localhost:8080
+						edit home.vue.html
+						```
+					</aside>
+				</section>
+
+				<section>
+					<h1>What are you waiting for?</h1>
+				</section>
+	
+				<section style="text-align: left">
+					<h1>Thank you!</h1>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
