@@ -319,7 +319,7 @@ Well...
 
 * https://www.jetdrone.xyz
 * https://twitter.com/jetdrone
-* https://github.com/vert-x3
+* http://vertx.io
 * https://www.reactivemanifesto.org
 * http://principlesofchaos.org
 * https://github.com/dastergon/awesome-chaos-engineering
