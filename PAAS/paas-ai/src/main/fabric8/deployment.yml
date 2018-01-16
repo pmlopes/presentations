@@ -1,0 +1,15 @@
+spec:
+  template:
+    spec:
+      containers:
+        - name: vertx
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: JAVA_OPTIONS
+              value: '-Dvertx.cacheDirBase=/tmp -Dvertx.jgroups.config=default-configs/default-jgroups-kubernetes.xml -Djava.net.preferIPv4Stack=true'
+            - name: JAVA_ARGS
+              value: '-cluster'

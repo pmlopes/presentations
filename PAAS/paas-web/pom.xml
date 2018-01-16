@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>xyz.jetdrone</groupId>
+    <artifactId>dev-070</artifactId>
+    <version>1.0.0</version>
+  </parent>
+
+  <artifactId>paas-web</artifactId>
+  <packaging>jar</packaging>
+
+  <name>P.A.A.S. Web</name>
+  <description>Pong As A Service Web Verticle</description>
+
+  <properties>
+    <vertx.verticle>xyz.jetdrone.paas.web.WebVerticle</vertx.verticle>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-web</artifactId>
+      <version>3.5.0</version>
+    </dependency>
+  </dependencies>
+
+</project>
