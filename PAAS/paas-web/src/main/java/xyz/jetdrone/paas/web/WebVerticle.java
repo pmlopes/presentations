@@ -18,7 +18,8 @@ public class WebVerticle extends AbstractVerticle {
     // Allow events for the designated addresses in/out of the event bus bridge
     BridgeOptions opts = new BridgeOptions()
       .addInboundPermitted(new PermittedOptions().setAddress("paas.ai"))
-      .addOutboundPermitted(new PermittedOptions().setAddress("paas.ai"));
+      .addOutboundPermitted(new PermittedOptions().setAddress("paas.ai"))
+      .setReplyTimeout(1000);
 
     // Create the event bus bridge and add it to the app.
     SockJSHandler ebHandler = SockJSHandler.create(vertx).bridge(opts);

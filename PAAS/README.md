@@ -1,8 +1,22 @@
+cd PAAS
 
-oc login -u system:admin
-oc adm policy add-cluster-role-to-user cluster-admin developer
-oc login -u developer
-oc adm policy add-scc-to-user privileged system:serviceaccount:$(oc project -q):default
-oc edit scc restricted
+oc cluster up
 
-allowHostDirVolumePlugin: true
+oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -n $(oc project -q)
+
+cd paas-web
+
+mvn -Popenshift clean fabric8:deploy
+
+cd ../paas-ai
+
+mvn -Popenshift clean fabric8:deploy
+
+
+pumba --random --interval 1m kill --signal SIGKILL re2:.*paas.*
+
+pumba netem --duration 5m --interface eth0 delay \
+      --time 3000 \
+      --jitter 30 \
+      --correlation 20 \
+    re2:.*paas.*

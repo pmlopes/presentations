@@ -1,5 +1,5 @@
 var animate = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || function (callback) {
-  window.setTimeout(callback, 1000 / 30)
+  window.setTimeout(callback, 1000 / 60)
 };
 
 var canvas = document.getElementById('canvas');
@@ -7,8 +7,8 @@ var context = canvas.getContext('2d');
 
 var eventBus = new EventBus('//' + window.location.host + '/eventbus', {
   vertxbus_reconnect_attempts_max: Infinity, // Max reconnect attempts
-  vertxbus_reconnect_delay_min: 1000, // Initial delay (in ms) before first reconnect attempt
-  vertxbus_reconnect_delay_max: 5000, // Max delay (in ms) between reconnect attempts
+  vertxbus_reconnect_delay_min: 500, // Initial delay (in ms) before first reconnect attempt
+  vertxbus_reconnect_delay_max: 2500, // Max delay (in ms) between reconnect attempts
   vertxbus_reconnect_exponent: 2, // Exponential backoff factor
   vertxbus_randomization_factor: 0.5 // Randomization factor between 0 and 1
 });
@@ -20,6 +20,7 @@ eventBus.onopen = function () {
   var player = new Player();
   var ball = new Ball(200, 300);
   var computer = new Computer(ball);
+  var slowDown = 2;
 
   var render = function () {
     context.fillStyle = "#FF00FF";
@@ -29,13 +30,17 @@ eventBus.onopen = function () {
     ball.render();
   };
 
+  var frameCounter = 0;
+
   var update = function () {
     player.update();
     ball.update(player.paddle, computer.paddle);
   };
 
   var step = function () {
-    update();
+    if (++frameCounter%slowDown===0) {
+      update();
+    }
     render();
     animate(step);
   };
@@ -75,18 +80,21 @@ eventBus.onopen = function () {
     var self = this;
 
     var update = function () {
-      setTimeout(function () {
-        eventBus.send('paas.ai', {ball: ball, paddle: self.paddle}, function (err, reply) {
-          if (!err) {
-            self.paddle.move(reply.body.diff, 0);
-            if (reply.body.x != null) {
-              self.paddle.x = reply.body.x;
-            }
+      eventBus.send('paas.ai', {ball: ball, paddle: self.paddle}, function (err, reply) {
+        if (!err) {
+          slowDown = 2;
+          self.paddle.move(reply.body.diff, 0);
+          if (reply.body.x != null) {
+            self.paddle.x = reply.body.x;
           }
-          // re-enqueue the update
+        } else {
+          slowDown = 8;
+        }
+        // re-enqueue the update
+        setTimeout(function () {
           update();
-        });
-      }, 30);
+        }, 30 * slowDown);
+      });
     };
     // start the AI
     update();

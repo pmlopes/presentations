@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "description": "Bringing order to the chaos with Eclipse Vert.x",
   "scripts": {
-    "start": "reveal-md index.md -w",
-    "build": "reveal-md index.md --static _site --static-dirs images"
+    "start": "reveal-md index.md --css custom.css",
+    "watch": "reveal-md index.md --css custom.css -w",
+    "build": "reveal-md index.md --css custom.css --static _site"
   },
   "dependencies": {
     "reveal-md": "^1.1.0"

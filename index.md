@@ -22,6 +22,15 @@ highlightTheme: "zenburn"
 
 ---
 
+<!-- .slide: style="text-align: left;" -->
+## Agenda
+
+1. Reactive 101           <!-- .element: class="fragment grow" -->
+2. Eclipse Vert.x 101     <!-- .element: class="fragment grow" -->
+3. Chaos Engineering 101  <!-- .element: class="fragment grow" -->
+
+---
+
 ## Hands-up time
 
 * Reactive programming  <!-- .element: class="fragment grow" -->
@@ -278,9 +287,22 @@ eventBus.registerHandler("paas.ai", msg => {
 
 ---
 
+### Real World events
+
+* [<span class="fragment">?</span>] Server down
+* [<span class="fragment">?</span>] Network issues
+* [<span class="fragment">?</span>] DDoS
+* [<span class="fragment">?</span>] Popularity
+
+<aside class="notes">
+  The first 2 can be simulated with chaos tools, the last ones with load testing tools like wrk
+</aside>
+
+---
+
 ### Going to Production
 
-Well...
+<!-- .element: class="stretch" --> ![No Panic!](images/no-panic.jpg)
 
 ---
 
@@ -292,17 +314,7 @@ Well...
 
 ---
 
-### Principles of Chaos Engineering
-
-* Build a Hypothesis around Steady State Behavior
-* Vary Real-world Events                          <!-- .element: class="fragment grow" -->
-* Run Experiments in Production                   <!-- .element: class="fragment grow" -->
-* Automate Experiments to Run Continuously        <!-- .element: class="fragment grow" -->
-* Minimize Blast Radius
-
----
-
-### Tooling
+### Run Experiments in Production
 
 * https://github.com/netflix/chaosmonkey
 * <!-- .element: class="fragment grow" --> https://github.com/gaia-adm/pumba
@@ -310,7 +322,32 @@ Well...
 
 ---
 
+### Important commands
+
+```sh
+# Kill randomly containers
+pumba --random --interval 10s \
+  kill --signal SIGKILL \
+  re2:.*paas.*
+
+# Lose packets every 3s+/-30ms
+pumba netem --interface eth0 \
+  delay --time 3000 --jitter 30 --correlation 20 \
+  re2:.*paas.*
+```
+
+---
+
 # DEMO
+
+---
+
+### Minimize Blast Radius
+
+* [<span class="fragment">X</span>] scale horizontally
+* [<span class="fragment">X</span>] scale across data centers
+* [<span class="fragment">X</span>] use circuit breakers
+* <!-- .element: class="fragment" -->[X] **embrace failure**
 
 ---
 
@@ -319,7 +356,7 @@ Well...
 
 * https://www.jetdrone.xyz
 * https://twitter.com/jetdrone
-* http://vertx.io
+* https://github.com/vert-x3
 * https://www.reactivemanifesto.org
 * http://principlesofchaos.org
 * https://github.com/dastergon/awesome-chaos-engineering
