@@ -101,7 +101,17 @@
           </executions>
           <configuration>
             <skip>${fabric8.skip}</skip>
-            <resources>
+              <images>
+                <image>
+                  <name>java-jboss-openjdk8-jdk</name>
+                  <build>
+                  <runCmds>
+                    <run>yum install iproute</run>
+                  </runCmds>
+                  </build>
+                </image>
+              </images>
+              <resources>
               <labels>
                 <pod>
                   <property>
