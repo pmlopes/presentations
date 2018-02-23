@@ -17,7 +17,7 @@ mvn clean package
 Run locally (bare metal):
 
 ```
-java -jar target/paas-web-1.0.0-fat.jar -cluster
+mvn vertx:run
 ```
 
 ### AI Module
@@ -35,7 +35,7 @@ mvn clean package
 Run locally (bare metal):
 
 ```
-java -jar target/paas-web-1.0.0-fat.jar -cluster
+mvn vertx:run
 ```
 
 ### AI Module (from Node.JS)
@@ -70,12 +70,8 @@ oc policy add-role-to-user view system:serviceaccount:$(oc project -q):default -
 
 ### Deploy the modules
 
-The parent `pom` defines 2 profiles the openshift profile will switch the default cluster manager
-to Infinispan (the supported cluster manager for OC/Kubernetes) and the build and deployment are
-the same across modules:
-
 ```
-mvn -Popenshift clean fabric8:deploy
+mvn clean fabric8:deploy
 ```
 
 ### Play with Pumba

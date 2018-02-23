@@ -1,7 +1,7 @@
 {
   "private": true,
   "dependencies": {
-    "vertx3-eventbus-client": "^3.5.0"
+    "vertx3-eventbus-client": "^3.5.1"
   },
   "main": "index.js",
 
