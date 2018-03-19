@@ -2,9 +2,9 @@ spec:
   strategy:
     type: Rolling
     rollingParams:
-      updatePeriodSeconds: 10
-      intervalSeconds: 20
-      timeoutSeconds: 600
+      updatePeriodSeconds: 5
+      intervalSeconds: 10
+      timeoutSeconds: 60
       maxUnavailable: 1
       maxSurge: 1
   template:

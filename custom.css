@@ -2,3 +2,8 @@ img {
 	border: none !important;
 	box-shadow: none !important;
 }
+
+.reveal code {
+	font-family: "Fira Code";
+}
+

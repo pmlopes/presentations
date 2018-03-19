@@ -79,7 +79,7 @@ mvn clean fabric8:deploy
 Once pumba is installed on your system you can simulate module crashes:
 
 ```
-pumba --random --interval 1m kill --signal SIGKILL re2:.*paas.*
+pumba --random --interval 1m kill --signal SIGKILL re2:.*POD_paas-ai.*
 ```
 
 Or network errors:

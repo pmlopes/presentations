@@ -1,4 +1,4 @@
-# dev 070 meetup
+# chaos meetup
 
 The root directory contains the sources for the slides
 

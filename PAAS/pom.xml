@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>xyz.jetdrone</groupId>
-  <artifactId>dev-070</artifactId>
+  <artifactId>chaos</artifactId>
   <version>1.0.0</version>
 
   <packaging>pom</packaging>
