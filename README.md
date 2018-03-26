@@ -54,7 +54,7 @@ Notes:
 
 ---
 
-## Sounds like a Linked List!
+## A Linked List!
 
 ```java
 class Block {
@@ -125,7 +125,7 @@ class Block {
 
 ---
 
-* <!-- .element: class="fragment grow" --> Will use Eclipse Vert.x
+* Will use Eclipse Vert.x
 * <!-- .element: class="fragment grow" --> It's a **Reactive System**
 * <!-- .element: class="fragment grow" --> It's **polyglot**
 * <!-- .element: class="fragment grow" --> The Eventbus lets me connect anything together
@@ -192,9 +192,9 @@ class Block {
 
 ### I'm cool I'm a Web3J user
 
-* web3j is a lightweight
-* reactive
-* type safe Java and Android
+* <!-- .element: class="fragment grow" --> web3j is a lightweight
+* <!-- .element: class="fragment grow" --> **reactive** <small class="fragment">*cough!* *cough!*</small>
+* <!-- .element: class="fragment grow" --> type safe Java and Android
 
 ---
 
