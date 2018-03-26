@@ -1,0 +1,14 @@
+{
+  "name": "reactive-amsterdam-blockchain",
+  "version": "2018.3.27",
+  "scripts": {
+    "start": "reveal-md README.md --theme blood --highlight-theme github --css custom.css",
+    "watch": "reveal-md README.md --theme blood --highlight-theme github --css custom.css -w",
+    "build": "reveal-md README.md --theme blood --highlight-theme github --css custom.css --static _site"
+  },
+  "dependencies": {
+    "reveal-md": "^1.1.3"
+  },
+  "author": "Paulo Lopes",
+  "license": "ISC"
+}

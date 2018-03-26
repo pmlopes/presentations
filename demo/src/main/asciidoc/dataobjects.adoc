@@ -1,0 +1,17 @@
+= Cheatsheets
+
+[[Block]]
+== Block
+
+
+[cols=">25%,^25%,50%"]
+[frame="topbot"]
+|===
+^|Name | Type ^| Description
+|[[data]]`data`|`String`|-
+|[[index]]`index`|`Number (int)`|-
+|[[nonce]]`nonce`|`Number (int)`|-
+|[[previousHash]]`previousHash`|`String`|-
+|[[timestamp]]`timestamp`|`Number (long)`|-
+|===
+
