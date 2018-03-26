@@ -21,9 +21,9 @@ Notes:
 <!-- .slide: style="text-align: left;" -->
 ## Agenda
 
-1. <!-- .element: class="fragment grow" --> Bockchain (the cool parts)
-2. <!-- .element: class="fragment grow" --> Eclipse Vert.x
-3. <!-- .element: class="fragment grow" --> Reactive Blockchain FTW!
+1. <!-- .element: class="fragment grow" --> **Bockchain** <small>the cool parts</small>
+2. <!-- .element: class="fragment grow" --> Eclipse **Vert.x**
+3. <!-- .element: class="fragment grow" --> **Reactive** Blockchain FTW!
 
 ---
 
@@ -46,11 +46,9 @@ Notes:
 
 ---
 
-## Nope!
-
----
-
 <!-- .slide: data-background="images/secret.gif" data-background-size="contain" data-background-video-loop="true" -->
+
+## Nope!
 
 ---
 
@@ -80,6 +78,7 @@ class Block {
 ---
 
 <!-- .slide: data-background-video="images/job-done.mp4" data-background-size="contain" data-background-video-loop="true" -->
+## The End
 
 ---
 
@@ -90,38 +89,30 @@ class Block {
 
 ---
 
+<!-- .slide: data-background-video="images/challenge-accepted.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
 ## Challenge!
 
 #### Let's build one ourselves!
 
 ---
 
-<!-- .slide: data-background-video="images/challenge-accepted.mp4" data-background-size="contain" data-background-video-loop="true" -->
+## I need...
 
----
-
-## Ingredients
-
-* One idea...
-* A `P2P` network
-* A `Linked List` on steroids
-
-
----
-
-## One Idea...
+* One **idea**...
+* A **`P2P`** network
+* A **`Linked List`** on steroids
 
 ---
 
 <!-- .slide: data-background-video="images/idea.mp4" data-background-size="contain" data-background-video-loop="true" -->
-
----
-
-## P2P Network...
+## One Idea...
 
 ---
 
 <!-- .slide: data-background-video="images/lazzy.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## P2P Network...
 
 ---
 
@@ -132,11 +123,150 @@ class Block {
 
 ---
 
+<!-- .slide: data-background-video="images/hacking.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
 ## Hacking it all together
 
 ---
 
-<!-- .slide: data-background-video="images/hacking.mp4" data-background-size="contain" data-background-video-loop="true" -->
+## Block
+
+```java
+public class Block {
+  private int index;
+  private long timestamp;
+  private String data;
+  private int nonce;
+  private String previousHash;
+}
+```
+
+---
+
+## BlockChain
+
+```java
+public interface Blockchain {
+  // P2P magic!!!
+  Blockchain start(Handler handler);
+  Blockchain stop(Handler handler);
+  // Lookup
+  int size();
+  Block get(int index);
+  Block last();
+  // event handlers
+  Blockchain blockHandler(Handler handler);
+  Blockchain replaceHandler(Handler handler);
+  // forge a new block
+  Blockchain add(String data, Handler handler);
+}
+```
+
+---
+
+## Implementation
+
+```java
+// the internal state
+chain = new ArrayList<>();
+// insert the genesis block
+chain.add(new Block()
+  .setIndex(0)
+  .setNonce(1)
+  .setPreviousHash("")
+  .setData("<genesis>"));
+```
+
+---
+
+## P2P
+
+```java
+// Announce we're alive!
+eb.send(address, {}, (err, res) -> {
+  consensus(res)
+    .stream()
+    .map(json -> new Block(json))
+    .collect(Collectors.toList()));
+});
+```
+
+---
+
+## P2P
+
+```java
+// start listening for events
+messageConsumer = eb.consumer(address, message -> {
+  if (message != null) {
+    // if there is a body it is a mine event
+    consensus(Collections.singletonList(new Block(message)));
+  } else {
+    // when there is no message it's a chain request
+    JsonArray json = new JsonArray();
+    for (Block block : chain) {
+      json.add(block.toJson());
+    }
+
+    message.reply(json);
+  }
+});
+```
+
+---
+
+<!-- .slide: data-background-video="images/consensus.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## Consensus?
+
+---
+
+## Algorithm
+
+```java
+/**
+ * This is our consensus algorithm, it resolves conflicts
+ * by replacing our chain with the longest one in the network.
+ */
+public void consensus(List<Block> receivedBlocks) {
+  // for brevity and simplicity, the longest valid chain
+  //  wins and replaces the existing one
+  // not super smart but it's a good start
+  ...
+  // Peer store is longer than current store.
+  if (validChain(receivedBlocks)) {
+    chain.clear();
+    chain.addAll(receivedBlocks);
+  }
+}
+```
+
+---
+
+<!-- .slide: data-background-video="images/pow.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## Proof of Work?
+
+---
+
+## Algorithm
+
+```java
+/**
+ * Simple Proof of Work Algorithm:
+ * - Find a number p' such that hash(pp') contains
+ *   leading 4 zeroes, where p is the previous p'
+ * - p is the previous proof, and p' is the new proof
+ */
+public int proofOfWork(int lastProof) {
+  int proof = 0;
+  while (!validProof(lastProof, proof)) {
+    proof++;
+  }
+
+  return proof;
+}
+```
 
 ---
 
@@ -148,41 +278,41 @@ class Block {
 
 ---
 
-## RANTS!
+<!-- .slide: data-background-video="images/perfect.mp4" data-background-size="contain" data-background-video-loop="true" -->
 
-* Why did exchanges went down last December?
+## Remember last December?
 
 ---
 
-* <!-- .element: class="fragment grow" --> Thread oriented apps can't scale
-* <!-- .element: class="fragment grow" --> Self inflicted DDoS
-* <!-- .element: class="fragment grow" --> Not using a Reactive System
+* <!-- .element: class="fragment grow" --> Thread oriented apps **can't scale**
+* <!-- .element: class="fragment grow" --> **Self inflicted DDoS**
+* <!-- .element: class="fragment grow" --> Not using a **Reactive System**
 
 ---
 
 ### Quick recap on Threading
 
-* has it's own memory
-* is managed by the OS or VM
-* Has contention and locks
-* Requires extra logic (scheduling)
+* <!-- .element: class="fragment grow" --> has it's own **memory**
+* <!-- .element: class="fragment grow" --> is **managed** by the OS or VM
+* <!-- .element: class="fragment grow" --> suffers from **contention** and **locks**
+* <!-- .element: class="fragment grow" --> **requires** extra logic (scheduling)
 
 ---
 
 ### Example
 
 * add a value to a queue
-* execution time on same thread: 0.01&#181;s
+* <!-- .element: class="fragment" --> execution time on same thread: **0.01&#181;s**
 
 ---
 
 ### Threaded Example
 
 * add a value to a queue (on a thread)
-* <!-- .element: class="fragment" --> execution time on a single thread: **~71.3&#181;s**
+* <!-- .element: class="fragment" --> execution time on a **new** thread: **~71.3&#181;s**
 * <!-- .element: class="fragment" --> imagine **10k** users: **~0.7s** (just for threading)
-* <!-- .element: class="fragment" --> now think that we do more than just 1 op in a app...
-* <!-- .element: class="fragment" --> the waiting starts to build exponentially...
+* <!-- .element: class="fragment" --> now think that we do **more than** just 1 op in a app...
+* <!-- .element: class="fragment" --> the waiting starts the **snow ball effect**...
 
 ---
 
@@ -190,11 +320,11 @@ class Block {
 
 ---
 
-### I'm cool I'm a Web3J user
+### Ethereum: Web3J
 
-* <!-- .element: class="fragment grow" --> web3j is a lightweight
+* <!-- .element: class="fragment grow" --> web3j is a **lightweight**
 * <!-- .element: class="fragment grow" --> **reactive** <small class="fragment">*cough!* *cough!*</small>
-* <!-- .element: class="fragment grow" --> type safe Java and Android
+* <!-- .element: class="fragment grow" --> **type safe** Java and Android
 
 ---
 
