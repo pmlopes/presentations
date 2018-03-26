@@ -47,12 +47,11 @@ Notes:
 ---
 
 <!-- .slide: data-background="images/secret.gif" data-background-size="contain" data-background-video-loop="true" -->
-
 ## Nope!
 
 ---
 
-## A Linked List!
+## This:
 
 ```java
 class Block {
@@ -63,7 +62,9 @@ class Block {
 
 ---
 
-## Sort of...
+<!-- .slide: data-transition="zoom" -->
+
+## A Linked List!
 
 ```java
 class Block {
@@ -74,6 +75,9 @@ class Block {
   String previousHash;
 }
 ```
+
+Notes:
+  Explain the fields and the reason of the previous hash.
 
 ---
 
@@ -117,9 +121,10 @@ class Block {
 ---
 
 * Will use Eclipse Vert.x
+* <!-- .element: class="fragment grow" --> It has a **builtin** cluster manager
 * <!-- .element: class="fragment grow" --> It's a **Reactive System**
 * <!-- .element: class="fragment grow" --> It's **polyglot**
-* <!-- .element: class="fragment grow" --> The Eventbus lets me connect anything together
+* <!-- .element: class="fragment grow" --> The Eventbus lets me **connect anything** together
 
 ---
 
@@ -329,6 +334,12 @@ public int proofOfWork(int lastProof) {
 ---
 
 <!-- .slide: data-background-video="images/confident.mp4" data-background-size="contain" data-background-video-loop="true" -->
+#### Android Performance is Awesome!
+
+---
+
+### But on server-side...
+### not really!
 
 ---
 
