@@ -49,6 +49,9 @@ Notes:
 <!-- .slide: data-background="images/secret.gif" data-background-size="contain" data-background-video-loop="true" -->
 ## Nope!
 
+Notes:
+  I went on a search for what is a blockchain
+
 ---
 
 ## This:
@@ -59,6 +62,9 @@ class Block {
     Block previous;
 }
 ```
+
+Notes:
+  This is what I've found
 
 ---
 
@@ -103,9 +109,9 @@ Notes:
 
 ## I need...
 
-* One **idea**...
-* A **`P2P`** network
-* A **`Linked List`** on steroids
+1. One **idea**...
+2. A **`P2P`** network
+3. A **`Linked List`** on steroids
 
 ---
 
@@ -184,6 +190,12 @@ chain.add(new Block()
 
 ---
 
+<!-- .slide: data-background-video="images/eventbus.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## EventBus
+
+---
+
 ## P2P
 
 ```java
@@ -235,7 +247,7 @@ messageConsumer = eb.consumer(address, message -> {
  */
 public void consensus(List<Block> receivedBlocks) {
   // for brevity and simplicity, the longest valid chain
-  //  wins and replaces the existing one
+  // wins and replaces the existing one
   // not super smart but it's a good start
   ...
   // Peer store is longer than current store.
@@ -284,10 +296,20 @@ public int proofOfWork(int lastProof) {
 ---
 
 <!-- .slide: data-background-video="images/perfect.mp4" data-background-size="contain" data-background-video-loop="true" -->
-
-## Remember last December?
+## Blockchain is Perfect
 
 ---
+
+## Until it isn't!
+
+---
+
+<!-- .slide: data-background-video="images/crash.mp4" data-background-size="contain" data-background-video-loop="true" -->
+### Why do Exchanges Crash?
+
+---
+
+### My theory<small>unproven</small>
 
 * <!-- .element: class="fragment grow" --> Thread oriented apps **can't scale**
 * <!-- .element: class="fragment grow" --> **Self inflicted DDoS**
@@ -322,6 +344,18 @@ public int proofOfWork(int lastProof) {
 ---
 
 <!-- .slide: data-background-video="images/sucks.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+---
+
+### Reactive Systems
+
+* Node.js <span class="fragment" style="color: red"><b>WRONG!</b></span>
+* Spring 5 <span class="fragment" style="color: red"><b>WRONG!</b></span>
+* Eclipse Vert.x <span class="fragment" style="color: green"><b>Correct!<b></span>
+* Akka <span class="fragment" style="color: green"><b>Correct!<b></span>
+
+Notes:
+  Wrong ones are not elastic or resilient
 
 ---
 
