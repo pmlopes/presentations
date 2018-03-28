@@ -21,7 +21,7 @@ Notes:
 <!-- .slide: style="text-align: left;" -->
 ## Agenda
 
-1. <!-- .element: class="fragment grow" --> **Bockchain** <small>the cool parts</small>
+1. <!-- .element: class="fragment grow" --> **Blockchain** <small>the cool parts</small>
 2. <!-- .element: class="fragment grow" --> Eclipse **Vert.x**
 3. <!-- .element: class="fragment grow" --> **Reactive** Blockchain FTW!
 
@@ -351,8 +351,8 @@ public int proofOfWork(int lastProof) {
 
 * Node.js <span class="fragment" style="color: red"><b>WRONG!</b></span>
 * Spring 5 <span class="fragment" style="color: red"><b>WRONG!</b></span>
-* Eclipse Vert.x <span class="fragment" style="color: green"><b>Correct!<b></span>
-* Akka <span class="fragment" style="color: green"><b>Correct!<b></span>
+* Eclipse Vert.x <span class="fragment" style="color: green"><b>Correct!</b></span>
+* Akka <span class="fragment" style="color: green"><b>Correct!</b></span>
 
 Notes:
   Wrong ones are not elastic or resilient
