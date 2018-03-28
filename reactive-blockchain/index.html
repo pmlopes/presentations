@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>reveal-md</title>
+        <link rel="stylesheet" href="./css/reveal.css">
+        <link rel="stylesheet" href="./css/theme/blood.css" id="theme">
+        <link rel="stylesheet" href="./css/highlight/github.css">
+        <link rel="stylesheet" href="./css/print/paper.css" type="text/css" media="print">
+          <link rel="stylesheet" href="./_assets/custom.css">
+
+    </head>
+    <body>
+
+        <div class="reveal">
+            <div class="slides"><section  data-markdown><script type="text/template">## Turning Reactive into Gold
+
+#### Reactive Amsterdam Meetup 2018
+
+<small style="font-family: 'Fira Code'">[@pml0pes](http://twitter.com/pml0pes)</small>
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: style="text-align: left;" -->
+## Who am I?
+
+* Principal Software Engineer @RedHat
+* Eclipse Vert.x core developer
+* Fluent in Portuguese, Java, JavaScript, etc...
+
+<aside class="notes"><p>Introduce myself, work, vertx</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .slide: style="text-align: left;" -->
+## Agenda
+
+1. <!-- .element: class="fragment grow" --> **Blockchain** <small>the cool parts</small>
+2. <!-- .element: class="fragment grow" --> Eclipse **Vert.x**
+3. <!-- .element: class="fragment grow" --> **Reactive** Blockchain FTW!
+</script></section><section  data-markdown><script type="text/template">
+## Hands-up time
+
+* <!-- .element: class="fragment grow" --> Blockchain
+* <!-- .element: class="fragment grow" --> Reactive programming
+* <!-- .element: class="fragment grow" --> Reactive systems
+* <!-- .element: class="fragment grow" --> Eclipse Vert.x
+</script></section><section  data-markdown><script type="text/template">
+## Blockchain?
+
+<span class="fragment">the new ducktape?</span>
+<span class="fragment">a database?</span>
+<span class="fragment">money?</span>
+<span class="fragment">the sollution to all your problems?</span>
+<span class="fragment">a miracle?</span>
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background="images/secret.gif" data-background-size="contain" data-background-video-loop="true" -->
+## Nope!
+
+<aside class="notes"><p>I went on a search for what is a blockchain</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## This:
+
+```java
+class Block {
+    Object data;
+    Block previous;
+}
+```
+
+<aside class="notes"><p>This is what I&#39;ve found</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-transition="zoom" -->
+
+## A Linked List!
+
+```java
+class Block {
+  int index;
+  long timestamp;
+  Object data;
+  int nonce;
+  String previousHash;
+}
+```
+
+<aside class="notes"><p>Explain the fields and the reason of the previous hash.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/job-done.mp4" data-background-size="contain" data-background-video-loop="true" -->
+## The End
+</script></section><section  data-markdown><script type="text/template">
+## Not so fast!
+
+* **It's a glorified linked list**
+* <!-- .element: class="fragment grow" --> That works on top of a P2P network
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/challenge-accepted.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## Challenge!
+
+#### Let's build one ourselves!
+</script></section><section  data-markdown><script type="text/template">
+## I need...
+
+1. One **idea**...
+2. A **`P2P`** network
+3. A **`Linked List`** on steroids
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/idea.mp4" data-background-size="contain" data-background-video-loop="true" -->
+## One Idea...
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/lazzy.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## P2P Network...
+</script></section><section  data-markdown><script type="text/template">
+* Will use Eclipse Vert.x
+* <!-- .element: class="fragment grow" --> It has a **builtin** cluster manager
+* <!-- .element: class="fragment grow" --> It's a **Reactive System**
+* <!-- .element: class="fragment grow" --> It's **polyglot**
+* <!-- .element: class="fragment grow" --> The Eventbus lets me **connect anything** together
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/hacking.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## Hacking it all together
+</script></section><section  data-markdown><script type="text/template">
+## Block
+
+```java
+public class Block {
+  private int index;
+  private long timestamp;
+  private String data;
+  private int nonce;
+  private String previousHash;
+}
+```
+</script></section><section  data-markdown><script type="text/template">
+## BlockChain
+
+```java
+public interface Blockchain {
+  // P2P magic!!!
+  Blockchain start(Handler handler);
+  Blockchain stop(Handler handler);
+  // Lookup
+  int size();
+  Block get(int index);
+  Block last();
+  // event handlers
+  Blockchain blockHandler(Handler handler);
+  Blockchain replaceHandler(Handler handler);
+  // forge a new block
+  Blockchain add(String data, Handler handler);
+}
+```
+</script></section><section  data-markdown><script type="text/template">
+## Implementation
+
+```java
+// the internal state
+chain = new ArrayList<>();
+// insert the genesis block
+chain.add(new Block()
+  .setIndex(0)
+  .setNonce(1)
+  .setPreviousHash("")
+  .setData("<genesis>"));
+```
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/eventbus.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## EventBus
+</script></section><section  data-markdown><script type="text/template">
+## P2P
+
+```java
+// Announce we're alive!
+eb.send(address, {}, (err, res) -> {
+  consensus(res)
+    .stream()
+    .map(json -> new Block(json))
+    .collect(Collectors.toList()));
+});
+```
+</script></section><section  data-markdown><script type="text/template">
+## P2P
+
+```java
+// start listening for events
+messageConsumer = eb.consumer(address, message -> {
+  if (message != null) {
+    // if there is a body it is a mine event
+    consensus(Collections.singletonList(new Block(message)));
+  } else {
+    // when there is no message it's a chain request
+    JsonArray json = new JsonArray();
+    for (Block block : chain) {
+      json.add(block.toJson());
+    }
+
+    message.reply(json);
+  }
+});
+```
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/consensus.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## Consensus?
+</script></section><section  data-markdown><script type="text/template">
+## Algorithm
+
+```java
+/**
+ * This is our consensus algorithm, it resolves conflicts
+ * by replacing our chain with the longest one in the network.
+ */
+public void consensus(List<Block> receivedBlocks) {
+  // for brevity and simplicity, the longest valid chain
+  // wins and replaces the existing one
+  // not super smart but it's a good start
+  ...
+  // Peer store is longer than current store.
+  if (validChain(receivedBlocks)) {
+    chain.clear();
+    chain.addAll(receivedBlocks);
+  }
+}
+```
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/pow.mp4" data-background-size="contain" data-background-video-loop="true" -->
+
+## Proof of Work?
+</script></section><section  data-markdown><script type="text/template">
+## Algorithm
+
+```java
+/**
+ * Simple Proof of Work Algorithm:
+ * - Find a number p' such that hash(pp') contains
+ *   leading 4 zeroes, where p is the previous p'
+ * - p is the previous proof, and p' is the new proof
+ */
+public int proofOfWork(int lastProof) {
+  int proof = 0;
+  while (!validProof(lastProof, proof)) {
+    proof++;
+  }
+
+  return proof;
+}
+```
+</script></section><section  data-markdown><script type="text/template">
+## DEMO
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/blockchain.mp4" data-background-size="contain" -->
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/perfect.mp4" data-background-size="contain" data-background-video-loop="true" -->
+## Blockchain is Perfect
+</script></section><section  data-markdown><script type="text/template">
+## Until it isn't!
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/crash.mp4" data-background-size="contain" data-background-video-loop="true" -->
+### Why do Exchanges Crash?
+</script></section><section  data-markdown><script type="text/template">
+### My theory<small>unproven</small>
+
+* <!-- .element: class="fragment grow" --> Thread oriented apps **can't scale**
+* <!-- .element: class="fragment grow" --> **Self inflicted DDoS**
+* <!-- .element: class="fragment grow" --> Not using a **Reactive System**
+</script></section><section  data-markdown><script type="text/template">
+### Quick recap on Threading
+
+* <!-- .element: class="fragment grow" --> has it's own **memory**
+* <!-- .element: class="fragment grow" --> is **managed** by the OS or VM
+* <!-- .element: class="fragment grow" --> suffers from **contention** and **locks**
+* <!-- .element: class="fragment grow" --> **requires** extra logic (scheduling)
+</script></section><section  data-markdown><script type="text/template">
+### Example
+
+* add a value to a queue
+* <!-- .element: class="fragment" --> execution time on same thread: **0.01&#181;s**
+</script></section><section  data-markdown><script type="text/template">
+### Threaded Example
+
+* add a value to a queue (on a thread)
+* <!-- .element: class="fragment" --> execution time on a **new** thread: **~71.3&#181;s**
+* <!-- .element: class="fragment" --> imagine **10k** users: **~0.7s** (just for threading)
+* <!-- .element: class="fragment" --> now think that we do **more than** just 1 op in a app...
+* <!-- .element: class="fragment" --> the waiting starts the **snow ball effect**...
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/sucks.mp4" data-background-size="contain" data-background-video-loop="true" -->
+</script></section><section  data-markdown><script type="text/template">
+### Reactive Systems
+
+* Node.js <span class="fragment" style="color: red"><b>WRONG!</b></span>
+* Spring 5 <span class="fragment" style="color: red"><b>WRONG!</b></span>
+* Eclipse Vert.x <span class="fragment" style="color: green"><b>Correct!</b></span>
+* Akka <span class="fragment" style="color: green"><b>Correct!</b></span>
+
+<aside class="notes"><p>Wrong ones are not elastic or resilient</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Ethereum: Web3J
+
+* <!-- .element: class="fragment grow" --> web3j is a **lightweight**
+* <!-- .element: class="fragment grow" --> **reactive** <small class="fragment">*cough!* *cough!*</small>
+* <!-- .element: class="fragment grow" --> **type safe** Java and Android
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/confident.mp4" data-background-size="contain" data-background-video-loop="true" -->
+#### Android Performance is Awesome!
+</script></section><section  data-markdown><script type="text/template">
+### But on server-side...
+### not really!
+</script></section><section  data-markdown><script type="text/template">
+```java
+...
+public class Async {
+  ...
+  private static final ExecutorService executor =
+    Executors.newCachedThreadPool();
+}
+```
+<small>[core/src/main/java/org/web3j/utils/Async.java](https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/utils/Async.java)</small>
+</script></section><section  data-markdown><script type="text/template">
+```java
+...
+  private static int getCpuCount() {
+    return Runtime.getRuntime().availableProcessors();
+  }
+...
+```
+<small>[core/src/main/java/org/web3j/utils/Async.java](https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/utils/Async.java)</small>
+</script></section><section  data-markdown><script type="text/template">
+```java
+public static <T> CompletableFuture<T> run(Callable<T> callable) {
+  CompletableFuture<T> result = new CompletableFuture<>();
+  CompletableFuture.runAsync(() -> {
+    // we need to explicitly catch any exceptions,
+    // otherwise they will be silently discarded
+    try {
+      result.complete(callable.call());
+    } catch (Throwable e) {
+      result.completeExceptionally(e);
+    }
+  }, executor);
+  return result;
+}
+```
+<small>[core/src/main/java/org/web3j/utils/Async.java](https://github.com/web3j/web3j/blob/master/core/src/main/java/org/web3j/utils/Async.java)</small>
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: data-background-video="images/wtf.mp4" data-background-size="contain" data-background-video-loop="true" -->
+</script></section><section  data-markdown><script type="text/template">
+<!-- .slide: style="text-align: left;" -->
+# Thank you!
+
+* https://www.jetdrone.xyz
+* https://twitter.com/pml0pes
+* https://github.com/vert-x3
+* https://www.reactivemanifesto.org
+* https://github.com/pmlopes/presentation
+</script></section></div>
+        </div>
+
+        <script src="./lib/js/head.min.js"></script>
+        <script src="./js/reveal.js"></script>
+
+        <script>
+            function extend() {
+              var target = {};
+              for (var i = 0; i < arguments.length; i++) {
+                var source = arguments[i];
+                for (var key in source) {
+                  if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                  }
+                }
+              }
+              return target;
+            }
+
+            // Optional libraries used to extend on reveal.js
+            var deps = [
+              { src: './lib/js/classList.js', condition: function() { return !document.body.classList; } },
+              { src: './plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: './plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+              { src: './plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+              { src: './plugin/zoom-js/zoom.js', async: true },
+              { src: './plugin/notes/notes.js', async: true },
+              { src: './plugin/math/math.js', async: true }
+            ];
+
+            // default options to init reveal.js
+            var defaultOptions = {
+              controls: true,
+              progress: true,
+              history: true,
+              center: true,
+              transition: 'default', // none/fade/slide/convex/concave/zoom
+              dependencies: deps
+            };
+
+            // options from URL query string
+            var queryOptions = Reveal.getQueryHash() || {};
+
+            var options = {};
+            options = extend(defaultOptions, options, queryOptions);
+        </script>
+
+
+        <script>
+            Reveal.initialize(options);
+        </script>
+    </body>
+</html>
