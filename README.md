@@ -1,5 +1,9 @@
-# Going Fullstack React(ive)!
-<small style="font-family: 'Fira Code'">@pml0pes</small>
+<!-- .slide: data-background="media/withthebest.png" data-background-size="contain" -->
+
+Notes:
+  Hello everyone and welcome to "going fullstack reactive". My name is Paulo Lopes and
+  I'm a Principal Software Engineer at RedHat and a core developer of the Eclipse Vert.x
+  project.
 
 ---
 
@@ -106,7 +110,7 @@ Notes:
 <!-- .element class="stretch" --> ![loading](media/loading.gif)
 
 Notes:
-  And we all know that every human being hates to wait...
+  And we all know that every person hates to wait...
 
 ---
 
@@ -116,7 +120,7 @@ Notes:
 <small>*source: https://www.truconversion.com/blog/traffic/decrease-page-load-time/*</small>
 
 Notes:
-  Clearly, having a website that loads instantaneously is sort of difficult. So, does this mean that you are doomed?
+  Clearly, having a website that loads instantaneously is sort of difficult to build. So, does this mean that you are doomed?
 
   No. There is an allowance.
 
@@ -126,11 +130,14 @@ Notes:
 
 ---
 
-## *How to be reactive?*
+## *Where to be reactive?*
 
 * on the frontend? <span class="fragment hl-purple">**YES**</span>
 * on the backend? <span class="fragment hl-purple">**YES**</span>
 * both? <span class="fragment hl-purple">**YES**</span>
+
+Notes:
+  How should we solve this problem? On the frontend web application? on your backend server? Both? As you can imagine the anwser to these questions is yes, yes and yes! So let me show you one possible way, and lets start top down, front to back.
 
 ---
 
@@ -144,7 +151,7 @@ Notes:
 * <!-- .element class="hl-purple" -->Bonus: Mobile apps with react native
 
 Notes:
-  React is a JavaScript library. It’s not a framework. It’s not a complete solution and we’ll often need to use more libraries with React to form any solution. React does not assume anything about the other parts in any full solution. It focuses on just one thing, and on doing that thing very well.
+  Why react.js? react is a JavaScript library. It’s not a framework. It’s not a complete solution and we’ll often need to use more libraries with React to form any solution. React does not assume anything about the other parts in any full solution. It focuses on just one thing, and on doing that thing very well.
 
   The thing that React does really well is building User Interfaces. A User Interface is anything we put in front of users to have them interact with a machine.
 
@@ -158,138 +165,142 @@ Notes:
 * Polyglot
 * Distributed
 
+Notes:
+  On the backend I would choose a Eclipse Vert.x. Vert.x is a toolkit, just like react.js it is not a framework, it puts developers on the front seat and does not force any opinion/pattern to solve the developer problem. It is reactive as previously illustrated, it is polyglot, it runs on the JVM but does not force you to use Java, you're not limited by what you know and can choose the best language for your problem (Java, JavaScript, Kotlin, Scala...) and above all it is distributed.
+
 ---
 
 ## To put in perspective
 
-| (out of the box) | Spring5 | node.js | vert.x |
-| ---------------- |:-------:|:-------:|:------:|
-| Responsive       | ✔       | ✔      | ✔     |
-| Message Driven   |         |         | ✔     |
-| Resilient        |         |         | ✔     |
-| Elastic          |         |         | ✔     |
+| (out of the box) | Spring5 | node.js | vert.x | Akka |
+| ---------------- |:-------:|:-------:|:------:|:----:|
+| Responsive       | ✔       | ✔      | ✔     | ✔    |
+| Message Driven   |         |         | ✔     | ✔    |
+| Resilient        |         |         | ✔     | ✔    |
+| Elastic          |         |         | ✔     | ✔    |
 
 Notes:
+  To put things in perspective about my choices, let me illustrate what you get out of the box in relation to the reactive manifesto requirements. As you can see most modern frameworks will adopt a reactive programming style, but not all are reactive systems.
 
 ---
 
-## *3 seconds<span class="fragment">.</span><span class="fragment">.</span><span class="fragment">.</span>*
+## *3 seconds<span class="fragment hl-purple">.</span><span class="fragment">.</span><span class="fragment hl-purple">.</span>*
 
 Notes:
+  We've drifted a bit, but lets get back, remember you've 3 seconds... or else you will start loosing your users. So let me show how to implement the backend of an hypothetical blog application.
 
 ---
 
 <div style="display: inline-block; width: 50%; float: left;">
 
 <div><small>
-<pre style="width: 100%"><code data-trim class="javascript">
-// Initial Setup                               //
-import {Router, StaticHandler} from '@vertx/web'
-
-import React from 'react'
-import {renderToString} from 'react-dom/server'
-import {match, RouterContext} from 'react-router'
-import routes from '../shared/components/routes'
-
-const app = Router.router(vertx)
+<pre style="width: 100%"><code data-trim class="java">
+// Initial setup                                    //
+var react = ReactSSR.createProxy(vertx);
+var handlebars = HandlebarsTemplateEngine.create();
+// Dummy data...
+var posts = new JsonArray(
+  vertx.fileSystem()
+    .readFileBlocking("posts.json"));
+// Route web requests to handlers...
+var app = Router.router(vertx);
 </code></pre></small></div>
 
 <div class="fragment"><small>
-<pre style="width: 100%"><code data-trim class="javascript">
-// Rest API (Similar to Express.JS)            //
-app.get('/api/post').handler((ctx) => {
+<pre style="width: 100%"><code data-trim class="java">
+// Rest API                                         //
+app.get("/api/post").handler(ctx -> {
   ctx.response()
     .putHeader("content-type", "application/json")
-    .end(JSON.stringify(posts))
-})
+    .end(posts.encode());
+});
+// Get a single post
+app.get("/api/post/:id").handler(ctx -> {
+  int id = Integer.parseInt(ctx.pathParam("id"));
 
-app.get('/api/post/:id').handler((ctx) => {
-  const id = ctx.request().getParam('id')
-  const post = posts.filter(p => p.id == id)
-  if (post) {
-    ctx.response()
-      .putHeader(
-          "content-type", "application/json")
-      .end(JSON.stringify(post[0]))
-  } else {
-    ctx.fail(404)
+  for (Object p : posts) {
+    if (((JsonObject) p).getInteger("id") == id) {
+      ctx.response()
+        .putHeader("Content-Type", "application/json")
+        .end(((JsonObject) p).encode());
+      return;
+    }
   }
-})
+
+  ctx.fail(404);
+});
 </code></pre></small></div>
 </div>
 
 <div style="display: inline-block; width: 50%;">
 <div class="fragment"><small>
 <pre style="width: 100%"><code data-trim class="javascript">
-// Mix React.JS with Vert.x                    //
-app.get().handler((ctx) => {
-  match({
-      routes: routes,
-      location: ctx.request().uri()
-  }, (err, redirect, props) => {
-
-    if (err) {
-      ctx.fail(err.message);
-    } else if (redirect) {
-      ctx.response()
-        .putHeader("Location",
-          redirect.pathname + redirect.search)
-        .setStatusCode(302)
-        .end();
-    } else if (props) {
-      const routerContextWithData = (
-        &lt;RouterContext
-          {...props}
-          createElement={(Component, props) => {
-            return &lt;Component
-                posts={posts} {...props} /&gt;
-          }}
-        /&gt;)
+// Mix React.JS with Vert.x                          //
+app.route().handler(ctx -> {
+  react.render(ctx.request().uri(), res -> {
+    if (res.failed()) {
+      ctx.fail(res.cause());
+    } else {
+      String markup = res.result();
+      if (markup == null) {
+        ctx.next();
+      } else {
+        handlebars.render(ctx.put("markup", markup),
+          "hbs/index.hbs", res1 -> {
+            if (res1.failed()) {
+              ctx.fail(res1.cause());
+            } else {
+              ctx.response()
+                .putHeader("Content-Type", "text/html")
+                .end(res1.result());
+            }
+        });
+      }
+    }
+  });
+});
+</code></pre></small></div>
+<div class="fragment"><small>
+<pre style="width: 100%"><code data-trim class="javascript">
+// Serve resources and start                         //
+app.route().handler(StaticHandler.create());
+// Start server
+vertx.createHttpServer()
+  .requestHandler(app::accept).listen(8080);
 </code></pre></small></div>
 </div>
+
+<small>https://github.com/pmlopes/presentations/tree/java-withthebest</small>
 
 ---
 
-<div style="display: inline-block; width: 50%; float: left;">
-<div><small>
-<pre style="width: 100%"><code data-trim data-no-escape class="javascript">
-// Render React.js without Node                //
-      const appHtml =
-          renderToString(routerContextWithData)
+### Deployment
 
-      ctx.response()
-        .putHeader("content-type", "text/html")
-        .end(\`&lt;!DOCTYPE html&gt;
-              &lt;html lang="en"&gt;
-              &lt;head&gt;
-                &lt;meta charset="UTF-8"&gt;
-                &lt;title&gt;Universal Blog&lt;/title&gt;
-              &lt;/head&gt;
-              &lt;body&gt;
-                &lt;div id="app"&gt;${appHtml}&lt;/div&gt;
-                &lt;script
-                    src="/bundle.js"&gt;&lt;/script&gt;
-              &lt;/body&gt;
-              &lt;/html&gt;\`)
-    } else {
-      ctx.next()
-    }
-  })
-})
-</code></pre></small></div>
-<div class="fragment"><small>
-<pre style="width: 100%"><code data-trim class="javascript">
-// Serve resources and start                   //
-app.get().handler(StaticHandler.create())
+<!-- .element class="stretch" --> ![monolith](media/component-monolith.png)
 
-vertx.createHttpServer()
-    .requestHandler(app).listen(8080)
-</code></pre></small></div>
-</div>
+```sh
+docker-compose start
+```
 
-<div style="display: inline-block; width: 50%;">
-<h2 class="fragment">DEMO</h2>
-</div>
+---
+
+### Deployment (Reactive <span class="hl-purple">System</span>)
+
+<!-- .element class="stretch" --> ![monolith](media/component-cluster.png)
+
+```sh
+docker-compose scale react=2
+```
+
+---
+
+### Deployment (Reactive <span class="hl-purple">System</span>)
+
+<!-- .element class="stretch" --> ![monolith](media/component-trivial-cluster.png)
+
+```sh
+# or replace implementations...
+```
 
 ---
 
@@ -297,12 +308,12 @@ vertx.createHttpServer()
 
 ---
 
-## A reactive system...
+## A reactive system:
 
-* Makes your users happy
-* Has high performance
-* Scales without code change
-* Is resilient to failure
+* <!-- .element: class="fragment grow" --> Makes your users happy
+* <!-- .element: class="fragment grow" --> Has high performance
+* <!-- .element: class="fragment grow" --> Scales without code change
+* <!-- .element: class="fragment grow" --> Is resilient to failure
 
 ---
 

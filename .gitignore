@@ -1,3 +1,8 @@
 node_modules
 yarn.lock
 package-lock.json
+.idea
+.settings
+.classpath
+.project
+*.iml
