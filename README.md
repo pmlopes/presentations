@@ -60,7 +60,7 @@ Notes:
 <!-- .element class="stretch" --> ![multi-reactor-pattern](media/multi-reactor-pattern.png)
 
 Notes:
-  Vert.x improves the event loop pattern by implementing the **multi event loop pattern**. Which means that there will be an
+  Vert.x improves the event loop pattern by implementing the **multi event loop pattern**. Which means that there will be an event loop per CPU core on your system, maximizing the usage of the computing resources available.
 
 ---
 
@@ -77,15 +77,14 @@ Notes:
   * It states that the system is resilient against failure
   * and elastic so it can scale with the load.
 
-  Examples of projects that implements all these traits are `Akka` and `Eclipse Vert.x`.
-
-  These 2 traits are provided by vert.x native cluster capabilities and the eventbus that allows distributed messaging, simple and to the point.
+  Examples of projects that implements all these traits are `Akka` and `Vert.x`.
 
 ---
 
 <!-- .element class="stretch" --> ![event-bus](media/event-bus-bridge.png)
 
 Notes:
+  Reactive systems use a Message Driven arquitecture in order to implement those traits. Vert.x for example relies on the event bus to connect, nodes on the same host, across hosts or even non JVM nodes such as Node.js or even native applications.
 
 ---
 
@@ -187,7 +186,14 @@ Notes:
 ## *3 seconds<span class="fragment hl-purple">.</span><span class="fragment">.</span><span class="fragment hl-purple">.</span>*
 
 Notes:
-  We've drifted a bit, but lets get back, remember you've 3 seconds... or else you will start loosing your users. So let me show how to implement the backend of an hypothetical blog application.
+  We've drifted a bit, but lets get back, remember you've 3 seconds... or else you will start loosing your users. So let me show how to implement the backend of an hypothetical application.
+
+---
+
+<!-- .element class="stretch" --> ![flow](media/diagram.png)
+
+Notes:
+  This application will have the following flow: Your browser will make a request, the backend application will request the reactive system to locate a service capable of rendering a specific path in the URL. Once the markup is generated, the application will pass the response to handlebars to enrich it and have a full blown HTML page that will be returned to the Browser.
 
 ---
 
@@ -270,17 +276,47 @@ vertx.createHttpServer()
 </code></pre></small></div>
 </div>
 
-<small>https://github.com/pmlopes/presentations/tree/java-withthebest</small>
+<small>source: https://github.com/pmlopes/presentations/tree/java-withthebest</small>
+
+---
+
+```hbs
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="wing.min.css" />
+  <meta charset="UTF-8">
+  <title>Fullstack Reactive</title>
+</head>
+<body>
+<div id="app">{{{ markup }}}</div>
+<script src="main.js"></script>
+</body>
+</html>
+```
+
+<small>source: https://github.com/pmlopes/presentations/tree/java-withthebest</small>
 
 ---
 
 ### Deployment
 
-<!-- .element class="stretch" --> ![monolith](media/component-monolith.png)
-
-```sh
+<pre><code data-trim data-noescape class="sh">
+$ <span class="fragment"># build react.js part
+$ npm run build
+...
+$ </span><span class="fragment"># build vert.x part
+mvn clean package
+...
+$ </span><span class="fragment"># start it
 docker-compose start
-```
+Starting web   ... done
+Starting react ... done
+$ </span>
+</code></pre>
+
+Notes:
+  This is a simple application so in order to build we take a few steps. 1st we build the reactjs part using the standard javascript tools. 2nd we build the server side using maven, finally we start it inside a container using docker compose.
 
 ---
 
@@ -288,9 +324,18 @@ docker-compose start
 
 <!-- .element class="stretch" --> ![monolith](media/component-cluster.png)
 
-```sh
-docker-compose scale react=2
-```
+<pre><code data-trim data-noescape class="sh">
+$ <span class="fragment"># scale up
+$ docker-compose scale react=2
+...
+$ </span><span class="fragment"># scale down
+docker-compose scale react=1
+...
+$ </span>
+</code></pre>
+
+Notes:
+  As you could have seen in the previous slide the application started 2 containers, one for the web and a second for the react server side rendering. This is where reactive systems shine. You can scale up *click* or down *click* making your system elastic and more resilient to failure.
 
 ---
 
@@ -298,9 +343,15 @@ docker-compose scale react=2
 
 <!-- .element class="stretch" --> ![monolith](media/component-trivial-cluster.png)
 
-```sh
-# or replace implementations...
-```
+<pre><code data-trim data-noescape class="sh">
+$ <span class="fragment"># swap implementations
+$ docker-compose scale react-nodejs=1
+...
+$ </span>
+</code></pre>
+
+Notes:
+  Or even hypothetically replace implementations without code refactoring or down time.
 
 ---
 
@@ -314,6 +365,9 @@ docker-compose scale react=2
 * <!-- .element: class="fragment grow" --> Has high performance
 * <!-- .element: class="fragment grow" --> Scales without code change
 * <!-- .element: class="fragment grow" --> Is resilient to failure
+
+Notes:
+  Lets summarize what we've covered so far: A reactive system makes your users happy, It brings hight performance by using your computing resources effectively (probably it could even reduce your cloud bill). It scales up and down without code changes so you can adapt to load as needed. And because of this elasticity it is also resilient to failure as each service can be respawn at any moment and take over the load of a bad behaved one.
 
 ---
 

@@ -4,14 +4,19 @@
   "description": "Going fullstack react(ive)",
   "scripts": {
     "start":
-      "reveal-md README.md --theme white --highlight-theme github --title 'java.withthebest' --css custom.css",
+      "node ./notes-server/index.js",
     "watch":
-      "reveal-md README.md --theme white --highlight-theme github --title 'java.withthebest' --css custom.css -w",
+      "reveal-md README.md --theme white --highlight-theme github --title 'java.withthebest' --css custom.css --scripts custom.js -w",
     "build":
-      "reveal-md README.md --theme white --highlight-theme github --title 'java.withthebest' --css custom.css --static _site"
+    "reveal-md README.md --theme white --highlight-theme github --title 'java.withthebest' --css custom.css --static-dirs media --static _site",
+    "build:server":
+      "reveal-md README.md --theme white --highlight-theme github --title 'java.withthebest' --css custom.css --scripts custom.js --static-dirs media --static _site"
   },
   "dependencies": {
-    "reveal-md": "^1.1.3"
+    "reveal-md": "^1.1.3",
+    "express": "^4.15.2",
+    "mustache": "^2.3.0",
+    "socket.io": "^1.7.3"
   },
   "author": "Paulo Lopes",
   "license": "ISC"
