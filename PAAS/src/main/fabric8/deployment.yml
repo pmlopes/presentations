@@ -1,0 +1,20 @@
+spec:
+  strategy:
+    type: Rolling
+    rollingParams:
+      updatePeriodSeconds: 3
+      intervalSeconds: 5
+      timeoutSeconds: 30
+  template:
+    spec:
+      containers:
+        - name: vertx
+          env:
+            - name: KUBERNETES_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: JAVA_ARGS
+              value: '-Dvertx.cacheDirBase=/tmp -Djava.net.preferIPv4Stack=true'
+          terminationGracePeriodSeconds: 30
