@@ -1,0 +1,20 @@
+img {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.reveal code {
+  font-family: "Fira Code";
+}
+
+.hl-purple {
+  color: #782b90;
+}
+
+.hl-yellow {
+  color: #FFFF00;
+}
+
+.underline {
+  text-decoration: underline;
+}
