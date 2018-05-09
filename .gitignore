@@ -7,3 +7,4 @@ package-lock.json
 .project
 *.iml
 _site
+.vscode

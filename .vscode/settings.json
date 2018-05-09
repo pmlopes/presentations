@@ -4,5 +4,6 @@
         "markdown",
         "latex",
         "plaintext"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }

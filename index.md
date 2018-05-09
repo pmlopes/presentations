@@ -12,7 +12,7 @@
 
 Notes:
   Hello everyone and welcome to "bringing order to the chaos" talk. My name is Paulo Lopes and I am a principal
-  software engineering at RedHat we I work amongst others things as a Eclipse Vert.x core developer.
+  software engineering at RedHat where I work among others things as a Eclipse Vert.x core developer.
 
   I consider myself a polyglot and am fluent in many languages, Java, JavaScript and others.
 
@@ -188,7 +188,7 @@ vertx.eventBus().<JsonObject>localConsumer("paas.ai", msg -> {
 });
 ```
 
-<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2017</small>
+<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2018</small>
 
 Notes:
   To keep the demo simple, here is the simple AI algorithm. You can later read the full source code and experiment yourself by forking the github repo listed here. As you can see the algorithm is quite simple, given the position of the paddle and the ball an impulse is given back with the direction speed difference that should be applied to the paddle.
@@ -216,7 +216,7 @@ vertx.createHttpServer()
     .requestHandler(app::accept).listen(8080);
 ```
 
-<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2017</small>
+<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2018</small>
 
 Notes:
   Then we enter the HTTP component, where we add basic monitoring probes, and create a bridge to the eventbus. Remember reactive systems are message driven,this bridge will allow the application to scale horizontally when deployed as a cluster and will also allow the web browser to participate on the cluster as if it was a member of the cluster. And this concludes the code listing.
@@ -255,7 +255,7 @@ eventBus.onopen = function () {
 };
 ```
 
-<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2017</small>
+<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2018</small>
 
 Notes:
   My plan B is to have the mission critical service being able to run on a different location and in my case even using a different runtime. Of course this is not always possible but remember that being able to be polyglot can help you in case your runtime A is affected my a security bug, switching to another runtime can keep your business running while giving you the leverage to fix the issues without down time.
@@ -304,6 +304,8 @@ Notes:
 
 * https://github.com/netflix/chaosmonkey
 * <!-- .element: class="fragment grow" --> https://github.com/alexei-led/pumba
+* <!-- .element: class="fragment" --> https://github.com/wg/wrk
+* <!-- .element: class="fragment" --> https://git.kernel.org/pub/scm/network/iproute2/iproute2.git
 
 Notes:
   Our application is running so we need to start doing experiments, there are 2 popular tools: **chaos monkey** from netflix and **pumba**. Chaos Monkey although more complex is from netflix and made to solve netflix issues, and my demo is clearly not netflix. Chaos monkey assumes you deploy to AWS and have instances across the world. **Pumba** on the other hand... is the small brother that performs many tests but assumes that your application is running as **Docker Containers**. Since OpenShift/Kubernetes runs my application as a **container** this tool is perfect for smaller businesses than netflix, like myself.
@@ -372,7 +374,7 @@ Notes:
 
 ```sh
 # Introduce latency (2)
-pumba --debug netem --duration 1m
+pumba --debug netem --duration 1m \
   --tc-image gaiadocker/iproute2 delay \
   --time 100 \
   --jitter 30 \

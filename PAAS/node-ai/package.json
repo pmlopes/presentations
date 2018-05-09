@@ -4,7 +4,6 @@
     "vertx3-eventbus-client": "^3.5.1"
   },
   "main": "index.js",
-
   "scripts": {
     "start": "node ./index.js"
   }
