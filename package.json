@@ -1,16 +1,16 @@
 {
-  "name": "codemotion-amsterdam-2018",
-  "version": "2018.05.09",
+  "name": "rivieradev-2018",
+  "version": "2018.05.16",
   "description": "Bringing order to the chaos",
   "scripts": {
     "start":
       "node ./notes-server/index.js",
     "watch":
-      "reveal-md --theme moon --highlight-theme zenburn --title 'Codemotion Amsterdam 2018' --css custom.css -w",
+      "reveal-md --theme moon --highlight-theme zenburn --title 'RivieraDev 2018' --css custom.css -w",
     "build":
-    "reveal-md index.md --theme moon --highlight-theme zenburn --title 'Codemotion Amsterdam 2018' --css custom.css --static-dirs media --static _site",
+    "reveal-md index.md --theme moon --highlight-theme zenburn --title 'RivieraDev 2018' --css custom.css --static-dirs media --static _site",
     "build:server":
-      "reveal-md index.md --theme moon --highlight-theme zenburn --title 'Codemotion Amsterdam 2018' --css custom.css --scripts custom.js --static-dirs media --static _site"
+      "reveal-md index.md --theme moon --highlight-theme zenburn --title 'RivieraDev 2018' --css custom.css --scripts custom.js --static-dirs media --static _site"
   },
   "dependencies": {
     "reveal-md": "^2.0.2",

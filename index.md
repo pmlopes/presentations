@@ -1,8 +1,11 @@
-<!-- .slide: data-background="media/splash.png" data-background-size="contain" -->
+<!-- .slide: style="text-align: left;" -->
+## JUDCon<small>2018</small>:Riviera
 
+### Bringing order to the chaos with Eclipse Vert.x
+Paulo Lopes <small>@pml0pes</small>
 ---
 
-<!-- .slide: style="text-align: left;" data-background="media/bg.png" data-background-size="contain" -->
+<!-- .slide: style="text-align: left;" -->
 ## Who am I?
 
 * Principal Software Engineer @RedHat
@@ -22,7 +25,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ## *errare humanum est*
 
 <small>to err is human</small>
@@ -34,8 +36,6 @@ Notes:
   We all known the costs of software bugs are incredibly high.
 
 ---
-
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 
 * 1987 [Wall Street Crash](http://www.investopedia.com/features/crashes/crashes6.asp) <small class="fragment hl-yellow">$500 billion in one day</small>
 * 1993 [Pentium Division Bug](http://www.willamette.edu/~mjaneba/pentprob.html) <small class="fragment hl-yellow"> $475 million</small>
@@ -68,7 +68,6 @@ Notes:
   *think of a vaccine or a flu shot. While seemingly counterintuitive, you inject yourself with something harmful in order to prevent a future issue. This same technique applies to complex systems on the cloud as well.*
 
 ---
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 
 *Chaos Engineering <big><span class="fragment">is the discipline of</span> <span class="fragment"><span class="hl-yellow">experimenting</span> on a <span class="hl-yellow">distributed system</span></span> <span class="fragment">in order to <span class="hl-yellow">build confidence</span></span> <span class="fragment">in the system’s capability to <span class="hl-yellow">withstand turbulent conditions</span></span> <span class="fragment">in <span class="hl-yellow">**production**</span>.</span></big>*
 
@@ -103,7 +102,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ## Principles of Chaos Engineering
 
 * <!-- .element: class="fragment" --> Build a Hypothesis around <span class="hl-yellow">**Steady State**</span> Behavior
@@ -117,7 +115,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ## PONG as a Service
 
 > An <span class="underline">highly available</span> AI based Pong application that computes in <span class="underline">realtime</span> the computer move using a webservice that <span class="underline">scales</span> to any number of users
@@ -141,7 +138,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Hypothesis
 
 *If **PONG as a Service** is a <span class="hl-yellow">Reactive System</span>,*
@@ -151,8 +147,6 @@ Notes:
 <span class="fragment">*and it will be <span class="hl-yellow">elastic</span> so the system stays responsive under varying workload.*</span>
 
 ---
-
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 
 |                    | Spring5 | node.js | vert.x | Akka |
 | ------------------ |:-------:|:-------:|:------:|:----:|
@@ -168,7 +162,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ##### Main.java <small>(1/3)</small>
 
 ```java
@@ -188,14 +181,13 @@ vertx.eventBus().<JsonObject>localConsumer("paas.ai", msg -> {
 });
 ```
 
-<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2018</small>
+<small>https://github.com/pmlopes/presentations/tree/rivieradev-2018</small>
 
 Notes:
   To keep the demo simple, here is the simple AI algorithm. You can later read the full source code and experiment yourself by forking the github repo listed here. As you can see the algorithm is quite simple, given the position of the paddle and the ball an impulse is given back with the direction speed difference that should be applied to the paddle.
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ##### Main.java <small>(2/3)</small>
 
 ```java
@@ -216,7 +208,7 @@ vertx.createHttpServer()
     .requestHandler(app::accept).listen(8080);
 ```
 
-<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2018</small>
+<small>https://github.com/pmlopes/presentations/tree/rivieradev-2018</small>
 
 Notes:
   Then we enter the HTTP component, where we add basic monitoring probes, and create a bridge to the eventbus. Remember reactive systems are message driven,this bridge will allow the application to scale horizontally when deployed as a cluster and will also allow the web browser to participate on the cluster as if it was a member of the cluster. And this concludes the code listing.
@@ -234,7 +226,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ##### index.js <small>(3/3)</small>
 
 ```js
@@ -255,14 +246,13 @@ eventBus.onopen = function () {
 };
 ```
 
-<small>https://github.com/pmlopes/presentations/tree/codemotion-amsterdam-2018</small>
+<small>https://github.com/pmlopes/presentations/tree/rivieradev-2018</small>
 
 Notes:
   My plan B is to have the mission critical service being able to run on a different location and in my case even using a different runtime. Of course this is not always possible but remember that being able to be polyglot can help you in case your runtime A is affected my a security bug, switching to another runtime can keep your business running while giving you the leverage to fix the issues without down time.
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Real World Events
 
 * Software bug
@@ -280,7 +270,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 #### Production
 
 ```sh
@@ -299,7 +288,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 #### Tooling
 
 * https://github.com/netflix/chaosmonkey
@@ -312,7 +300,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Testing Real World Events
 
 * <span class="hl-yellow">DDoS</span>
@@ -329,7 +316,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Testing Real World Events
 
 * DDoS <span class="hl-yellow">✔</span>
@@ -340,14 +326,13 @@ Notes:
 # Introduce packet loss
 pumba --debug netem --duration 1m \
   --tc-image gaiadocker/iproute2 \
-  loss -p 20 -c 10 "re2:.*paas.*"
+  loss -p 20 -c 10 "re2:.*chaos.*"
 ```
 
 Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Testing Real World Events
 
 * DDoS <span class="hl-yellow">✔</span>
@@ -358,14 +343,13 @@ Notes:
 # Introduce latency
 pumba --debug netem --duration 1m \
   --tc-image gaiadocker/iproute2 \
-  delay --time 500 "re2:.*paas.*"
+  delay --time 500 "re2:.*chaos.*"
 ```
 
 Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Testing Real World Events
 
 * DDoS <span class="hl-yellow">✔</span>
@@ -379,14 +363,13 @@ pumba --debug netem --duration 1m \
   --time 100 \
   --jitter 30 \
   --correlation 20 \
-  "re2:.*paas.*"
+  "re2:.*chaos.*"
 ```
 
 Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Testing Real World Events
 
 * DDoS <span class="hl-yellow">✔</span>
@@ -395,14 +378,13 @@ Notes:
 
 ```sh
 pumba --random --interval 1m \
-      kill --signal SIGKILL "re2:.*paas.*"
+      kill --signal SIGKILL "re2:.*chaos.*"
 ```
 
 Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Testing Real World Events
 
 * DDoS <span class="hl-yellow">✔</span>
@@ -414,7 +396,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Automate Experiments to Run Continuously
 
 <!-- .element: class="stretch" --> ![Automate](media/robot-3.png)
@@ -423,7 +404,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Minimize Blast Radius
 
 <!-- .element: class="stretch" --> ![EventBus PTP](media/murphylaw-book.jpg)
@@ -433,7 +413,6 @@ Notes:
 
 ---
 
-<!-- .slide: data-background="media/bg.png" data-background-size="contain" -->
 ### Minimize Blast Radius (Tips)
 
 * <!-- .element: class="fragment grow" --> Have a fallback plan when things go wrong
@@ -445,7 +424,7 @@ Notes:
 
 ---
 
-<!-- .slide: style="text-align: left;" data-background="media/bg.png" data-background-size="contain" -->
+<!-- .slide: style="text-align: left;" -->
 # Thank you!
 
 * https://www.jetdrone.xyz
