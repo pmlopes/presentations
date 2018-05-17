@@ -1,8 +1,8 @@
 <!-- .slide: style="text-align: left;" -->
-## JUDCon<small>2018</small>:Riviera
+## JUDCon:Riviera
 
 ### Bringing order to the chaos with Eclipse Vert.x
-Paulo Lopes <small>@pml0pes</small>
+Paulo Lopes <small>`@pml0pes`</small>
 ---
 
 <!-- .slide: style="text-align: left;" -->
@@ -10,8 +10,8 @@ Paulo Lopes <small>@pml0pes</small>
 
 * Principal Software Engineer @RedHat
 * Eclipse Vert.x core developer
-* Polyglot fluent in Java and JavaScript and others
-* Game dev, Software Architect, Open Source dev
+* Polyglot fluent in Java, JavaScript and others
+* GameDev, Software Architect, Open Source
 
 Notes:
   Hello everyone and welcome to "bringing order to the chaos" talk. My name is Paulo Lopes and I am a principal
@@ -40,7 +40,7 @@ Notes:
 * 1987 [Wall Street Crash](http://www.investopedia.com/features/crashes/crashes6.asp) <small class="fragment hl-yellow">$500 billion in one day</small>
 * 1993 [Pentium Division Bug](http://www.willamette.edu/~mjaneba/pentprob.html) <small class="fragment hl-yellow"> $475 million</small>
 * 1999 [Y2K](http://money.cnn.com/magazines/fortune/fortune_archive/2000/02/07/272831/index.htm) <small class="fragment hl-yellow"> $500 billion</small>
-* 2018 [Meltdown Spetre](https://www.wired.com/story/meltdown-spectre-costs-of-unchecked-innovation/) <small class="fragment hl-yellow"> ??? billion</small>
+* 2018 [Meltdown Spectre](https://www.wired.com/story/meltdown-spectre-costs-of-unchecked-innovation/) <small class="fragment hl-yellow"> ??? billion</small>
 * ...
 
 Notes:
@@ -117,7 +117,7 @@ Notes:
 
 ## PONG as a Service
 
-> An <span class="underline">highly available</span> AI based Pong application that computes in <span class="underline">realtime</span> the computer move using a webservice that <span class="underline">scales</span> to any number of users
+> An <span class="underline">highly available</span> AI based Pong application that computes in <span class="underline">realtime</span> the computer move using a webservice that <span class="underline">scales</span> to any number of users!
 
 Notes:
   Let me introduce these principles in a simple example application. Imagine that we want to build a PaaS, **Pong** as a service application.
