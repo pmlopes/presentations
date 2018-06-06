@@ -3,8 +3,8 @@
   "version": "2018.06.01",
   "description": "Legalize JavaScript for the Enterprise Now!",
   "scripts": {
-    "watch": "reveal-md --theme sky --highlight-theme zenburn --title 'Codemotion Amsterdam 2018' --css custom.css -w",
-    "build": "reveal-md index.md --theme sky --highlight-theme zenburn --title 'Codemotion Amsterdam 2018' --css custom.css --static-dirs media --static _site"
+    "watch": "reveal-md --theme white --highlight-theme zenburn --title 'AmsterdamJS 2018' --css custom.css -w",
+    "build": "reveal-md index.md --theme white --highlight-theme zenburn --title 'AmsterdamJS 2018' --css custom.css --static-dirs media --static _site"
   },
   "dependencies": {
     "reveal-md": "^2.0.2"
