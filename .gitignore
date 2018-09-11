@@ -7,3 +7,5 @@ package-lock.json
 .project
 *.iml
 _site
+target
+.vertx
