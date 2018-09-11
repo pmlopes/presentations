@@ -124,6 +124,7 @@ class RuntimeReflectionRegistrationFeature implements Feature {
   public void beforeAnalysis(BeforeAnalysisAccess access) {
     try {
       RuntimeReflection.register(java.util.LinkedHashMap.class.getDeclaredConstructor());
+      RuntimeReflection.register(io.netty.channel.socket.nio.NioServerSocketChannel.class.getDeclaredConstructor());
     } catch (NoSuchMethodException e) {
       throw new RuntimeException(e);
     }
