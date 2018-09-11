@@ -1,9 +1,0 @@
-# build files
-target
-build
-lib_managed
-# runtime files
-node_modules
-.vertx
-src/main/resources/webroot/main.js
-src/main/resources/ssr.js
