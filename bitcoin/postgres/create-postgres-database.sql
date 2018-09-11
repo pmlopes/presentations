@@ -1,0 +1,3 @@
+CREATE USER dbuser WITH PASSWORD 'dbpassword';
+
+CREATE DATABASE bitcoin WITH TEMPLATE = template0 ENCODING 'UTF8';
