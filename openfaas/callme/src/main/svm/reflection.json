@@ -1,0 +1,15 @@
+[
+  {
+    "name": "java.util.LinkedHashMap",
+    "methods": [
+      { "name": "<init>", "parameterTypes": [] }
+    ]
+  },
+  {
+    "name": "MyFunction",
+    "methods": [
+      { "name": "<init>", "parameterTypes": [] }
+    ]
+  }
+
+]

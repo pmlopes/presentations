@@ -160,7 +160,7 @@ Notes:
 
 ---
 
-## Fighting back!
+## Tricks of the trade!
 
 * <!-- .element class="fragment" --> `-H:+ReportUnsupportedElementsAtRuntime`
 * <!-- .element class="fragment" --> `--delay-class-initialization-to-runtime=FQCN`
@@ -173,7 +173,43 @@ Notes:
 
 ---
 
-## 1. Realtime bitcoin viewer
+## 1. Serverless
+
+![openfaas](media/openfaas.png)
+
+---
+
+## Flow:
+
+1. Write `fn`: `() -> "Hello there!"`
+2. Deploy
+3. profit!
+
+---
+
+## Showtime
+
+---
+
+## 2. gRPC
+
+![grpc](media/grpc.png)
+
+---
+
+## Flow:
+
+1. Server
+2. Client
+3. chat!
+
+---
+
+## Showtime
+
+---
+
+## 3. Realtime bitcoin viewer
 
 ![diagram](media/diagram.png)
 
@@ -194,45 +230,9 @@ Notes:
 
 ---
 
-## 2. Serverless
-
-![openfaas](media/openfaas.png)
-
----
-
-## Flow:
-
-1. Write `fn`: `() -> "Hello there!"`
-2. Deploy
-3. profit!
-
----
-
-## Showtime
-
----
-
-## 3. gRPC
-
-![grpc](media/grpc.png)
-
----
-
-## Flow:
-
-1. Server
-2. Client
-3. chat!
-
----
-
-## Showtime
-
----
-
 ## Project Bootstrap
 
-> Due to the SVM caveats, we need to fight some `Netty` (a dependency of `Vert.x`) issues. <small>Paulo Lopes</small>
+> <!-- .element class="fragment" --> Due to the SVM caveats, we need to fight some `Netty` <small>`Vert.x` dependency</small> issues.
 
 http://vertx-starter.jetdrone.xyz/
 
