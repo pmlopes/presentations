@@ -1,13 +1,13 @@
 {
-  "name": "AmsterdamJUB",
-  "version": "2018.09.20",
-  "description": "GraalVM, Vert.x & Native images for fun and profit!",
+  "name": "Oracle-CodeOne",
+  "version": "2018.10.25",
+  "description": "Yes JavaScript can be faster than Java!",
   "scripts": {
-    "watch": "reveal-md README.md --theme white --highlight-theme github --title 'AmsterdamJUG' --css custom.css -w",
-    "build": "reveal-md README.md --theme white --highlight-theme github --title 'AmsterdamJUG' --css custom.css --static-dirs media --static _site"
+    "watch": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css -w",
+    "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css --static-dirs media --static _site"
   },
   "dependencies": {
-    "reveal-md": "^2.1.0"
+    "reveal-md": "^2.1.2"
   },
   "author": "Paulo Lopes",
   "license": "ISC"

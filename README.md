@@ -1,246 +1,216 @@
-![graal-vertx](media/graal-vertx.jpeg)
+### Yes JavaScript is **faster**
+### than Java<small>*</small>!
+###### <small><small>*</small> when you use GraalVM</small>
 
-### *Native images for fun and profit!*
+<p>&nbsp;</p>
+`Paulo Lopes - @pml0pes` <!-- .element style="font-size: 0.5em" -->
 
 Notes:
 
 ---
 
-## *Who am I?*
+### *I'm a ... Developer!*
 
-* Discovered Java in 1997 (1.0.2b)
-* Java Developer since 1998 (1.1.4)
-* <!-- .element class="fragment" --> Eclipse Vert.x Core Developer
+* Polyglot <small class="fragment">Java (since 1.1.4)</small> <small class="fragment">JavaScript (since Netscape 4.0)</small>
+* Game <small class="fragment">AAA (7th Gen)</small> <small class="fragment">Social Games</small>
+* Open Source <small class="fragment">Eclipse Vert.x</small>
 * <!-- .element class="fragment" --> RedHat Principal Software Engineer
-* <!-- .element class="fragment" --> <small>Likes JavaScript</small>
 
 Notes:
 
 ---
 
-## Once upon the time...
-### (In a nutshell)
+### JavaScript (and the JVM)
+
+* (Dec 2006) Rhino 1.6r2 is bundled with Java 6
+* <!-- .element class="fragment" --> (May 2009) Node.js is presented at JSConf
+* <!-- .element class="fragment" --> (Mar 2013) Node.js 0.10.x release
+* <!-- .element class="fragment" --> (Mar 2014) Nashorn is bundled with Java 8
+
+Notes:
+  Rhino started at Netscape in 1997, when they were planning to produce a version of the Netscape Navigator written fully in Java. Originally Rhino compiled all JavaScript code to byte code.  But this had 2 faults: Compile time was long and very resource intensive, second it leaked memory as class loaders didn't release the compilation resources.
+
+  Nodejs was introduced in 2009 but not until the 0.10.x series it got popular. It introduced the single thread event driven programming to server developers was built on top of V8, the JavaScript engine running on Google Chrome.
+
+  In March 2014, With the release of Java8 Nashorn was introduced, it improved the performance of JavaScript on the JVM in several orders of magnitude than Rhino and bumped the JavaScript language level from JavaScript 1.7 to EcmaScript 5.1.
+
 ---
 
-| Release | Date     | Features | JRE installer |
-| ------- |:---------|:------------|-----------:|
-| 1.1     | Feb 1997 | <span class="hl-purple">**Interpreted**</span> | 2.61MB     |
-| 1.2     | Dec 1998 | JIT         | <span class="hl-purple">**11.94MB**</span>    |
-| 1.4     | Feb 2002 | Lots!!!     | <span class="hl-purple">**13.52MB**</span>    |
-| 1.5     | Sep 2004 | Generics    | <span class="hl-purple">**15.8MB**</span>     |
-| 1.6     | Dec 2006 | JavaScript  | <span class="hl-purple">**15.55MB**</span>    |
-| 1.7     | Jul 2011 | `java.nio`  | <span class="hl-purple">**31.18MB**</span>    |
-| 1.8     | Mar 2014 | `() -> {}`  | <span class="hl-purple">**61.55MB**</span>    |
+### Why care about JavaScript?
+
+* *Everyone* knows the language
+* <!-- .element class="fragment" --> Productive <small>write, (debug), run!</small>
+* <!-- .element class="fragment" --> Millions of libraries on NPM <small>Yes I know leftpad!</small>
+* <!-- .element class="fragment" --> Fullstack
+
+Notes:
+  JavaScript is simple, at its core there's just a full hand of types and functions, so the learning curve is very low. Most of the time there's almost no requirements to start coding, from the browser, open the devtools and you are already writing code. The community has provided millions of libraries, and for many projects this allowed, developers to cross borders in their stacks. Frontend developers could write backend code, and backend developers could write frontend applications.
+
+---
+
+### nodejs is fast! <span class="fragment">(not really!)</span>
+
+<div style="display: inline-block; width: 50%; float: left;">
+![node event loop](media/node-eventloop.png)
+</div>
+
+<div style="display: inline-block; width: 50%;" class="fragment">
+![threaded JVM](media/threaded-jvm.png)
+</div>
+
+<small>https://strongloop.com/strongblog/node-js-is-faster-than-java/</small>
+
+Notes:
+  One of the biggest urban myths out there is that nodejs is faster than java, however all articles state that java application are by nature thread based and therefore susceptible to locking and waste of resources.
+
+---
+
+![techempower](media/techempower.png)
+<small>https://www.techempower.com/benchmarks/</small>
+
+Notes:
+  The reality shows that JVM based frameworks rule independent benchmarks.
+
+---
+
+### GraalJS
+
+![graal-slide](media/graal-slide.jpg)
+
+<small>https://www.slideshare.net/ThomasWuerthinger/2015-cgo-graal</small>
+
+Notes:
+  GraalJS is the new contender. The project goals are:
+
+  * Execute JavaScript code with best performance
+  * Full compatibility with the latest ECMAScript
+  * Fast interoperability with JVM/GraalVM langs
+
+---
+
+### The need for speed
+
+* Fast <small class="fragment">nashorn</small>
+* Faster <small class="fragment">nodejs</small>
+* Fastest  <small class="fragment">graaljs</small>
+
+Notes:
+  Even though performance increased from Rhino to Nashorn (and by the way, nashorn is Rhinoceros in German), the project failed at keeping up to date with the fast pace of evolution of the JavaScript world.
+
+  On the other hand, nodejs is sitting on the shoulders of giants. It's build on top of V8 (Google Chrome, JavaScript engine) which is constantly working on getting the best performance possible and spec compliance possible.
+
+  And recently, Oracle open sources graaljs. GraalJS runs on GraalVM and show some promising results.
+
+---
+
+# Performance
+
+* Get closer to the Hardware
+* Go Hybrid
+
+---
+
+### Close to the hardware
+
+```
+.text
+  .global _start
+_start:
+  movl    $len,%edx
+  movl    $msg,%ecx
+  movl    $1,%ebx
+  movl    $4,%eax
+  int     $0x80
+  movl    $0,%ebx
+  movl    $1,%eax
+  int     $0x80
+...
+```
+
+Notes:
+  Sometimes it is fast but not really maintainable...
+
+---
+
+### Hybrid model
+
+* pick a good jvm framework <small class="fragment">Vert.x</small>
+* make it polyglot <small class="fragment">JavaScript + Tooling</small>
+* profit <small class="fragment">ES4X</small>
+
+Notes:
+  The hybrid approach is, pick a good candidate from the current benchmark that can be makde polyglot and profit.
+---
+
+# ES4X
+
+* latest JavaScript support <small>*With GraalVM</small>
+* `package.json` / "`NPM`" development style
+* great tooling IntelliSense, Debugging
+* insane performance!
+
+Notes:
+  EcmaScript for Vert.x or ES4X is a runtime that supports the latest JavaScript language spec and features, uses a NPM development approach so tooling is familiar to JavaScript developers and has support for code completion, debugging and great performance.
+
+---
+
+### Why Vert.x?
+
+* Toolkit
+* <!-- .element class="fragment" --> Unopiniated
+* <!-- .element class="fragment" --> Polyglot
+* <!-- .element class="fragment" --> Reactive
+* <!-- .element class="fragment" --> Distributed
 
 Notes:
 
+  * It's a toolkit, not a full blown framework
+  * It doesn't impose a rigid workflow or dependencies
+  * It is designed with polyglot in mind so APIs are kept simple and explicit rather than implicit
+  * It is reactive and a signee of the reactive manifesto
+  * which makes it trivial to build distributed scalable applications
+
 ---
 
-![js-dev](media/js-dev.jpg)
+### How fast?
 
-### Java is **Slow**
-### Java is **Bloated**
+<!-- .element class="stretch" --> ![techempower](media/es4x.png)
 
 Notes:
+  The fastest JS you can find.
 
 ---
 
-## Lies, lies and more lies...
+### Faster than Java
 
-<!-- .element class="stretch" --> ![fast-java](media/fast-java.jpg)
-
-<small>https://www.techempower.com/benchmarks</small>
+<!-- .element class="stretch" --> ![chart](media/chart.png)
 
 Notes:
+  In fact the combination of Vert.x and Graal gives you one of the best performances when compared to:
+
+  * Vert.x Web on plain OpenJDK8
+
+  Or the references
+
+  * nodejs (same language)
+  * spring (most popular choice on the JVM)
 
 ---
 
-## Lies, lies and more lies...
-
-<!-- .element class="stretch" --> ![fast-java-2](media/fast-java-2.jpg)
-
-<small>https://www.techempower.com/benchmarks</small>
-
-Notes:
-
----
-
-## Well...
-
----
-
-## Just In Time Compiler
-
-> JIT causes a slight to noticeable delay in initial execution of an application
-
-Notes:
-  In general, the more optimization JIT performs, the better the code it will generate, but the initial delay will also increase. A JIT compiler therefore has to make a trade-off between the compilation time and the quality of the code it hopes to generate. Startup time can be increased IO-bound operations in addition to JIT compilation: for example, the rt.jar class data file for the Java Virtual Machine (JVM) is 40 MB and the JVM must seek a lot of data in this contextually huge file.
-
----
-
-![js-dev](media/js-dev.jpg)
-
-## I've told you so!
-
----
-
-## So what is Graal(VM)?
-
-> Graal is a native code generator. You give it some intermediate model of executable code, and then you get native code for processors.
-
-Notes:
-  Once you have a code generator, you can do many other things such as a compiler to native code for some language, you can do a JIT (just-in-time) compiler for another language, etc.
-
----
-
-## GraalVM subprojects
-
-* JIT
-* Truffle languages (JS, Ruby, R, Python, LLVM, etc...)
-* Oracle DB stuff
-* **SubstrateVM**
-
-Notes:
-  What excites people so much about GraalVM is a sub-project called SubstrateVM (SVM), and that compiles JVM applications to native executables. This is also called a ahead-of-time compiler.
-
----
-
-## SubstrateVM
-
-> Substrate VM is a framework that allows ahead-of-time (AOT) compilation of Java applications under closed-world assumption into executable images or shared objects (ELF-64 or 64-bit Mach-O).
-
----
-
-## SubstrateVM `!=` JVM
-
----
-
-| What                                      | Status    |
-| ----------------------------------------- | ----------|
-| Dynamic Class (Un)Loading                 | ✘ |
-| Reflection                                | Mostly |
-| Dynamic Proxy                             | Mostly |
-| InvokeDynamic/Method Handles              | ✘ |
-| Threads                                   | ✔ |
-| Synchronized, wait, and notify            | ✔ |
-| Security Manager                          | ✘ |
-| References                                | Mostly |
-
-Notes:
-
----
-
-| What                                      | Status    |
-| ----------------------------------------- | ----------|
-| Finalizers                                | ✘ |
-| Java Native Interface (JNI)               | Mostly |
-| Unsafe Memory Access                      | Mostly |
-| Static Initializers                       | Partially |
-| Lambda Expressions                        | ✔ |
-| Identity Hash Code                        | ✔ |
-| JVMTI, JMX, other native VM interfaces    | ✘ |
-
----
-
-## The Bad News...
-
-* Not every application can be compiled to SVM
-* **There is no JIT** (It's AOT remember?)
-* **GC is simpler**
-
----
-
-## The Good news...
-
-* <!-- .element class="fragment" --> Vert.x works <small>(mileage varies greatly depending on your stack)</small>
-* <!-- .element class="fragment" --> Out of the box <small>web, redis, postgres, gRPC, sockjs, websockets, etc...</small>
-* <!-- .element class="fragment" --> `cli` or `serverless`
-* <!-- .element class="fragment" --> Low resources
-* <!-- .element class="fragment" --> Fast startup
-
----
-
-## Tricks of the trade!
-
-* <!-- .element class="fragment" --> `-H:+ReportUnsupportedElementsAtRuntime`
-* <!-- .element class="fragment" --> `--delay-class-initialization-to-runtime=FQCN`
-* <!-- .element class="fragment" --> `reflection.json`
-* <!-- .element class="fragment" --> `substitutions.java`
-
----
-
-## Demo(s)
-
----
-
-## 1. Serverless
-
-![openfaas](media/openfaas.png)
-
----
-
-## Flow:
-
-1. Write `fn`: `() -> "Hello there!"`
-2. Deploy
-3. profit!
-
----
-
-## Showtime
-
----
-
-## 2. gRPC
-
-![grpc](media/grpc.png)
-
----
-
-## Flow:
-
-1. Server
-2. Client
-3. chat!
-
----
-
-## Showtime
-
----
-
-## 3. Realtime bitcoin viewer
-
-![diagram](media/diagram.png)
-
----
-
-## Dependencies:
-
-* Vert.x core (3.6.0)
-  * <small>EventBus, HTTP Server, WebSocketClient</small>
-* Vert.x web (3.6.0)
-  * <small>HTTP Routing, WebSocketServer, Eventbus Bridge</small>
-* Postgres + reactive-pg-client (0.10.2)
-  * <small>Postgres SQL client</small>
-
----
-
-## Showtime
-
----
-
-## Project Bootstrap
-
-> <!-- .element class="fragment" --> Due to the SVM caveats, we need to fight some `Netty` <small>`Vert.x` dependency</small> issues.
-
-http://vertx-starter.jetdrone.xyz/
+## Demo
+
+* bootstrap project
+* create simple app <small>the code from the previous slide</small>
+  * code completion
+  * debugging
+* (bonus) async await
 
 ---
 
 <!-- .slide: style="text-align: left;" -->
 # Thank you!
 
+* https://reactiverse.io/es4x
 * https://www.graalvm.org
 * https://vertx.io
 * https://www.jetdrone.xyz
