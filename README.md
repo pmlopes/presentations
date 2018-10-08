@@ -172,12 +172,13 @@ Notes:
 * profit <small class="fragment">ES4X</small>
 
 Notes:
-  The hybrid approach is, pick a good candidate from the current benchmark that can be makde polyglot and profit.
+  The hybrid approach is, pick a good candidate from the current benchmark that can be made polyglot and profit.
+
 ---
 
 # ES4X
 
-* latest JavaScript support <small>*With GraalVM</small>
+* latest JavaScript support <small>*With GraalVM*</small>
 * `package.json` / "`NPM`" development style
 * great tooling IntelliSense, Debugging
 * insane performance!
@@ -196,7 +197,6 @@ Notes:
 * <!-- .element class="fragment" --> Distributed
 
 Notes:
-
   * It's a toolkit, not a full blown framework
   * It doesn't impose a rigid workflow or dependencies
   * It is designed with polyglot in mind so APIs are kept simple and explicit rather than implicit
