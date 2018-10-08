@@ -4,7 +4,8 @@
   "description": "Yes JavaScript can be faster than Java!",
   "scripts": {
     "watch": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css -w",
-    "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css --static-dirs media --static _site"
+    "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css --static-dirs media --static _site",
+    "print": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css  --print slides.pdf"
   },
   "dependencies": {
     "reveal-md": "^2.1.2"

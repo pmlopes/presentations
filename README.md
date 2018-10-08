@@ -20,6 +20,37 @@ Notes:
 
 ---
 
+### JavaScript
+
+#### Properties <!-- .element: style="text-align: left;" -->
+<small class="fragment">Infinity</small><small class="fragment">, NaN</small><small class="fragment">, undefined</small><small class="fragment">, null</small>
+
+#### Functions <!-- .element: style="text-align: left;" -->
+<small class="fragment">eval()</small><small class="fragment">, isFinite()</small><small class="fragment">, isNan()</small><small class="fragment">, parseFloat()</small><small class="fragment">, parseInt()</small><small class="fragment">, decodeURI()</small><small class="fragment">, decodeURIComponent()</small><small class="fragment">, encodeURI()</small><small class="fragment">, encodeURIComponent()</small>
+
+#### Objects <!-- .element: style="text-align: left;" -->
+<small class="fragment">Object</small><small class="fragment">, Function</small><small class="fragment">, Boolean</small><small class="fragment">, Error</small><small class="fragment">, Number</small><small class="fragment">, Math</small><small class="fragment">, Date</small><small class="fragment">, String</small><small class="fragment">, RegExp</small><small class="fragment">, Array</small>
+
+Notes:
+  So what is so interesting with `JavaScript`? let's do a crash course on the language. The core runtime defines a set of Properties, Functions and Objects. Once a developers knows these, all the building blocks are available to start coding.
+
+  So If I have to enumerate almost all the API, it would fit in this slide, let see...
+
+---
+
+<!-- .slide: data-background-video="media/iknowkungfu.mp4" data-background-size="contain" -->
+
+Notes:
+  It's so simple that you get that feeling right...
+
+---
+
+## I Know JavaScript!
+
+Notes:
+
+---
+
 ### JavaScript (and the JVM)
 
 * (Dec 2006) Rhino 1.6r2 is bundled with Java 6
@@ -28,6 +59,8 @@ Notes:
 * <!-- .element class="fragment" --> (Mar 2014) Nashorn is bundled with Java 8
 
 Notes:
+  Lets focus now on JavaScript and the JVM
+
   Rhino started at Netscape in 1997, when they were planning to produce a version of the Netscape Navigator written fully in Java. Originally Rhino compiled all JavaScript code to byte code.  But this had 2 faults: Compile time was long and very resource intensive, second it leaked memory as class loaders didn't release the compilation resources.
 
   Nodejs was introduced in 2009 but not until the 0.10.x series it got popular. It introduced the single thread event driven programming to server developers was built on top of V8, the JavaScript engine running on Google Chrome.
@@ -172,6 +205,10 @@ Notes:
 
 ---
 
+<!-- .slide: data-background-video="media/notfair.mp4" data-background-size="contain" -->
+
+---
+
 ### How fast?
 
 <!-- .element class="stretch" --> ![techempower](media/es4x.png)
@@ -197,13 +234,40 @@ Notes:
 
 ---
 
-## Demo
+## The Basics
 
 * bootstrap project
 * create simple app <small>the code from the previous slide</small>
   * code completion
   * debugging
 * (bonus) async await
+
+Notes:
+  Lets make a small demo to ilustrate the basics.
+
+---
+
+# DEMO I
+
+---
+
+## Lets Integrate!
+
+* server side rendering with `reactjs`
+* integrate with drools `¯\_(ツ)_/¯`
+
+Notes:
+  The power of using ES4X and Graal is not about performance, the true power is about integration, Vert.x and Graal allow you to use the best of both worlds, integrate with your favorite frontend framework and your business logic written for the JVM. Here's an example.
+
+---
+
+# DEMO II
+---
+
+# Vert.x    <!-- .element class="fragment" -->
+# +         <!-- .element class="fragment" -->
+# GraalVM   <!-- .element class="fragment" -->
+# = ❤️      <!-- .element class="fragment" -->
 
 ---
 

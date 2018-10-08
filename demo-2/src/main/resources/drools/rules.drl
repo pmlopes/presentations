@@ -1,0 +1,13 @@
+package drools
+
+//list any import classes here.
+
+//declare any global variables here
+
+rule "Greetings"
+	when
+		greetingsReferenceObject: Greeting( message == "Hello World!" )
+	then
+		greetingsReferenceObject.greet();
+	end
+
