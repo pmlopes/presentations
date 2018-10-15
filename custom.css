@@ -10,3 +10,7 @@ img {
 .hl-purple {
   color: #782b90;
 }
+
+body {
+  background: url(./media/bg.png) no-repeat 100% 100%;
+}

@@ -22,14 +22,40 @@ Notes:
 
 ### JavaScript
 
-#### Properties <!-- .element: style="text-align: left;" -->
-<small class="fragment">Infinity</small><small class="fragment">, NaN</small><small class="fragment">, undefined</small><small class="fragment">, null</small>
+#### Properties <!-- .element: style="text-align: left;" class="fragment" -->
+<div style="text-align: left">
+  <small class="fragment">Infinity</small>
+  <small class="fragment">NaN</small>
+  <small class="fragment">undefined</small>
+  <small class="fragment">null</small>
+</div>
 
-#### Functions <!-- .element: style="text-align: left;" -->
-<small class="fragment">eval()</small><small class="fragment">, isFinite()</small><small class="fragment">, isNan()</small><small class="fragment">, parseFloat()</small><small class="fragment">, parseInt()</small><small class="fragment">, decodeURI()</small><small class="fragment">, decodeURIComponent()</small><small class="fragment">, encodeURI()</small><small class="fragment">, encodeURIComponent()</small>
+#### Functions <!-- .element: style="text-align: left;" class="fragment" -->
+<div style="text-align: left">
+  <small class="fragment">eval()</small>
+  <small class="fragment">isFinite()</small>
+  <small class="fragment">isNan()</small>
+  <small class="fragment">parseFloat()</small>
+  <small class="fragment">parseInt()</small>
+  <small class="fragment">decodeURI()</small>
+  <small class="fragment">decodeURIComponent()</small>
+  <small class="fragment">encodeURI()</small>
+  <small class="fragment">encodeURIComponent()</small>
+</div>
 
-#### Objects <!-- .element: style="text-align: left;" -->
-<small class="fragment">Object</small><small class="fragment">, Function</small><small class="fragment">, Boolean</small><small class="fragment">, Error</small><small class="fragment">, Number</small><small class="fragment">, Math</small><small class="fragment">, Date</small><small class="fragment">, String</small><small class="fragment">, RegExp</small><small class="fragment">, Array</small>
+#### Objects <!-- .element: style="text-align: left;" class="fragment" -->
+<div style="text-align: left">
+  <small class="fragment">Object</small>
+  <small class="fragment">Function</small>
+  <small class="fragment">Boolean</small>
+  <small class="fragment">Error</small>
+  <small class="fragment">Number</small>
+  <small class="fragment">Math</small>
+  <small class="fragment">Date</small>
+  <small class="fragment">String</small>
+  <small class="fragment">RegExp</small>
+  <small class="fragment">Array</small>
+</div>
 
 Notes:
   So what is so interesting with `JavaScript`? let's do a crash course on the language. The core runtime defines a set of Properties, Functions and Objects. Once a developers knows these, all the building blocks are available to start coding.
@@ -180,7 +206,7 @@ Notes:
 
 * latest JavaScript support <small>*With GraalVM*</small>
 * `package.json` / "`NPM`" development style
-* great tooling IntelliSense, Debugging
+* great tooling IntelliSense, Debugging <small>*With TypeScript*</small>
 * insane performance!
 
 Notes:
@@ -205,7 +231,10 @@ Notes:
 
 ---
 
-<!-- .slide: data-background-video="media/notfair.mp4" data-background-size="contain" -->
+## Demo 0
+
+Notes:
+  Quick Vert.x intro
 
 ---
 
@@ -215,6 +244,10 @@ Notes:
 
 Notes:
   The fastest JS you can find.
+
+---
+
+<!-- .slide: data-background-video="media/notfair.mp4" data-background-size="contain" -->
 
 ---
 
@@ -231,6 +264,15 @@ Notes:
 
   * nodejs (same language)
   * spring (most popular choice on the JVM)
+
+---
+
+### Why TypeScript?
+
+![typescript](media/typescript.jpg)
+
+Notes:
+  TypeScript is a key player in the project, but it's role is rather hidden. TypeScript Definition files are generated for all the vert.x API and this will allow us to benefit from proper code completion, intellisense, hinting at code time, but will stay out of our way at runtime, so the performance penalty is 0%. Let's consider an example to make thinks easier to understand:
 
 ---
 
