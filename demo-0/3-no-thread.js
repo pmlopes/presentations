@@ -3,7 +3,7 @@
 
 // this example shows that there are no extra threads
 
-// npm run shell -- -g -- 3-no-thread.js
+// npm run shell -- 3-no-thread.js
 
 const Thread = Java.type('java.lang.Thread');
 
@@ -13,7 +13,7 @@ add(1, 1, res => {
   console.log(`3) Thread : ${Thread.currentThread().getName()} result: ${res}`);
 })
 
-console.log('After');
+console.log('2) After');
 
 function add(a, b, handler) {
   let r = a + b;

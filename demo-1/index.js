@@ -19,28 +19,27 @@ let client = PgClient.pool(
     .setDatabase('hello_world'));
 
 app.get('/').handler(
-  // // Step #1
-  // ctx => {
-  //   client.preparedQuery(SELECT_WORLD, Tuple.of(1), res => {
-  //     if (res.succeeded()) {
-  //       let resultSet = res.result().iterator();
-  //
-  //       if (!resultSet.hasNext()) {
-  //         // no result found
-  //         ctx.fail(404);
-  //         return;
-  //       } else {
-  //         let row = resultSet.next();
-  //
-  //         ctx.response()
-  //           .putHeader("Content-Type", "application/json")
-  //           .end(JSON.stringify({id: row.getInteger(0), randomNumber: row.getInteger(1)}));
-  //       }
-  //     } else {
-  //       ctx.fail(res.cause());
-  //     }
-  //   });
-  // }
+  ctx => {
+    client.preparedQuery(SELECT_WORLD, Tuple.of(1), res => {
+      if (res.succeeded()) {
+        let resultSet = res.result().iterator();
+
+        if (!resultSet.hasNext()) {
+          // no result found
+          ctx.fail(404);
+          return;
+        } else {
+          let row = resultSet.next();
+
+          ctx.response()
+            .putHeader("Content-Type", "application/json")
+            .end(JSON.stringify({id: row.getInteger(0), randomNumber: row.getInteger(1)}));
+        }
+      } else {
+        ctx.fail(res.cause());
+      }
+    });
+  }
 
   // // Step #2
   // ctx => {

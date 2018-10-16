@@ -3,8 +3,8 @@
 
 // this example shows clustering
 
-// npm run shell -- -g -- -cluster 4-cluster-eventbus-consumer.js
-// npm run shell -- -g -- -cluster 4-cluster-eventbus-producer.js
+// npm run shell -- 4-cluster-eventbus-consumer.js -- -cluster
+// npm run shell -- 4-cluster-eventbus-producer.js -- -cluster
 
 vertx.eventBus()
   .consumer(

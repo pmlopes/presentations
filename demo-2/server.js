@@ -47,7 +47,7 @@ app.get('/greetings').handler(function (ctx) {
   engine.insert(greeting);
   engine.fireAllRules();
 
-  ctx.response().end();
+  ctx.response().end('See the console...');
 });
 
 app.get().handler((ctx) => {

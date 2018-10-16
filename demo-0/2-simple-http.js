@@ -3,7 +3,7 @@
 
 // this example shows the basics of creating http servers
 
-// npm run shell -- -g -- 2-simple-http.js
+// npm run shell -- 2-simple-http.js
 // http localhost:8000
 
 vertx
