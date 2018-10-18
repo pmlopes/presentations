@@ -233,6 +233,8 @@ Notes:
 
 ## Demo 0
 
+<small>https://github.com/pmlopes/presentations/tree/codeone/demo-0</small>
+
 Notes:
   Quick Vert.x intro
 
@@ -291,6 +293,8 @@ Notes:
 
 # DEMO I
 
+<small>https://github.com/pmlopes/presentations/tree/codeone/demo-1</small>
+
 ---
 
 ## Lets Integrate!
@@ -304,6 +308,9 @@ Notes:
 ---
 
 # DEMO II
+
+<small>https://github.com/pmlopes/presentations/tree/codeone/demo-2</small>
+
 ---
 
 # Vert.x    <!-- .element class="fragment" -->
