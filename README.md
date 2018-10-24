@@ -1,3 +1,5 @@
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
+
 ### Yes JavaScript is **faster**
 ### than Java<small>*</small>!
 ###### <small><small>*</small> when you use GraalVM</small>
@@ -8,6 +10,7 @@
 Notes:
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### *I'm a ... Developer!*
 
@@ -19,6 +22,7 @@ Notes:
 Notes:
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### JavaScript
 
@@ -63,19 +67,20 @@ Notes:
   So If I have to enumerate almost all the API, it would fit in this slide, let see...
 
 ---
-
 <!-- .slide: data-background-video="media/iknowkungfu.mp4" data-background-size="contain" -->
 
 Notes:
   It's so simple that you get that feeling right...
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ## I Know JavaScript!
 
 Notes:
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### JavaScript (and the JVM)
 
@@ -94,6 +99,7 @@ Notes:
   In March 2014, With the release of Java8 Nashorn was introduced, it improved the performance of JavaScript on the JVM in several orders of magnitude than Rhino and bumped the JavaScript language level from JavaScript 1.7 to EcmaScript 5.1.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### Why care about JavaScript?
 
@@ -106,6 +112,7 @@ Notes:
   JavaScript is simple, at its core there's just a full hand of types and functions, so the learning curve is very low. Most of the time there's almost no requirements to start coding, from the browser, open the devtools and you are already writing code. The community has provided millions of libraries, and for many projects this allowed, developers to cross borders in their stacks. Frontend developers could write backend code, and backend developers could write frontend applications.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### nodejs is fast! <span class="fragment">(not really!)</span>
 
@@ -123,6 +130,7 @@ Notes:
   One of the biggest urban myths out there is that nodejs is faster than java, however all articles state that java application are by nature thread based and therefore susceptible to locking and waste of resources.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ![techempower](media/techempower.png)
 <small>https://www.techempower.com/benchmarks/</small>
@@ -131,6 +139,7 @@ Notes:
   The reality shows that JVM based frameworks rule independent benchmarks.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### GraalJS
 
@@ -146,9 +155,11 @@ Notes:
   * Fast interoperability with JVM/GraalVM langs
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### The need for speed
 
+* Slow <small>rhino</small>
 * Fast <small class="fragment">nashorn</small>
 * Faster <small class="fragment">nodejs</small>
 * Fastest  <small class="fragment">graaljs</small>
@@ -161,6 +172,7 @@ Notes:
   And recently, Oracle open sources graaljs. GraalJS runs on GraalVM and show some promising results.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 # Performance
 
@@ -168,6 +180,7 @@ Notes:
 * Go Hybrid
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### Close to the hardware
 
@@ -190,6 +203,7 @@ Notes:
   Sometimes it is fast but not really maintainable...
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### Hybrid model
 
@@ -201,6 +215,7 @@ Notes:
   The hybrid approach is, pick a good candidate from the current benchmark that can be made polyglot and profit.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 # ES4X
 
@@ -213,6 +228,7 @@ Notes:
   EcmaScript for Vert.x or ES4X is a runtime that supports the latest JavaScript language spec and features, uses a NPM development approach so tooling is familiar to JavaScript developers and has support for code completion, debugging and great performance.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### Why Vert.x?
 
@@ -230,6 +246,7 @@ Notes:
   * which makes it trivial to build distributed scalable applications
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ## Demo 0
 
@@ -239,6 +256,7 @@ Notes:
   Quick Vert.x intro
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### How fast?
 
@@ -248,10 +266,10 @@ Notes:
   The fastest JS you can find.
 
 ---
-
 <!-- .slide: data-background-video="media/notfair.mp4" data-background-size="contain" -->
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ### Faster than Java
 
@@ -268,34 +286,40 @@ Notes:
   * spring (most popular choice on the JVM)
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
-### Why TypeScript?
+### Why <span style="color: #0078cf">TypeScript</span>?
 
-![typescript](media/typescript.jpg)
+* <!-- .element class="fragment" --> helps with intellisense
+* <!-- .element class="fragment" --> allows you to verify your code at development time
+* <!-- .element class="fragment" --> no performance impact at runtime
 
 Notes:
   TypeScript is a key player in the project, but it's role is rather hidden. TypeScript Definition files are generated for all the vert.x API and this will allow us to benefit from proper code completion, intellisense, hinting at code time, but will stay out of our way at runtime, so the performance penalty is 0%. Let's consider an example to make thinks easier to understand:
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ## The Basics
 
 * bootstrap project
-* create simple app <small>the code from the previous slide</small>
+* create simple app <small>the code from the benchmark</small>
   * code completion
   * debugging
 * (bonus) async await
 
 Notes:
-  Lets make a small demo to ilustrate the basics.
+  Lets make a small demo to illustrate the basics.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 # DEMO I
 
 <small>https://github.com/pmlopes/presentations/tree/codeone/demo-1</small>
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ## Lets Integrate!
 
@@ -306,12 +330,14 @@ Notes:
   The power of using ES4X and Graal is not about performance, the true power is about integration, Vert.x and Graal allow you to use the best of both worlds, integrate with your favorite frontend framework and your business logic written for the JVM. Here's an example.
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 # DEMO II
 
 <small>https://github.com/pmlopes/presentations/tree/codeone/demo-2</small>
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 # Vert.x    <!-- .element class="fragment" -->
 # +         <!-- .element class="fragment" -->
@@ -319,8 +345,8 @@ Notes:
 # = ❤️      <!-- .element class="fragment" -->
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" style="text-align: left;" -->
 
-<!-- .slide: style="text-align: left;" -->
 # Thank you!
 
 * https://reactiverse.io/es4x

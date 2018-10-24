@@ -10,3 +10,9 @@ _site
 target
 .vertx
 .vscode
+
+mvnw
+mvnw.bat
+.mvn
+
+*js.map
