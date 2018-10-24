@@ -2,6 +2,13 @@
 // @ts-check
 const util = require('util');
 
+// this example shows a high performance implementation
+// of a http REST API backed by PostgreSQL
+
+// docker build -t postgres-tbf postgres
+// docker run --rm -it -p 5432:5432 --name codeone-postgres postgres-tbf
+// npm start
+
 import {Router} from '@vertx/web';
 
 import {PgClient, Tuple} from '@reactiverse/reactive-pg-client';
