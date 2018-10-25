@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "demo-0"
+		},
+		{
+			"path": "demo-1"
+		},
+		{
+			"path": "demo-2"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "automatic"
+	}
+}

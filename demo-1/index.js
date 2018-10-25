@@ -1,13 +1,23 @@
 /// <reference types="@vertx/core/runtime" />
 // @ts-check
-const util = require('util');
 
 // this example shows a high performance implementation
 // of a http REST API backed by PostgreSQL
 
+// bootstrap a project
+
+// npm init -y
+// npx es4x-cli init
+// npm install @vertx/core --save-prod
+// npm install @vertx/web --save-prod
+// npm install @reactiverse/reactive-pg-client --save-prod
+// npm install
+
 // docker build -t postgres-tbf postgres
 // docker run --rm -it -p 5432:5432 --name codeone-postgres postgres-tbf
 // npm start
+
+const util = require('util');
 
 import {Router} from '@vertx/web';
 
