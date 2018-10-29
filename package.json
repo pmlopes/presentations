@@ -1,7 +1,7 @@
 {
-  "name": "Oracle-CodeOne",
-  "version": "2018.10.25",
-  "description": "Yes JavaScript can be faster than Java!",
+  "name": "JFall",
+  "version": "2018.11.08",
+  "description": "Building native images for fun and profit!",
   "scripts": {
     "watch": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css -w",
     "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css --static-dirs media,theme --static _site",
