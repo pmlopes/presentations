@@ -8,6 +8,8 @@
 `Paulo Lopes - @pml0pes` <!-- .element style="font-size: 0.5em" -->
 
 Notes:
+  Hello Everyone and welcome, in the next 45 minutes or so I'll be showing you about
+  running JavaScript fast, really fast, faster than Java.
 
 ---
 <!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
@@ -17,9 +19,12 @@ Notes:
 * Polyglot <small class="fragment">Java (since 1.1.4)</small> <small class="fragment">JavaScript (since Netscape 4.0)</small>
 * Game <small class="fragment">AAA (7th Gen)</small> <small class="fragment">Social Games</small>
 * Open Source <small class="fragment">Eclipse Vert.x</small>
-* <!-- .element class="fragment" --> RedHat Principal Software Engineer
+* RedHat Principal Software Engineer
 
 Notes:
+  Small introduction, my name is Paulo and I'm a developer, a polyglot developer. I know
+  Java since 1.1.4 and JavaScript since Netscape 4. I'm also a former Game developer, which
+  means that I'm obsessed with high performance code and finally an OSS developer at RedHat.
 
 ---
 <!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
@@ -62,22 +67,21 @@ Notes:
 </div>
 
 Notes:
-  So what is so interesting with `JavaScript`? let's do a crash course on the language. The core runtime defines a set of Properties, Functions and Objects. Once a developers knows these, all the building blocks are available to start coding.
+  So what is so interesting with `JavaScript`?
+
+  Let's do a crash course on the language. The core runtime defines a set of Properties, Functions and Objects. Once a developers knows these, all the building blocks are available to start coding.
 
   So If I have to enumerate almost all the API, it would fit in this slide, let see...
-
----
-<!-- .slide: data-background-video="media/iknowkungfu.mp4" data-background-size="contain" -->
-
-Notes:
-  It's so simple that you get that feeling right...
 
 ---
 <!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
 ## I Know JavaScript!
 
+<video class="stretch" data-autoplay loop data-src="media/iknowkungfu.mp4" type="video/mp4" />
+
 Notes:
+  It's so simple that you get that matrix feeling right...
 
 ---
 <!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
@@ -165,7 +169,7 @@ Notes:
 * Fastest  <small class="fragment">graaljs</small>
 
 Notes:
-  Even though performance increased from Rhino to Nashorn (and by the way, nashorn is Rhinoceros in German), the project failed at keeping up to date with the fast pace of evolution of the JavaScript world.
+  Even though performance increased from Rhino to Nashorn, the project failed at keeping up to date with the fast pace of evolution of the JavaScript world.
 
   On the other hand, nodejs is sitting on the shoulders of giants. It's build on top of V8 (Google Chrome, JavaScript engine) which is constantly working on getting the best performance possible and spec compliance possible.
 
@@ -178,6 +182,9 @@ Notes:
 
 * Get closer to the Hardware
 * Go Hybrid
+
+Notes:
+  So lets talk about performance for a while. Basically you can choose 2 ways of improving performance.
 
 ---
 <!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
@@ -354,3 +361,11 @@ Notes:
 * https://vertx.io
 * https://www.jetdrone.xyz
 * https://twitter.com/pml0pes
+
+
+---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
+
+<!-- .element class="stretch" --> ![vertx-in-action](media/vertx-meap.png)
+
+https://www.manning.com/books/vertx-in-action
