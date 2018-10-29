@@ -16,3 +16,4 @@ mvnw.bat
 .mvn
 
 *js.map
+*.class
