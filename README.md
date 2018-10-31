@@ -117,12 +117,12 @@ Notes:
 ### Native Images
 
 * Startup time matters
-  * Short-running command line applications
-  * Serverless cloud functions
+  * **Short-running** command line applications
+  * **Serverless** cloud functions
 * Memory footprint matters
-  * Small to medium-sized heaps (100Mb ~ 1Gb)
+  * **Small** to medium-sized heaps <small>(100Mb ~ 1Gb)</small>
 * All java code is known ahead of time
-  * Single-application cloud server
+  * **Single-application** cloud server
 
 ---
 <!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
@@ -134,12 +134,14 @@ Notes:
   * Multiple GByte ~ TByte heap size
 * Classes are only known at run time
   * "traditional" java application server
+  * frameworks full of <s>magic</s> annotations
 
 ---
 <!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
-## Serverless
-#### (Demo)
+## Obvious use case
+
+## Serverless <!-- .element class="fragment" -->
 
 Notes:
   faas template pull https://github.com/pmlopes/openfaas-svm-vertx
@@ -225,7 +227,7 @@ Notes:
 ## Vert.x
 #### (Demo)
 
-https://github.com/pmlopes/presentations/tree/jfall-2018/demo
+http://bit.ly/jfall-2018
 
 Notes:
   Let's build a secure realtime bitcoin visualization app.
@@ -400,4 +402,16 @@ Successfully tagged bitcoinviewer_vertx-bitcoin:latest
 https://github.com/oracle/graal/issues
 
 ---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" -->
 
+# Questions?
+
+---
+<!-- .slide: data-background-image="media/rht-bg.png" data-background-size="contain" style="text-align: left;" -->
+
+# Thank you!
+
+* https://www.graalvm.org
+* https://vertx.io
+* https://www.jetdrone.xyz
+* https://twitter.com/pml0pes
