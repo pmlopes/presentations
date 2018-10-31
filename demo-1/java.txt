@@ -1,0 +1,151 @@
+--------------------------
+Benchmark setup
+--------------------------
+Server:    http://localhost:8080
+PLAINTEXT: http://localhost:8080/plaintext
+JSON:      http://localhost:8080/json
+--------------------------
+
+--------------------------
+Running JSON Serialization
+--------------------------
+Warming up...
+Running...
+Running 15s test @ http://localhost:8080/json
+  8 threads and 8 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   162.61us  634.50us  26.87ms   99.76%
+    Req/Sec     7.16k     1.66k    8.98k    75.58%
+  Latency Distribution
+     50%  121.00us
+     75%  130.00us
+     90%  232.00us
+     99%  277.00us
+  860807 requests in 15.10s, 123.96MB read
+Requests/sec:  57007.94
+Transfer/sec:      8.21MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 16 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   268.22us   71.05us   2.14ms   92.78%
+    Req/Sec     7.47k     1.14k    8.62k    82.70%
+  Latency Distribution
+     50%  249.00us
+     75%  258.00us
+     90%  276.00us
+     99%  523.00us
+  898120 requests in 15.10s, 129.33MB read
+Requests/sec:  59478.60
+Transfer/sec:      8.57MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 32 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   530.77us  102.99us   2.89ms   95.46%
+    Req/Sec     7.56k   746.60    10.02k    84.25%
+  Latency Distribution
+     50%  510.00us
+     75%  526.00us
+     90%  548.00us
+     99%    1.04ms
+  906938 requests in 15.10s, 130.60MB read
+Requests/sec:  60062.43
+Transfer/sec:      8.65MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.14ms  192.08us   5.49ms   92.88%
+    Req/Sec     7.06k     1.10k   32.02k    94.51%
+  Latency Distribution
+     50%    1.10ms
+     75%    1.16ms
+     90%    1.26ms
+     99%    2.06ms
+  844479 requests in 15.10s, 121.61MB read
+Requests/sec:  55926.79
+Transfer/sec:      8.05MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 128 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.32ms  447.29us  25.30ms   93.74%
+    Req/Sec     6.94k   697.58     8.65k    77.17%
+  Latency Distribution
+     50%    2.23ms
+     75%    2.36ms
+     90%    2.59ms
+     99%    3.98ms
+  828504 requests in 15.01s, 119.31MB read
+Requests/sec:  55183.45
+Transfer/sec:      7.95MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     4.42ms  325.76us  15.68ms   90.46%
+    Req/Sec     7.28k   414.68    15.27k    84.67%
+  Latency Distribution
+     50%    4.35ms
+     75%    4.52ms
+     90%    4.69ms
+     99%    5.30ms
+  869260 requests in 15.03s, 125.18MB read
+Requests/sec:  57851.49
+Transfer/sec:      8.33MB
+--------------------------
+Running Plaintext
+--------------------------
+Warming up...
+Running...
+Running 15s test @ http://localhost:8080/plaintext
+  8 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.00us    0.00us   0.00us    -nan%
+    Req/Sec     0.00      0.00     0.00      -nan%
+  Latency Distribution
+     50%    0.00us
+     75%    0.00us
+     90%    0.00us
+     99%    0.00us
+  0 requests in 15.04s, 0.00B read
+Requests/sec:      0.00
+Transfer/sec:       0.00B
+Running 15s test @ http://localhost:8080/plaintext
+  8 threads and 1024 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.00us    0.00us   0.00us    -nan%
+    Req/Sec     0.00      0.00     0.00      -nan%
+  Latency Distribution
+     50%    0.00us
+     75%    0.00us
+     90%    0.00us
+     99%    0.00us
+  0 requests in 15.06s, 0.00B read
+Requests/sec:      0.00
+Transfer/sec:       0.00B
+Running 15s test @ http://localhost:8080/plaintext
+  8 threads and 4096 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.00us    0.00us   0.00us    -nan%
+    Req/Sec     0.00      0.00     0.00      -nan%
+  Latency Distribution
+     50%    0.00us
+     75%    0.00us
+     90%    0.00us
+     99%    0.00us
+  0 requests in 15.02s, 0.00B read
+  Socket errors: connect 11, read 0, write 0, timeout 0
+Requests/sec:      0.00
+Transfer/sec:       0.00B
+Running 15s test @ http://localhost:8080/plaintext
+  8 threads and 16384 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.00us    0.00us   0.00us    -nan%
+    Req/Sec     0.00      0.00     0.00      -nan%
+  Latency Distribution
+     50%    0.00us
+     75%    0.00us
+     90%    0.00us
+     99%    0.00us
+  0 requests in 15.10s, 0.00B read
+  Socket errors: connect 12299, read 0, write 0, timeout 0
+Requests/sec:      0.00
+Transfer/sec:       0.00B
+

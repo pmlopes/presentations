@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+  postgres:
+    build:
+      context: postgres
+      dockerfile: Dockerfile
+    ports:
+      - 5432:5432
+
+  vertx-bitcoin:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8443:8443
+    links:
+      - postgres

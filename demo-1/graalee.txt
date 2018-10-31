@@ -1,0 +1,210 @@
+--------------------------
+Benchmark setup
+--------------------------
+Server:    http://localhost:8080
+PLAINTEXT: http://localhost:8080/plaintext
+JSON:      http://localhost:8080/json
+DB:        http://localhost:8080/db
+QUERIES:   http://localhost:8080/queries
+--------------------------
+
+--------------------------
+Running JSON Serialization
+--------------------------
+Warming up...
+Running...
+Running 15s test @ http://localhost:8080/json
+  8 threads and 8 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   336.84us  187.19us   6.50ms   89.63%
+    Req/Sec     3.04k   844.47     4.22k    60.43%
+  Latency Distribution
+     50%  283.00us
+     75%  346.00us
+     90%  528.00us
+     99%  778.00us
+  365818 requests in 15.10s, 53.73MB read
+Requests/sec:  24227.22
+Transfer/sec:      3.56MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 16 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   634.10us  226.02us   7.97ms   91.83%
+    Req/Sec     3.19k   411.67     4.03k    66.39%
+  Latency Distribution
+     50%  586.00us
+     75%  622.00us
+     90%  701.00us
+     99%    1.28ms
+  383915 requests in 15.10s, 56.38MB read
+Requests/sec:  25425.46
+Transfer/sec:      3.73MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 32 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.36ms  387.61us  12.92ms   93.01%
+    Req/Sec     2.97k   464.70    11.37k    91.26%
+  Latency Distribution
+     50%    1.27ms
+     75%    1.37ms
+     90%    1.54ms
+     99%    2.77ms
+  355778 requests in 15.10s, 52.25MB read
+Requests/sec:  23563.02
+Transfer/sec:      3.46MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.67ms  329.84us  10.31ms   93.38%
+    Req/Sec     3.01k   153.87     4.10k    71.48%
+  Latency Distribution
+     50%    2.63ms
+     75%    2.76ms
+     90%    2.91ms
+     99%    3.57ms
+  361299 requests in 15.10s, 53.06MB read
+Requests/sec:  23927.23
+Transfer/sec:      3.51MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 128 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     5.51ms  705.56us  15.55ms   83.50%
+    Req/Sec     2.92k   329.92     7.74k    86.12%
+  Latency Distribution
+     50%    5.45ms
+     75%    5.82ms
+     90%    6.20ms
+     99%    7.90ms
+  349108 requests in 15.10s, 51.27MB read
+Requests/sec:  23119.74
+Transfer/sec:      3.40MB
+Running 15s test @ http://localhost:8080/json
+  8 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    12.12ms    2.46ms  42.87ms   87.93%
+    Req/Sec     2.65k   412.40     3.53k    79.25%
+  Latency Distribution
+     50%   11.40ms
+     75%   12.30ms
+     90%   14.71ms
+     99%   21.89ms
+  316866 requests in 15.01s, 46.54MB read
+Requests/sec:  21104.44
+Transfer/sec:      3.10MB
+--------------------------
+Running Single Query
+--------------------------
+Warming up...
+Running...
+Running 15s test @ http://localhost:8080/db
+  8 threads and 8 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.95ms  488.73us  21.91ms   98.30%
+    Req/Sec     1.07k    79.40     1.91k    79.05%
+  Latency Distribution
+     50%    0.90ms
+     75%    0.99ms
+     90%    1.13ms
+     99%    1.57ms
+  128131 requests in 15.10s, 19.28MB read
+  Non-2xx or 3xx responses: 5
+Requests/sec:   8485.62
+Transfer/sec:      1.28MB
+Running 15s test @ http://localhost:8080/db
+  8 threads and 16 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.77ms  284.55us   9.40ms   86.10%
+    Req/Sec     1.14k   112.51     4.31k    93.84%
+  Latency Distribution
+     50%    1.73ms
+     75%    1.86ms
+     90%    2.04ms
+     99%    2.61ms
+  135806 requests in 15.10s, 20.43MB read
+Requests/sec:   8994.40
+Transfer/sec:      1.35MB
+Running 15s test @ http://localhost:8080/db
+  8 threads and 32 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     3.46ms  390.31us  10.67ms   80.87%
+    Req/Sec     1.16k    49.17     1.26k    75.92%
+  Latency Distribution
+     50%    3.41ms
+     75%    3.62ms
+     90%    3.88ms
+     99%    4.74ms
+  138536 requests in 15.01s, 20.85MB read
+Requests/sec:   9232.61
+Transfer/sec:      1.39MB
+Running 15s test @ http://localhost:8080/db
+  8 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     6.97ms  754.96us  25.62ms   83.89%
+    Req/Sec     1.15k    63.38     1.28k    82.25%
+  Latency Distribution
+     50%    6.86ms
+     75%    7.24ms
+     90%    7.67ms
+     99%    9.54ms
+  137779 requests in 15.01s, 20.73MB read
+Requests/sec:   9180.15
+Transfer/sec:      1.38MB
+Running 15s test @ http://localhost:8080/db
+  8 threads and 128 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    14.13ms    1.26ms  28.76ms   79.74%
+    Req/Sec     1.14k    66.13     1.33k    69.92%
+  Latency Distribution
+     50%   13.94ms
+     75%   14.67ms
+     90%   15.45ms
+     99%   19.12ms
+  135842 requests in 15.01s, 20.44MB read
+Requests/sec:   9051.75
+Transfer/sec:      1.36MB
+Running 15s test @ http://localhost:8080/db
+  8 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    27.73ms    7.97ms  82.22ms   68.93%
+    Req/Sec     1.16k    90.53     1.35k    80.67%
+  Latency Distribution
+     50%   27.56ms
+     75%   33.06ms
+     90%   37.79ms
+     99%   46.87ms
+  138516 requests in 15.02s, 20.84MB read
+Requests/sec:   9223.43
+Transfer/sec:      1.39MB
+--------------------------
+Running Multiple Queries
+--------------------------
+Warming up...
+Running...
+Running 15s test @ http://localhost:8080/queries?queries=1
+  8 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    32.85ms   20.49ms 317.88ms   98.08%
+    Req/Sec     1.04k    94.23     1.26k    92.15%
+  Latency Distribution
+     50%   30.43ms
+     75%   36.56ms
+     90%   41.05ms
+     99%  128.38ms
+  122917 requests in 15.02s, 18.71MB read
+  Non-2xx or 3xx responses: 203
+Requests/sec:   8185.34
+Transfer/sec:      1.25MB
+Running 15s test @ http://localhost:8080/queries?queries=5
+  8 threads and 256 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   141.08ms   11.92ms 281.31ms   80.54%
+    Req/Sec   227.00     43.25   323.00     67.27%
+  Latency Distribution
+     50%  138.63ms
+     75%  145.75ms
+     90%  155.59ms
+     99%  179.25ms
+  26403 requests in 14.62s, 7.21MB read
+  Non-2xx or 3xx responses: 219
+Requests/sec:   1805.69
+Transfer/sec:    504.58KB
