@@ -140,11 +140,19 @@ public class Application {
 | RAM  |   324.08 MiB |   <span class="hl-purple">**19.8MiB**</span> |
 | Time |       2.958s | <span class="hl-purple">**0.000467s**</span> |
 
+<small>** * all results using platform defaults**</small> 
+
 ---
 
 ## No more waste...
 
 <video class="stretch" data-autoplay loop data-src="media/save.mp4" type="video/mp4" />
+
+---
+
+## Vert.x + GraalVM
+### =
+### Java Serverless ❤️️! <!-- .element class="fragment" -->
 
 ---
 
