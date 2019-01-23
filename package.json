@@ -1,14 +1,14 @@
 {
-  "name": "Oracle-CodeOne",
-  "version": "2018.10.25",
-  "description": "Yes JavaScript can be faster than Java!",
+  "name": "codemotion-meetup-2019",
+  "version": "2019.01.24",
+  "description": "Fast & Furious: Java Serverless without a JVM!",
   "scripts": {
-    "watch": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css -w",
-    "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css --static-dirs media,theme --static _site",
-    "print": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'Oracle CodeOne' --css custom.css  --print slides.pdf"
+    "watch": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'codemotion meetup' --css theme/custom.css,theme/asciinema-player.css --scripts theme/asciinema-player.js -w",
+    "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'codemotion meetup' --css theme/custom.css,theme/asciinema-player.css --scripts theme/asciinema-player.js --static-dirs media,theme --static _site",
+    "print": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'codemotion meetup' --css theme/custom.css,theme/asciinema-player.css --scripts theme/asciinema-player.js --print slides.pdf"
   },
   "dependencies": {
-    "reveal-md": "^2.1.2"
+    "reveal-md": "2.4.1"
   },
   "author": "Paulo Lopes",
   "license": "ISC"
