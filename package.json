@@ -4,7 +4,7 @@
   "description": "Fast & Furious: Java Serverless without a JVM!",
   "scripts": {
     "watch": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'codemotion meetup' --css theme/custom.css,theme/asciinema-player.css --scripts theme/asciinema-player.js -w",
-    "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'codemotion meetup' --css theme/custom.css,theme/asciinema-player.css --scripts theme/asciinema-player.js --static-dirs media,theme --static _site",
+    "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'codemotion meetup' --css theme/custom.css,theme/asciinema-player.css --scripts theme/asciinema-player.js --static-dirs media,theme,cast --static _site",
     "print": "reveal-md README.md --theme theme/theme.css --highlight-theme github --title 'codemotion meetup' --css theme/custom.css,theme/asciinema-player.css --scripts theme/asciinema-player.js --print slides.pdf"
   },
   "dependencies": {
