@@ -1,0 +1,16 @@
+img {
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.reveal code {
+  font-family: "Fira Code";
+}
+
+.hl-purple {
+  color: #782b90;
+}
+
+body {
+  background: url(./media/bg.png) no-repeat 100% 100%;
+}
