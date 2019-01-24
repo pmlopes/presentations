@@ -94,6 +94,16 @@ public class Application {
 
 ---
 
+### It's not me, AWS also 👍
+
+![aws-docs](media/aws.png)
+
+---
+
+# JAVA `!=` SPRING
+
+---
+
 ## 👍 Java Serverless!
 
 <video class="stretch" data-autoplay loop data-src="media/java-serverless.mp4" type="video/mp4" />
@@ -107,21 +117,41 @@ public class Application {
 
 ---
 
+# GraalVM?
+
+* JIT
+* Polyglot Runtime
+* **AOT compiler**
+
+---
+
+## Bytecode IN, ASM out
+
+<video class="stretch" data-autoplay loop data-src="media/wax.mp4" type="video/mp4" />
+
+---
+
 ### GraalVM / Native image
 
 * Aggressive AOT optimizations
 * remove unused classes,methods and fields
 * static initializers preloaded at compile time
 * final ELF binary without need for JVM
-* <!-- .element class="fragment" --> Not everything can be compiled (Spring is an example)
-* <!-- .element class="fragment" --> There's no JIT
-* <!-- .element class="fragment" --> GC is not very powerful 
+* <!-- .element class="fragment" --> **Not everything can be compiled (Spring is an example)**
+* <!-- .element class="fragment" --> **There's no JIT**
+* <!-- .element class="fragment" --> **GC is not very powerful** 
 
 ---
 
 # DEMO
 
 ---
+
+![openfaas](media/openfaas.png)
+
+---
+
+# DEMO
 
 <asciinema-player src="cast/openfaas.cast" rows="24" cols="120"></asciinema-player>
 
