@@ -433,7 +433,7 @@ Notes:
   The default verticle is on the MANIFEST so the elf needs to know about which resources to bundle
 
 ---
-<!-- .slide: data-background-image="media/kung-fu.jpg" -->
+<!-- .slide: data-background-image="media/kung-fu.png" -->
 
 ---
 <!-- .slide: style="text-align: left;" -->
