@@ -1,0 +1,15 @@
+{
+  "name": "10-things-js-runtime",
+  "version": "0.0.1",
+  "scripts": {
+    "watch": "reveal-md README.md --theme theme/theme.css --highlight-theme github --css theme/font-awesome/css/all.css,theme/custom.css,theme/asciinema-player.css --scripts theme/font-awesome/js/all.js,theme/custom.js,theme/asciinema-player.js -w",
+    "build": "reveal-md README.md --theme theme/theme.css --highlight-theme github --css theme/font-awesome/css/all.css,theme/custom.css,theme/asciinema-player.css --scripts theme/font-awesome/js/all.js,theme/custom.js,theme/asciinema-player.js --static-dirs media,theme,steps --static _site",
+    "print": "reveal-md README.md --theme theme/theme.css --highlight-theme github --css theme/font-awesome/css/all.css,theme/custom.css,theme/asciinema-player.css --scripts theme/font-awesome/js/all.js,theme/custom.js,theme/asciinema-player.js --print slides.pdf"
+  },
+  "dependencies": {
+    "reveal-md": "2.4.1",
+    "revealjs-animated": "1.2.2"
+  },
+  "author": "Paulo Lopes",
+  "license": "ISC"
+}
