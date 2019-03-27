@@ -97,7 +97,7 @@ Hello: ELF 64-bit LSB  executable, x86-64, version 1 (SYSV),
 </script></section><section  data-markdown><script type="text/template">
 ## GCJ
 
-* Great starup time
+* Great startup time
 * Performance not that much
 * required all sources to be available
 * custom runtime (`libgcj`)
@@ -298,7 +298,7 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 
 # Step #1
 
-[source code](./steps/step-1)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-1)
 
 <aside class="notes"><p>Start with a simple vert.x application.
   mvn clean package
@@ -307,7 +307,7 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 
 # Step #2
 
-[source code](./steps/step-2)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-2)
 
 <aside class="notes"><p>Add the graal plugin
   Since project dependencies include optional dependencies we must signal that the class path is incomplete</p>
@@ -315,7 +315,7 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 
 # Step #3
 
-[source code](./steps/step-3)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-3)
 
 <aside class="notes"><p>Solve the closed world assumption
   Add a main
@@ -324,7 +324,7 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 
 # Step #4
 
-[source code](./steps/step-4)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-4)
 
 <aside class="notes"><p>So libraries use native code a reference memory during initialization, this is not valid at runtime as the memory space
   is different, so we must tell graal to recompute that address.</p>
@@ -332,21 +332,21 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 
 # Step #5
 
-[source code](./steps/step-5)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-5)
 
 <aside class="notes"><p>Security requires certificates in keystore format but it also needs more</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
 
 # Step #6
 
-[source code](./steps/step-6)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-6)
 
 <aside class="notes"><p>Security requires an extra flag (which will increase the binary) and a hard dependency on libsunec.so</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
 
 # Step #7
 
-[source code](./steps/step-7)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-7)
 
 <aside class="notes"><p>Clients can use security (SSL) too but
   ./hello_native -Dvertx.disableDnsResolver=true
@@ -355,7 +355,7 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 
 # Step #8
 
-[source code](./steps/step-8)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-8)
 
 <aside class="notes"><p>Reflection can be used to, for example lets build all 3 verticles in the same elf
   You need to tell all reflection usage to graal compiler, you can do it manuall or use the agent</p>
@@ -363,7 +363,7 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 
 # Step #9
 
-[source code](./steps/step-9)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-9)
 
 <aside class="notes"><p>The default verticle is on the MANIFEST so the elf needs to know about which resources to bundle</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/kung-fu.png" -->
@@ -372,7 +372,7 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 # Step #10
 ### Bonus
 
-[source code](./steps/step-10)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-10)
 
 <aside class="notes"><p>mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
     -DprojectGroupId=org.acme \
