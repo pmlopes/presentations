@@ -99,7 +99,7 @@ Hello: ELF 64-bit LSB  executable, x86-64, version 1 (SYSV),
 
 ## GCJ
 
-* Great starup time
+* Great startup time
 * Performance not that much
 * required all sources to be available
 * custom runtime (`libgcj`)
@@ -338,7 +338,7 @@ Caused by: java.lang.IllegalStateException: Unable to determine code source arch
 
 # Step #1
 
-[source code](./steps/step-1)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-1)
 
 Notes:
   Start with a simple vert.x application.
@@ -350,7 +350,7 @@ Notes:
 
 # Step #2
 
-[source code](./steps/step-2)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-2)
 
 Notes:
   Add the graal plugin
@@ -361,7 +361,7 @@ Notes:
 
 # Step #3
 
-[source code](./steps/step-3)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-3)
 
 Notes:
   Solve the closed world assumption
@@ -373,7 +373,7 @@ Notes:
 
 # Step #4
 
-[source code](./steps/step-4)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-4)
 
 Notes:
   So libraries use native code a reference memory during initialization, this is not valid at runtime as the memory space
@@ -384,7 +384,7 @@ Notes:
 
 # Step #5
 
-[source code](./steps/step-5)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-5)
 
 Notes:
   Security requires certificates in keystore format but it also needs more
@@ -394,7 +394,7 @@ Notes:
 
 # Step #6
 
-[source code](./steps/step-6)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-6)
 
 Notes:
   Security requires an extra flag (which will increase the binary) and a hard dependency on libsunec.so
@@ -404,7 +404,7 @@ Notes:
 
 # Step #7
 
-[source code](./steps/step-7)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-7)
 
 Notes:
   Clients can use security (SSL) too but
@@ -416,7 +416,7 @@ Notes:
 
 # Step #8
 
-[source code](./steps/step-8)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-8)
 
 Notes:
   Reflection can be used to, for example lets build all 3 verticles in the same elf
@@ -427,7 +427,7 @@ Notes:
 
 # Step #9
 
-[source code](./steps/step-9)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-9)
 
 Notes:
   The default verticle is on the MANIFEST so the elf needs to know about which resources to bundle
@@ -441,7 +441,7 @@ Notes:
 # Step #10
 ### Bonus
 
-[source code](./steps/step-10)
+[source code](https://github.com/pmlopes/presentations/tree/the-holy-graal-2019/steps/step-10)
 
 Notes:
   mvn io.quarkus:quarkus-maven-plugin:0.12.0:create \
