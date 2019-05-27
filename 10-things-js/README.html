@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>reveal-md</title>
+    <link rel="stylesheet" href="./css/reveal.css" />
+    <link rel="stylesheet" href="./_assets/theme/theme.css" id="theme" />
+    <link rel="stylesheet" href="./css/highlight/github.css" />
+    <link rel="stylesheet" href="./css/print/paper.css" type="text/css" media="print" />
+    <link rel="stylesheet" href="./_assets/theme/font-awesome/css/all.css" />
+    <link rel="stylesheet" href="./_assets/theme/custom.css" />
+    <link rel="stylesheet" href="./_assets/theme/asciinema-player.css" />
+
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+# 10 things
+#### I learned making the fastest js server runtime in the world
+
+<div style="font-size: 1em">
+  <br/>
+  **Paulo Lopes**<br/>
+  Principal Software Engineer<br/>
+  ![redhat](media/Logo-RedHat-A-Color-RGB.png) <!-- .element style="max-width:20%; max-height:20%;" -->
+</div>
+
+<aside class="notes"><p>Raise your hand if you believe JavaScript is slow!</p>
+<p>  By the end of this talk I hope to not see any hands in the air.</p>
+<p>  Before we start, there are several questions I would like to ask:</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![search](media/search/search.png)
+![search-1](media/search/result-1.png)
+
+<aside class="notes"><p>How fast is js?</p>
+<p>  Your favourite search engine will probably say:</p>
+<blockquote>
+<p>under the right circumstances it&#39;s very very fast, actually as as as C</p>
+</blockquote>
+</aside></script></section><section  data-markdown><script type="text/template">
+![search](media/search/search.png)
+![search-2](media/search/result-2.png)
+
+<aside class="notes"><p>Why is JS so fast?</p>
+<blockquote>
+<p>as soon you understand the eventloop and how it processes requests, you realise why it is so fast!</p>
+</blockquote>
+</aside></script></section><section  data-markdown><script type="text/template">
+![search](media/search/search.png)
+![search-3](media/search/result-3.png)
+
+<aside class="notes"><p>How can it be fast it it&#39;s single threaded?</p>
+<blockquote>
+<p>because it&#39;s lightweight</p>
+</blockquote>
+</aside></script></section><section  data-markdown><script type="text/template">
+![search](media/search/search.png)
+![search-4](media/search/result-4.png)
+
+<aside class="notes"><p>How fast is it compared to Java?</p>
+<blockquote>
+<p>js is awesome and hot, and shines when it comes to a huge amount of short connections</p>
+</blockquote>
+</aside></script></section><section  data-markdown><script type="text/template">
+![search](media/search/search.png)
+![search-5](media/search/result-5.png)
+
+<aside class="notes"><p>But... What makes it faster than Java?</p>
+<blockquote>
+<p>Because the async ecosystem has more than 50k modules written in asynchronous style.</p>
+</blockquote>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+### Do we trust the Internet?
+#### 🤫 I don't! <!-- .element: class="fragment" -->
+
+<aside class="notes"><p>Given all these questions, I have to ask:</p>
+<p>  Do we trust the internet?</p>
+<p>  The internet is full of stories, stories connect us...</p>
+<p>  However stories are not exact science. Above all they are not what should drive an software engineer.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+**engineering** <small>noun</small><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<small>*en·​gi·​neer·​ing | \ ˌen-jə-ˈnir-iŋ\\*</small>
+
+> <small>*the application of science and mathematics by which the properties of matter and the sources of energy in nature are made useful to people.*<br><br>(Merriam-Webster)</small>
+
+<aside class="notes"><p>As an engineer, we should apply science and mathmatics to the way we solve our software problems.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![search](media/search/search.png)
+# 🤷 <!-- .element: class="fragment" -->
+
+<aside class="notes"><p>In order to anwser the question:</p>
+<blockquote>
+<p>Is javascript fast?</p>
+</blockquote>
+<p>  We must be able to reproduce the problem, and we must be able to explain and reproduce the results.</p>
+<p>  So I&#39;m sorry to say but the right answer is:</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #1:
+#### Define server
+
+<aside class="notes"><p>When I was planning this talk, I needed a title. I end up with &quot;10 things I learned making the fastest js server runtime in the world&quot;. I carefully decided to choose the word &quot;server&quot;.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+**server** <small>noun</small><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<small>*serv·​er | \ ˈsər-vər\\*</small>
+
+> <small>*a computer in a network that is used to provide services (such as access to files or shared peripherals or the routing of e-mail) to other computers in the network.*<br><br>(Wikipedia)</small>
+
+<aside class="notes"><p>A server is a computer in a network that is used to provide services to other computers in the network.</p>
+<p>  What I&#39;m about to tell, fully applies to servers but is not necessarily to your command line applications, lambdas or browser applications.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #2:
+#### Define fast
+
+<aside class="notes"><p>What does fast server mean? We need to agree in a common set of metrics. The metrics I choose to define fast come from monitoring server applications. If you&#39;re interested in this topic you should have a look at SRE.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+**Site Reliability Engineering**
+
+<small>*is a discipline that incorporates aspects of software engineering and applies them to infrastructure and operations problems. The main goals are to create ultra-scalable and highly reliable software systems*</small>
+
+
+https://landing.google.com/sre/books/
+
+<aside class="notes"><p>Google has one of the greatest SRE teams out there, they wrote books you can read in the link above.</p>
+<p>  The SRE team identified 5 golden signals. Golden signals are critical for ops teams to monitor their systems and identify problems. These signals are especially important as we move to microservices and containers.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+**Site Reliability Engineering metrics**
+
+* Rate<span class="fragment"> <small>* —  Request rate, in requests/sec*</small></span>
+* Errors <span class="fragment"><small>* —  Error rate, in errors/sec*</small></span>
+* Latency <span class="fragment"><small>* —  Response time, including queue/wait time*</small></span>
+* <span style="color: #808080">*Saturation*</span>
+* <span style="color: #808080">*Utilization*<span>
+
+<aside class="notes"><p>There are many metrics to monitor, but industry experience has shown that: rate, errors, latency, saturation and utilization, contain virtually all the information you need to know what’s going on and where.</p>
+<p>  Getting these signals is quite challenging and varies a lot by service and tooling available. For now I&#39;m just considering:</p>
+<ul>
+<li>Rate</li>
+<li>Errors</li>
+<li><p>Latency</p>
+<p>Focus on rate, errors and latency means that the focus is on the software we build, not on the Operating System or Hardware.</p>
+</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #3:
+#### Understand the environment/lifecycle
+
+<aside class="notes"><p>A typical server application has a well known set of characteristics.</p>
+<p>  We need to know how the application behaves before anything can be said about it.</p>
+<p>  What is a &quot;Server Application&quot; then?</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+**Server Application**
+
+* long running process <!-- .element class="fragment" -->
+* deployed on cloud or bare metal <!-- .element class="fragment" -->
+* attached to a fast network <!-- .element class="fragment" -->
+* "enough" CPU/Memory <!-- .element class="fragment" -->
+
+<aside class="notes"><p>A server application is:</p>
+<ul>
+<li>long running process</li>
+<li>deployed on cloud or bare metal</li>
+<li>attached to a fast network</li>
+<li><p>&quot;enough&quot; CPU/Memory</p>
+<p>A long-running process has different characteristics from a short living process. In a long-running process, startup and warming up times can be irrelevant to the full application lifecycle. Again this isn&#39;t true if you&#39;re running CLI/functions, or in-browser apps, where startup time is a key factor for user happiness.</p>
+</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #5:
+#### Measure / Benchmark
+
+<aside class="notes"><p>Most articles will tell you how fast something is, but most of the time, the information on how the tests were performed is ommited. From an engineering perspective, this is incorrect. We should be able to reproduce the same experiment in a lab environment and achieve the same result.</p>
+<p>  The experiment should be peer reviewed so we can confirm that the results are not biased and that the tests are fair to all participants.</p>
+<p>  Writing benchmarks is hard. First, every benchmark will not fully represent a real-world use case. Getting peers to review your code can be hard to find. Getting peers to tests against, and willing to review your work can be even harder.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## Benchmarking is hard
+* *Meaningful benchmarks are even harder*
+* <!-- .element: class="fragment" --> Techempower Framework Benchmarks
+  * <!-- .element: class="fragment" --> Contributors: **512**
+  * <!-- .element: class="fragment" --> Pull Requests: **3824**
+  * <!-- .element: class="fragment" --> Commits: **10900**
+
+<small class="fragment">https://github.com/TechEmpower/FrameworkBenchmarks/</small>
+
+<aside class="notes"><p>Benchmark is hard!</p>
+<p>  However there is a very popular benchmark named &quot;Techempower Framework Benchmarks&quot;.</p>
+<p>  This benchmark has more than 500 contributors, it has merged more the 3000 pull requests and the total amount of commits is over 10000.</p>
+<p>  There are tests for 630 different frameworks in many different languages so this makes my life easier as I don&#39;t need to prove the quality of the benchmark and the contributors will review all results.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/TechEmpower.png" data-background-size="contain" -->
+
+<aside class="notes"><p>TechEmpower has built a good reputation with so many contributors and tests that are hard to ignore. So let&#39;s have a look, where javascript ranks.</p>
+<p>  Since the list is very long, I&#39;ve rotated the screen and cut it so you can understand the problem.</p>
+<p>  Quick question: Where is the best JavaScript framework on this graph?</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/TechEmpower2.png" data-background-size="contain" -->
+
+<aside class="notes"><p>As shocking as it can be, the first entry to JavaScript ranks at #89 which performs at 22.7% of the rate, of the best result.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #6:
+#### Look under the hood
+
+<aside class="notes"><p>Before we can do any optimization, we need to understand what is going on. We shouldn&#39;t jump into conclusions and just start tweaking the code. If we do that we will just be Yak shaving. Instead we need to take a scientific approach. If you haven&#39;t learned about profiling node applications, I&#39;d recommend you to read the very good tutorial on nodejs website on profiling.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+```js
+const cluster = require('cluster'),
+  numCPUs = require('os').cpus().length,
+  express = require('express');
+
+if (cluster.isMaster) {
+  for (let i = 0; i < numCPUs; i++)
+    cluster.fork();
+} else {
+  const app = module.exports = express();
+  app.get('/plaintext', (req, res) =>
+    res
+      .header('Content-Type', 'text/plain')
+      .send('Hello, World!'));
+}
+```
+
+<aside class="notes"><p>Let&#39;s look at this code. This is a small portion of one of the benchmark tests. As you can see a typical express server is created and we use the cluster API to utilize the total amount of CPU cores available.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Analize
+
+<!-- .element: class="stretch" --> ![flamegraph](media/flamegraph.png)
+
+<aside class="notes"><p>When we profile and analize this application using a flamegraph as a visualization tool, one thing can be observed. You will probably not see any block (or the block is too small) that refers to the code I&#39;ve just shown you.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Observe
+
+<!-- .element: class="stretch" --> ![libuv](media/libuv.png)
+
+<aside class="notes"><p>This is because, if we look how the runtime works, the large majority of the work is done not on the javascript code, but on native code. If you recall the previous flamegraph, the vast majority of the code is spent in the libuv and v8.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### You can only optimize
+
+<!-- .element: class="stretch" --> ![iceberg](media/iceberg.jpg)
+
+<aside class="notes"><p>What I am trying to tell you is that you can only optimize the tip of the iceberg.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+# 🤔
+
+<aside class="notes"><p>Interesting...</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #7:
+#### JavaScript runtimes
+
+
+<aside class="notes"><p>If I would ask you, what is the first thing that comes to your mind when I say: &quot;javascript engine&quot;. I believe most of you just thought: V8</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+**V8 JavaScript engine**
+> <small>*Speed up real-world performance for modern JavaScript, and enable developers to build a faster future web.*</small>
+
+<aside class="notes"><p>If we look at V8 mission statement we can read:</p>
+<blockquote>
+<p>Speed up real-world performance for modern JavaScript, and enable developers to build a faster future web</p>
+</blockquote>
+<p>  Its performance is amazing, we all agree with that. But we also know that there are other engines out there too.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### More engines
+
+* <!-- .element: class="fragment" style="color: #808080" --> ChakraCore
+* <!-- .element: class="fragment" style="color: #808080" --> SpiderMonkey
+* <!-- .element: class="fragment" style="color: #808080" --> ScriptCore
+* <!-- .element: class="fragment" --> **Graaljs**
+
+<aside class="notes"><p>The &quot;Kangax-table&quot; (which is not an authority in JS engines), lists the compatibility of ES6 across many. There you can see:</p>
+<ul>
+<li>Edge (Chakra)</li>
+<li>Firefox (spider monkey)</li>
+<li>Safari (ScriptCore)</li>
+<li>Graal (new Java)</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #8:
+#### Try other engines
+
+<aside class="notes"><p>Most of the CPU usage on our server happens in the native part. So what if we look at other engines?  After running several experiments I&#39;ve settled on Graal.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+**Graal**
+![graal](media/graal.jpg)
+
+https://graalvm.org
+
+<aside class="notes"><p>GraalVM is an extension of the Java virtual machine to support more languages and execution modes. The Graal project includes a new high-performance compiler, itself called Graal, which can be used in a just-in-time compiler.</p>
+<p>  One objective of Graal is to improve the performance of Java virtual machine-based languages to match the performance of native languages. Another goal is to allow freeform mixing of code from any programming language in a single program, billed as &quot;polyglot applications&quot;.</p>
+<p>  So GraalVM offers a great new modern ES2019/ES2020 runtime. If you paid attention to the benchmark results, Java frameworks rank very well, so my goal was to mix the 2.</p>
+<p>  The goal is to have a fast server, BUT, I&#39;m not switching from JavaScript to another language.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## GraalJS
+
+<i>
+
+* JavaScript with best possible performance
+* Full latest ECMAScript specification
+* Fast interoperability
+  * Java, Scala, or Kotlin, ...
+  * or GraalVM Ruby, Python, or R ...
+
+</i>
+
+<small>https://github.com/graalvm/graaljs</small>
+
+<aside class="notes"><p>Graaljs goals are:</p>
+<ul>
+<li>Execute JavaScript code with best possible performance</li>
+<li>full support for the latest ECMAScript specification</li>
+<li>Fast interoperability with Java, Scala, or Kotlin, or with other GraalVM languages like Ruby, Python, or R</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+#### Graal <small>vs</small> Graal.js <small>vs</small> Node.js
+
+![lang-benchmark](media/benchmark-details-fast-6-fast-vms-2.svg.png)
+
+<small>https://stefan-marr.de/papers/dls-marr-et-al-cross-language-compiler-benchmarking-are-we-fast-yet/</small>
+
+<aside class="notes"><p>Academic research has shown that graal engine can be on par or be better than V8 for language benchmarks. This is a paper you can read about it if you&#39;re interested.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Hypothesis
+
+![idea](media/idea.jpg)
+
+<aside class="notes"><p>So let&#39;s formulate an hypothesis. What if I create a project which I will call EcmaScript for X that...</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+### ES4X
+* <!-- .element: class="fragment" --> ~~V8~~ `=>` GraalJS <small>(https://graalvm.org)</small>
+* <!-- .element: class="fragment" --> ~~libUV~~ `=>` Eclipse Vert.x  <small>(https://vertx.io)</small>
+* <!-- .element: class="fragment" --> ~~V8 JIT~~ `=>` GraalVM JVMCI <small>(https://graalvm.org)</small>
+* <!-- .element: class="fragment" --> ~~node bindings`~~ `=>` **`.d.ts`** of Java APIs
+* <!-- .element: class="fragment" --> **`commonjs and ESM`** loader
+* <!-- .element: class="fragment" --> **`npm`** compatibility (no native modules for now)
+* <!-- .element: class="fragment" --> debug/profile using **chrome-devtools**
+
+<small>https://reactiverse.io/es4x</small>
+
+<aside class="notes"><p>Replaces:</p>
+<ul>
+<li>V8 with Graal</li>
+<li>LibUV with Eclipse Vert.x</li>
+<li>V8 JIT with Graal compiler</li>
+<li><p>node bindings with typescript definitions which are discarded at runtime</p>
+<p>Offers:</p>
+</li>
+<li><p>commonjs and ESM loader</p>
+</li>
+<li>basic npm compatibility</li>
+<li>integrates with Chrome devtools and any Java monitoring tool</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template">
+```js
+import { Router } from '@vertx/web';
+
+const app = Router.router(vertx);
+
+app.get("/plaintext").handler(ctx => {
+  ctx.response()
+    .putHeader("Content-Type", "text/plain")
+    .end('Hello, World!');
+});
+```
+
+<aside class="notes"><p>This is how the old express code is written in ES4X. I guess it won&#39;t be hard to follow. Important thing to notice is that Vert.x will by default use all the available cores, so no need to use a cluster module. Vert.x provides a async IO API build on top of Netty which is used by big names: google, twitter, netflix to name a few...</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-video="media/cast.webm.mp4" data-background-size="contain" -->
+
+<aside class="notes"><p>Let me quickly show how it works...</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+### Expectation: 
+
+* <!-- .element: class="fragment" --> User code (JavaScript)
+* <!-- .element: class="fragment" --> **+** Runtime (ES4X)
+* <!-- .element: class="fragment" --> **+** Interop JS `<->` Java
+* <!-- .element: class="fragment" --> **+** JS Engine (GraalJS)
+* <!-- .element: class="fragment" --> **+** IO library (vert.x)
+* <!-- .element: class="fragment" --> **+** JDK
+* <!-- .element: class="fragment" --> **= Full application optimization** 🚀
+
+<aside class="notes"><p>The expected result is that the:</p>
+<ul>
+<li>User code (JavaScript)</li>
+<li>Runtime (ES4X)</li>
+<li>Interop JS <code>&lt;-&gt;</code> Java</li>
+<li>JS Engine (GraalJS)</li>
+<li>IO library (vert.x)</li>
+<li><p>JDK</p>
+<p>Will <strong>ALL</strong> be optimized by graal, not just the script itself.</p>
+</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #9:
+#### Test experiment
+
+<aside class="notes"><p>Several months ago, I submitted an implementation of the benchmark using this experiment. After review, it got accepted. Here is how things are:</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/es4x-single.png" data-background-size="contain" -->
+
+<aside class="notes"><p>JavaScript now ranks at #5 overall and the best in JavaScript in general but a far margin.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/es4x-multi.png" data-background-size="contain" -->
+
+<aside class="notes"><p>JavaScript now ranks at #6 overall and the best in JavaScript in general but a far margin.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## #10:
+## How does it compare?
+
+<aside class="notes"><p>How does it compare to the other javascript frameworks out there?</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/1.png" data-background-size="contain" -->
+
+<aside class="notes"><p>More than 2 times better that the previous best javascript framework when working with JSON</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/2.png" data-background-size="contain" -->
+
+<aside class="notes"><p>Almost 3,5 times better than the previous best, but to be fair <strong>6</strong> times better when comparing to the previous best using postgres</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/3.png" data-background-size="contain" -->
+
+<aside class="notes"><p>2,5 times better when performing lots of database operations per request</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/5.png" data-background-size="contain" -->
+
+<aside class="notes"><p>More than 5 times better when doing database updates</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Req/sec
+
+| Node*   | ES4X**        | Test           |
+| -------:| -------------:| -------------- |
+| 558,261 | **1,146,774** | JSON           |
+| 195,638 | **677,568**   | Single Query   |
+| 17,458  | **42,974**    | Multiple Query |
+| 4,967   | **21,182**    | Data Updates   |
+| 881,321 | **2,268,524** | Plaintext      |
+
+<small>Higher is better</small>
+
+<aside class="notes"><p>As you can see I&#39;m not talking about small tiny improvements, I&#39;m talking about huge improvements!</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+## Conclusion
+
+* *There's nothing wrong with **JavaScript***.
+* <!-- .element: class="fragment" --> Yes **JavaScript** is **fast**
+* <!-- .element: class="fragment" --> You don't need to switch to Go/Rust/etc...
+* <!-- .element: class="fragment" --> *Dare to **Experiment***
+
+<aside class="notes"><p>So the final tip is that optimization is a never-ending job, for example, we can get better results if we run with the Enterprise Edition of Graal instead of the Open Source edition. All the results would be improved by about 20% and perhaps you can think of other tricks.</p>
+<p>  And now we rinse and repeat... It&#39;s a never ending job!</p>
+<p>  If you would like to improve this experiment even further, check the GitHub repo, look at my ugly code and let&#39;s make it even better!</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
+
+# Thank you!
+
+* <i class="fab fa-twitter"></i> `@pml0pes`
+* <i class="fab fa-github"></i> `pmlopes`
+* https://reactiverse.io/es4x
+* https://vertx.io
+* https://graalvm.org</script></section></div>
+    </div>
+
+    <script src="./lib/js/head.min.js"></script>
+    <script src="./js/reveal.js"></script>
+
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+      // Optional libraries used to extend on reveal.js
+      var deps = [
+        { src: './lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        { src: './plugin/markdown/marked.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+        { src: './plugin/markdown/markdown.js', condition: function() { return !!document.querySelector('[data-markdown]'); } },
+        { src: './plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        { src: './plugin/zoom-js/zoom.js', async: true },
+        { src: './plugin/notes/notes.js', async: true },
+        { src: './plugin/math/math.js', async: true }
+      ];
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        dependencies: deps
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal.getQueryHash() || {};
+
+      var options = extend(defaultOptions, {}, queryOptions);
+    </script>
+
+    <script src="./_assets/theme/font-awesome/js/all.js"></script>
+    <script src="./_assets/theme/custom.js"></script>
+    <script src="./_assets/theme/asciinema-player.js"></script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+</html>
