@@ -4,7 +4,7 @@ img {
 }
 
 .reveal code {
-  font-family: "Fira Code";
+  font-family: 'Roboto Mono', monospace;
 }
 
 .hl-purple {
