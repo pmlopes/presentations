@@ -81,6 +81,10 @@
 <p>Do we trust the internet?</p>
 <p>The internet is full of stories, like someone once said: stories connect people...</p>
 <p>However stories are not exact science. Above all they are not what should drive an software engineer.</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/Margaret_Hamilton.jpg" data-background-size="contain" -->
+
+<aside class="notes"><p>Speaking of software engineering, do you know who this lady is?</p>
+<p>She is Margeret Hamilton. Among other things, she wrote the software that allowed the first people walking on the Moon to land safely. She did it with 2kb of RAM. She also coined the term &quot;Software Engineering&quot;, so thank you Margaret!</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
 
 **engineering** <small>noun</small><br/>
@@ -421,12 +425,22 @@ $ yarn add global es4x-pm
 #### Test experiment
 
 <aside class="notes"><p>Several months ago, I submitted an implementation of the benchmark using this experiment. After review, it got accepted. Here is how things are:</p>
+</aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/katie-bouman.png" data-background-size="contain" -->
+
+<aside class="notes"><p>This is Katie Bouman! This great woman achived something much more incredible that what I&#39;m about to show, but shamefuly our community tried to discredit her work based on her gender. I am deeply ashamed and wish we would have more woman like her!</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+# 🥁 🥁 🥁
+
+<aside class="notes"><p>Let me get back to the topic...</p>
+<p>Drumroll...</p>
+<p>Let&#39;s see who&#39;s on the Top #10 of most of the tests?</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/es4x-single.png" data-background-size="contain" -->
 
-<aside class="notes"><p>JavaScript now ranks at #5 overall and the best in JavaScript in general but a far margin.</p>
+<aside class="notes"><p>JavaScript</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/es4x-multi.png" data-background-size="contain" -->
 
-<aside class="notes"><p>JavaScript now ranks at #6 overall and the best in JavaScript in general but a far margin.</p>
+<aside class="notes"><p>JavaScript</p>
+<p>Well you get the idea...</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
 
 ## #10:
@@ -435,30 +449,31 @@ $ yarn add global es4x-pm
 <aside class="notes"><p>How does it compare to the other javascript frameworks out there?</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/1.png" data-background-size="contain" -->
 
-<aside class="notes"><p>More than 2 times better that the previous best javascript framework when working with JSON</p>
+<aside class="notes"><p>JSON serialization test only for JS frameworks</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Node: 558,261
+# ES4X: <!-- .element class="fragment" --> <span class="hl-purple">**1,146,774**</span>
+
+<aside class="notes"><p>More than 2X Faster!</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/2.png" data-background-size="contain" -->
 
-<aside class="notes"><p>Almost 3,5 times better than the previous best, but to be fair <strong>6</strong> times better when comparing to the previous best using postgres</p>
+<aside class="notes"><p>Single DB call test.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Node: 110,947
+# ES4X: <!-- .element class="fragment" --> <span class="hl-purple">**677,568**</span>
+
+<aside class="notes"><p>That&#39;s 6X faster testing against the same DB server or 3,5 against the best of node.</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/3.png" data-background-size="contain" -->
 
-<aside class="notes"><p>2,5 times better when performing lots of database operations per request</p>
+<aside class="notes"><p>Now hammer the DB with lots of parallel reads</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Node: 7,810
+# ES4X: <!-- .element class="fragment" --> <span class="hl-purple">**42,974**</span>
+
+<aside class="notes"><p>That&#39;s about 5,5X faster on the same DB server or 2,5 times better when testings against the best off node</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: data-background-image="media/5.png" data-background-size="contain" -->
 
-<aside class="notes"><p>More than 5 times better when doing database updates</p>
-</aside></script></section><section  data-markdown><script type="text/template">
-### Req/sec
-
-| Node*   | ES4X**        | Test           |
-| -------:| -------------:| -------------- |
-| 558,261 | **1,146,774** | JSON           |
-| 195,638 | **677,568**   | Single Query   |
-| 17,458  | **42,974**    | Multiple Query |
-| 4,967   | **21,182**    | Data Updates   |
-| 881,321 | **2,268,524** | Plaintext      |
-
-<small>Higher is better</small>
-
-<aside class="notes"><p>As you can see I&#39;m not talking about small tiny improvements, I&#39;m talking about huge improvements!</p>
+<aside class="notes"><p>Testing DB concurrent updates.</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
 
 ## Conclusion
@@ -468,9 +483,7 @@ $ yarn add global es4x-pm
 * <!-- .element: class="fragment" --> You don't need to switch to Go/Rust/etc...
 * <!-- .element: class="fragment" --> *Dare to **Experiment***
 
-<aside class="notes"><p>So the final tip is that optimization is a never-ending job, for example, we can get better results if we run with the Enterprise Edition of Graal instead of the Open Source edition. All the results would be improved by about 20% and perhaps you can think of other tricks.</p>
-<p>And now we rinse and repeat... It&#39;s a never ending job!</p>
-<p>If you would like to improve this experiment even further, check the GitHub repo, look at my ugly code and let&#39;s make it even better!</p>
+<aside class="notes"><p>If you would like to improve this experiment even further, check the GitHub repo, look at my ugly code and let&#39;s make it even better!</p>
 </aside></script></section><section  data-markdown><script type="text/template"><!-- .slide: style="text-align: left;" -->
 
 # Thank you!
