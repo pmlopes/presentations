@@ -8,7 +8,7 @@
 
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/reveal.css">
-  <link rel="stylesheet" href="css/theme/white.css">
+  <link rel="stylesheet" href="css/theme/night.css">
 
   <!-- Theme used for syntax highlighting of code -->
   <link rel="stylesheet" href="lib/css/monokai.css">
@@ -19,11 +19,11 @@
 
   <!-- Printing and PDF exports -->
   <script>
-    var link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
-    document.getElementsByTagName('head')[0].appendChild(link);
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName('head')[0].appendChild(link);
   </script>
 
   <style>
@@ -36,93 +36,113 @@
     /* Process colors */
     .proc-0 {
       display: inline-block;
-      width:120px;
-      height:120px;
+      width: 120px;
+      height: 120px;
       background-color: #ee1111;
     }
 
     .proc-1 {
       display: inline-block;
-      width:120px;
-      height:120px;
+      width: 120px;
+      height: 120px;
       background-color: #e3a21a;
     }
 
     .proc-2 {
       display: inline-block;
-      width:120px;
-      height:120px;
+      width: 120px;
+      height: 120px;
       background-color: #2b5797;
     }
+
     .proc-3 {
       display: inline-block;
-      width:120px;
-      height:120px;
+      width: 120px;
+      height: 120px;
       background-color: #eff4ff;
     }
+
     .proc-4 {
       display: inline-block;
-      width:120px;
-      height:120px;
+      width: 120px;
+      height: 120px;
       background-color: #1d1d1d;
     }
+
     .proc-5 {
       display: inline-block;
-      width:120px;
-      height:120px;
+      width: 120px;
+      height: 120px;
       background-color: #7e3878;
     }
+
     .proc-6 {
       display: inline-block;
-      width:120px;
-      height:120px;
+      width: 120px;
+      height: 120px;
       background-color: #ff0097;
     }
+
     .proc-7 {
       display: inline-block;
-      width:120px;
-      height:120px;
+      width: 120px;
+      height: 120px;
       background-color: #00a300;
     }
 
     .proc-wait {
       display: inline-block;
-      width:60px;
-      height:120px;
+      width: 60px;
+      height: 120px;
     }
 
     .proc-hl {
       border-top: 2rem solid;
-      border-color: black;
+      border-color: lightcyan;
     }
 
     .proc-short {
-      width:60px;
+      width: 60px;
     }
 
     .proc-micro {
-      width:10px;
+      width: 10px;
     }
 
     .proc-switch {
       display: inline-block;
-      width:20px;
-      height:120px;
-      background-color: #1d1d1d;
+      width: 20px;
+      height: 120px;
+      background-color: lightcyan;
+    }
+
+    .reveal {
+      background-image: url("media/QCon2019_template.jpeg");
+      background-size: 100% 100%;
     }
   </style>
 </head>
 <body>
 <div class="reveal">
   <div class="slides">
-    <section style="text-align: left">
-      <h1>Crushing Latency</h1>
-      <h2>with Vert.x</h2>
+
+    <!-- TODO: shows where node ranks, explain truffle
+    -->
+
+    <section data-background-image="media/QCon2019_first_page.jpeg" data-background-size="100% 100%"
+             style="text-align: left">
+      <h2>Crushing Latency</h2>
+      <h3>with Vert.x</h3>
 
       <span style="font-size: 0.6em">
         <strong>Paulo Lopes</strong>
         <i class="fab fa-redhat"></i>
         <br/>Principal Software Engineer
+        <p>
+          <i class="fab fa-twitter"></i> <code>@pml0pes</code><br>
+          <i class="fab fa-linkedin"></i> <code>https://www.linkedin.com/in/pmlopes/</code><br>
+          <i class="fab fa-github"></i> <code>pmlopes</code>
+        </p>
       </span>
     </section>
 
@@ -136,21 +156,27 @@
 
       <blockquote>
         <img data-src="media/latency-explained.png">
-        <small><em>Network latency is the term used to indicate any kind of delay that happens in data communication over a network.</em><br><br>(techopedia.com)</small>
+        <small><em>Network latency is the term used to indicate any kind of delay that happens in data communication
+          over a network.</em><br><br>(techopedia.com)</small>
       </blockquote>
 
     </section>
 
     <section>
-      <h2>Latency by the numbers</h2>
+      <h3>Latency by the numbers</h3>
 
       <ul>
-        <li><strong>Amazon</strong>: every 100ms of latency costs 1% in sales<br>
-          <small><a href="http://home.blarg.net/~glinden/StanfordDataMining.2006-11-29.ppt">http://home.blarg.net/~glinden/StanfordDataMining.2006-11-29.ppt</a></small></li>
-        <li><strong>Google</strong>: an extra 0.5 seconds in search page generation time dropped traffic by 20%<br>
-          <small><a href="http://glinden.blogspot.com/2006/11/marissa-mayer-at-web-20.html">http://glinden.blogspot.com/2006/11/marissa-mayer-at-web-20.html</a></small></li>
-        <li><strong>A broker</strong>: could lose $4 million in revenues per millisecond if their electronic trading platform is 5 milliseconds behind the competition<br>
-        <small><a href="http://www.tabbgroup.com/PublicationDetail.aspx?PublicationID=346">http://www.tabbgroup.com/PublicationDetail.aspx?PublicationID=346</a></small></li>
+        <li class="fragment"><strong>Amazon</strong>: every 100ms of latency costs 1% in sales<br>
+          <small><a href="http://home.blarg.net/~glinden/StanfordDataMining.2006-11-29.ppt">http://home.blarg.net/~glinden/StanfordDataMining.2006-11-29.ppt</a></small>
+        </li>
+        <li class="fragment"><strong>Google</strong>: an extra 0.5 seconds in search page generation time dropped
+          traffic by 20%<br>
+          <small><a href="http://glinden.blogspot.com/2006/11/marissa-mayer-at-web-20.html">http://glinden.blogspot.com/2006/11/marissa-mayer-at-web-20.html</a></small>
+        </li>
+        <li class="fragment"><strong>A broker</strong>: could lose $4 million in revenues per millisecond if their
+          electronic trading platform is 5 milliseconds behind the competition<br>
+          <small><a href="http://www.tabbgroup.com/PublicationDetail.aspx?PublicationID=346">http://www.tabbgroup.com/PublicationDetail.aspx?PublicationID=346</a></small>
+        </li>
       </ul>
 
     </section>
@@ -176,10 +202,39 @@
           <a href="https://www.infoq.com/articles/pritchett-latency/">www.infoq.com/articles/pritchett-latency</a>
         </small>
       </p>
+
+      <aside class="notes">
+        <p>
+          Many developers are familiar with ACID transactions from working with relational databases. As such, the ACID
+          consistency model has been the norm for some time. The key ACID guarantee is that it provides a safe
+          environment
+          in which to operate on your data.
+        </p>
+
+        <p>
+          <b>Atomic</b> - <b>Consistent</b> - <b>Isolated</b> - <b>Durable</b>
+        </p>
+
+        <p>
+          For many domains and use cases, ACID transactions are far more pessimistic (i.e., they’re more worried about
+          data safety) than the domain actually requires.
+        </p>
+
+        <p>
+          <b>Basic Availability</b> - <b>Soft-state</b> - <b>Eventual consistency</b>
+        </p>
+
+        <p>
+          There’s no right answer to whether your application needs an ACID versus BASE consistency model. Developers
+          and
+          data architects should select their data consistency trade-offs on a case-by-case basis - not based just on
+          what’s trending or what model was used previously.
+        </p>
+      </aside>
     </section>
 
     <section>
-      <h2><small>2011:</small> Vert.x</h2>
+      <h2><small>2011 (Tim Fox):</small> Vert.x</h2>
 
       <ul>
         <li class="fragment">Loosely Couple Components <small>(event bus)</small></li>
@@ -204,11 +259,21 @@
       <h3>5ms / req time</h3>
 
       <div>
-        <div class="proc-0"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-1"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-5"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-6"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-7"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-0">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-6">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-7">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         ...
       </div>
 
@@ -224,13 +289,27 @@
       <h3>req time grows as threads fight for execution time</h3>
 
       <div>
-        <div class="proc-0"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-1 proc-short"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-5 proc-short"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-6"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-5 proc-short"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-7"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-1 proc-short"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-0">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-6">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-7">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         ...
       </div>
 
@@ -247,21 +326,37 @@
       <h3>when load is higher than max threads queuing builds up</h3>
 
       <div>
-        <div class="proc-0"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-0">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         <div class="fragment fade-in-then-out proc-switch"></div>
-        <div class="proc-1 proc-short"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-1 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         <div class="fragment fade-in-then-out proc-switch"></div>
-        <div class="proc-5 proc-short"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-5 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         <div class="fragment fade-in-then-out proc-switch"></div>
-        <div class="proc-6"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-6">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         <div class="fragment fade-in-then-out proc-switch"></div>
-        <div class="proc-5 proc-short"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-5 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         <div class="fragment fade-in-then-out proc-switch"></div>
-        <div class="proc-wait"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-wait">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         <div class="fragment fade-in-then-out proc-switch"></div>
-        <div class="proc-7"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-7">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         <div class="fragment fade-in-then-out proc-switch"></div>
-        <div class="proc-1 proc-short"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-1 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
         ...
       </div>
 
@@ -277,13 +372,27 @@
     </section>
 
     <section>
+      <img src="media/did-you-know.jpg" class="stretch">
+      <pre><code data-trim class="bash">
+        grep 'CONFIG_HZ=' /boot/config-$(uname -r)
+        # CONFIG_HZ=1000
+      </code></pre>
+
+      <aside class="notes">
+        given the benchmark from the previous slide and my linux kernel tick configuration, I waste for each second
+        1.116ms in context switches?
+      </aside>
+    </section>
+
+    <section>
       <h2>Practical example: <small>Tomcat 9.0</small></h2>
 
       <ul>
         <li>Default <code>maxThreads</code>: <strong>200</strong></li>
         <li class="fragment">Avg req time: <strong>5ms</strong></li>
         <li class="fragment">Hypothetical High load: <strong>1000 req</strong></li>
-        <li class="fragment">Wasted wait/queue time: <strong>(1000 / 200 - 1) * 5 = <big>20ms</big></strong></li>
+        <li class="fragment">Wasted wait/queue time: <strong><small>(1000 / 200 - 1) * 5
+          = </small><big>0~20ms</big></strong></li>
       </ul>
 
       <p>
@@ -303,21 +412,38 @@
 
     <section>
 
-      <h2>Vert.x</h2>
+      <h3>Vert.x</h3>
 
       <div style="display: inline-block; width: 45%; float: left;">
-        <div style="text-align: left;">
-          <big><b>Events</b></big>
+        <div class="stretch">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="1"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="6"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="11"></div>
+          <img data-src="media/eventloop-white.png">
         </div>
-
-        <img data-src="media/eventloop.png">
       </div>
 
       <div style="display: inline-block; width: 45%; text-align: left">
-        <div class="proc-0"><div class="fragment fade-in-then-out proc-hl" data-fragment-index="1"></div><div class="fragment fade-in-then-out proc-hl" data-fragment-index="3"></div><div class="fragment fade-in-then-out proc-hl" data-fragment-index="5"></div><div class="fragment fade-in-then-out proc-hl" data-fragment-index="7"></div></div> Request Handler<br/>
-        <div class="proc-1"><div class="fragment fade-in-then-out proc-hl" data-fragment-index="2"></div></div> AUTH Handler<br/>
-        <div class="proc-5"><div class="fragment fade-in-then-out proc-hl" data-fragment-index="4"></div></div> DB Handler<br/>
-        <div class="proc-6"><div class="fragment fade-in-then-out proc-hl" data-fragment-index="6"></div></div> JSON Handler
+        <div class="proc-0">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="2"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="4"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="8"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="10"></div>
+        </div>
+        <small>Request handler</small><br/>
+        <div class="proc-1">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="3"></div>
+        </div>
+        <small> AUTH handler</small><br/>
+        <div class="proc-5">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="5"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="7"></div>
+        </div>
+        <small> DB handler</small><br/>
+        <div class="proc-6">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="9"></div>
+        </div>
+        <small> JSON handler</small>
       </div>
 
     </section>
@@ -330,14 +456,21 @@
       <h2>Vert.x</h2>
       <h4>Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz</h4>
 
-      <span><img width="20%" heigth="20%" src="media/eventloop.png"></span>
-      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%" src="media/eventloop.png"></span>
-      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%" src="media/eventloop.png"></span>
-      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%" src="media/eventloop.png"></span>
-      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%" src="media/eventloop.png"></span>
-      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%" src="media/eventloop.png"></span>
-      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%" src="media/eventloop.png"></span>
-      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%" src="media/eventloop.png"></span>
+      <span><img width="20%" heigth="20%" src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
 
     </section>
 
@@ -352,9 +485,10 @@
         <li class="fragment"><em>Meaningful benchmarks are even harder</em></li>
         <li class="fragment">Techempower Framework Benchmarks</li>
         <ul>
-          <li class="fragment">Contributors: <strong>528</strong></li>
-          <li class="fragment">Pull Requests: <strong>4022</strong></li>
-          <li class="fragment">Commits: <strong>11095</strong></li>
+          <li class="fragment">Contributors: <strong>545</strong></li>
+          <li class="fragment">Pull Requests: <strong>4138</strong></li>
+          <li class="fragment">Commits: <strong>11230</strong></li>
+          <li class="fragment">Frameworks: <strong>658</strong></li>
         </ul>
       </ul>
 
@@ -378,7 +512,7 @@
 
     <section>
       <div style="display: inline-block; width: 45%; float: left;">
-        <h2>Baseline</h2>
+        <h2>jax-rs</h2>
 
         <pre><code data-trim data-noescape>
         <small>
@@ -402,7 +536,7 @@
       </div>
 
       <div style="display: inline-block; width: 45%; text-align: left">
-        <h2>vert.x-web</h2>
+        <h2>vert.x</h2>
 
         <pre><code data-trim data-noescape class="java">
         <small>
@@ -446,6 +580,16 @@
     </section>
 
     <section>
+      <img src="media/did-you-know.jpg" class="stretch">
+
+      <aside class="notes">
+        Did you know that using non blocking frameworks (like vert.x) you will not need as much hardware as with
+        blocking frameworks. Which means, lower cloud bills and also very important, less resource waste, which is
+        always good for the planet.
+      </aside>
+    </section>
+
+    <section>
       <h1>Polyglot</h1>
       <h4>English - 简体中文 - Português</h4>
     </section>
@@ -454,18 +598,37 @@
       <h3>What happens when you say Hello?</h3>
 
       <div>
-        <div class="proc-5"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-1 proc-micro"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-5 proc-micro"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-1 proc-micro"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-5 proc-micro"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-1 proc-micro"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-5 proc-micro"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-1 proc-micro"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-5 proc-micro"><div class="fragment fade-in-then-out proc-hl"></div></div>
-        <div class="proc-5"><div class="fragment fade-in-then-out proc-hl"></div></div>
+        <div class="proc-5">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
       </div>
-
 
       <pre><code data-trim>
       function handler (context) {
@@ -505,11 +668,12 @@
       <h2>In a nutshell</h2>
 
       <ul>
-        <li>Lots of conversions (GC)</li>
-        <li>Constant switch from JS engine to Java code
-          (somehow similar to context switching)</li>
-        <li>Not suited for performance</li>
-        <li><strong>JIT optimization will stop at language cross</strong></li>
+        <li class="fragment">Lots of conversions (GC)</li>
+        <li class="fragment">Constant switch from JS engine to Java code
+          (somehow similar to context switching)
+        </li>
+        <li class="fragment">Not suited for performance</li>
+        <li class="fragment"><strong>JIT optimization will stop at language cross</strong></li>
       </ul>
 
     </section>
@@ -523,7 +687,16 @@
 
     <section>
       <h2>JIT can't optimize it all</h2>
+
       <img data-src="media/iceberg.jpg" alt="iceberg" class="stretch">
+    </section>
+
+    <section>
+      <h2>Where's Node?</h2>
+      <img data-src="media/TechEmpower-node.png" alt="iceberg" class="stretch">
+    </section>
+
+    <section data-transition="zoom" data-background-image="media/TechEmpower-node-2.png" data-background-size="contain">
     </section>
 
     <section>
@@ -538,18 +711,37 @@
         <small>
           <a href="https://graalvm.org">https://graalvm.org</a></small>
       </p>
+
+      <aside class="notes">
+        GraalVM is a universal virtual machine for running applications written in JavaScript, Python, Ruby, R,
+        JVM-based languages like Java, Scala, Groovy, Kotlin, Clojure, and LLVM-based languages such as C and C++.
+      </aside>
+
     </section>
 
+    <section>
+      <img data-src="media/truffle.jpg" alt="truffle" class="stretch">
+
+      <p>
+        <small>
+          <a href="https://graalvm.org">https://graalvm.org</a></small>
+      </p>
+
+      <aside class="notes">
+        GraalVM removes the isolation between programming languages and enables interoperability in a shared
+        runtime. It can run either standalone or in the context of OpenJDK,
+      </aside>
+    </section>
 
     <section>
       <h2>GraalVM: In a nutshell</h2>
 
       <ul>
-        <li><strike>Lots of conversions (GC)</strike></li>
-        <li><strike>Constant switch from JS engine to Java code
+        <li class="fragment"><strike>Lots of conversions (GC)</strike></li>
+        <li class="fragment"><strike>Constant switch from JS engine to Java code
           (somehow similar to context switching)</strike></li>
-        <li><strike>Not suited for performance</strike></li>
-        <li><strike><strong>JIT optimization will stop at language cross</strong></strike></li>
+        <li class="fragment"><strike>Not suited for performance</strike></li>
+        <li class="fragment"><strike><strong>JIT optimization will stop at language cross</strong></strike></li>
       </ul>
     </section>
 
@@ -578,9 +770,9 @@
 
       <ul>
         <li>GraalJS (for fast JS runtime)</li>
-        <li>Vert.x (for fast I/O + event loops)</li>
-        <li>GraalVM (for full JIT)</li>
-        <li><code>.d.ts</code> (for IDE support)</li>
+        <li class="fragment">Vert.x (for fast I/O + event loops)</li>
+        <li class="fragment">GraalVM (for full JIT)</li>
+        <li class="fragment"><code>.d.ts</code> (for IDE support)</li>
       </ul>
 
       <pre><code data-trim data-noescape class="bash">
@@ -637,11 +829,11 @@
       </div>
     </section>
 
-    <section data-background-image="media/es4x-single.png" data-background-size="contain">
+    <section data-background-image="media/es4x-single.png" data-background-size="100% 100%">
 
     </section>
 
-    <section data-background-image="media/es4x-multi.png" data-background-size="contain">
+    <section data-background-image="media/es4x-multi.png" data-background-size="100% 100%">
 
     </section>
 
@@ -650,7 +842,7 @@
       <h4>what about latency?</h4>
     </section>
 
-    <section data-background-image="media/latency.png" data-background-size="contain">
+    <section data-background-image="media/latency.png" data-background-size="100% 100%">
 
     </section>
 
@@ -659,25 +851,30 @@
 
       <ul>
         <li>latency is not a problem, it's a symptom</li>
-        <li>non-blocking to fully use the CPU</li>
-        <li><strong>use vert.x</strong></li>
+        <li>use non-blocking to fully use the CPU</li>
+        <li><strong>use vert.x <span class="fragment">;-)</span></strong></li>
         <li>polyglot is fine</li>
         <li>use graalvm for polyglot JIT optimizations</li>
         <li>node can be slow for server applications</li>
-        <li><strong>use ES4X</strong></li>
+        <li><strong>use ES4X <span class="fragment">;-)</span></strong></li>
       </ul>
     </section>
 
     <section style="text-align: left">
-      <h1>Thank you!</h1>
+      <h2>Let's connect!</h2>
 
       <ul>
         <li><i class="fab fa-twitter"></i> <code>@pml0pes</code></li>
         <li><i class="fab fa-github"></i> <code>pmlopes</code></li>
+        <li><i class="fab fa-linkedin"></i> <code>https://www.linkedin.com/in/pmlopes/</code></li>
         <li><a href="https://reactiverse.io/es4x">https://reactiverse.io/es4x</a></li>
         <li><a href="https://vertx.io">https://vertx.io</a></li>
         <li><a href="https://graalvm.org">https://graalvm.org</a></li>
       </ul>
+    </section>
+
+    <section data-background-image="media/QCon2019_last_page.jpeg" data-background-size="100% 100%"
+             style="text-align: left">
     </section>
 
   </div>
@@ -686,23 +883,23 @@
 <script src="js/reveal.js"></script>
 
 <script>
-  // More info about config & dependencies:
-  // - https://github.com/hakimel/reveal.js#configuration
-  // - https://github.com/hakimel/reveal.js#dependencies
-  Reveal.initialize({
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
 
-    controls: true,
-    progress: true,
-    center: true,
-    hash: true,
+        controls: false,
+        progress: true,
+        center: true,
+        hash: true,
 
-    dependencies: [
-      {src: 'plugin/markdown/marked.js'},
-      {src: 'plugin/markdown/markdown.js'},
-      {src: 'plugin/notes/notes.js', async: true},
-      {src: 'plugin/highlight/highlight.js', async: true}
-    ]
-  });
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
 </script>
 </body>
 </html>
