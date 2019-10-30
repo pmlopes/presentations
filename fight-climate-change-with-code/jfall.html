@@ -1,0 +1,278 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Fight Climate Change with code</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/white.css">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/monokai.css">
+
+  <!-- font awesome -->
+  <link href="css/fontawesome/css/all.min.css" rel="stylesheet">
+  <script defer src="css/fontawesome/js/all.min.js"></script>
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+
+  <style>
+    img {
+      border: none !important;
+      box-shadow: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section style="text-align: left">
+        <h2>Fight Climate Change</h2>
+        <h3>with code</h3>
+
+        <span style="font-size: 0.6em">
+          <strong>Paulo Lopes</strong>
+          <i class="fab fa-redhat"></i>
+          <br />Principal Software Engineer
+          <p>
+            <i class="fab fa-twitter"></i> <code>@pml0pes</code><br>
+            <i class="fab fa-linkedin"></i> <code>https://www.linkedin.com/in/pmlopes/</code><br>
+            <i class="fab fa-github"></i> <code>pmlopes</code>
+          </p>
+        </span>
+      </section>
+
+      <section>
+        <h1>Why?</h1>
+      </section>
+
+      <section>
+        <h1>How?</h1>
+      </section>
+
+      <section data-background-image="media/reactive.png" data-background-size="100% 100%">
+      </section>
+
+      <section>
+        <h1>How?</h1>
+        <h2>Know your tools</h2>
+      </section>
+
+      <section>
+        <h3>Linux (amd64)</h3>
+        <pre><code data-trim>
+          # ls -l /sys/class/powercap
+          lrwxrwxrwx. 1 root root intel-rapl -> ...
+          lrwxrwxrwx. 1 root root intel-rapl:0 -> ...
+          lrwxrwxrwx. 1 root root intel-rapl:0:0 -> ...
+          lrwxrwxrwx. 1 root root intel-rapl:0:1 -> ...
+          lrwxrwxrwx. 1 root root intel-rapl:0:2 -> ...
+          lrwxrwxrwx. 1 root root intel-rapl:1 -> ...
+          lrwxrwxrwx. 1 root root intel-rapl-mmio -> ...
+          lrwxrwxrwx. 1 root root intel-rapl-mmio:0 -> ...
+          lrwxrwxrwx. 1 root root intel-rapl-mmio:0:0 -> ...
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code data-trim>
+          PERF(1)               perf Manual                     PERF(1)
+
+          NAME
+                perf - Performance analysis tools for Linux
+
+          SYNOPSIS
+                perf [--version] [--help] [OPTIONS] COMMAND [ARGS]
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="bash">
+          perf stat \       <span class="fragment"># Collect Statistics</span>
+            -a \            <span class="fragment"># From all CPUs</span>
+            -e "power/energy-cores/" \ <span class="fragment"># events related to energy</span>
+            -I 1000 \       <span class="fragment"># every 1000ms</span>
+            -x \; \         <span class="fragment"># Use a custom delimiter</span>
+            -o stat.csv \   <span class="fragment"># Output file</span>
+            /usr/bin/cmd    <span class="fragment"># The command you want to measure ;-)</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <h1>How?</h1>
+        <h2>Do you choose your framework</h2>
+      </section>
+
+      <section>
+        <h3>Example</h3>
+        <ul>
+          <li>node.js</li>
+          <li>springboot</li>
+          <li>quarkus</li>
+          <li>vertx</li>
+          <li>quarkus-native</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>nodejs</h3>
+        <pre><code data-trim class="javascript">
+          const app = express();
+
+          app.get('/api', (req, res) => {
+            res
+              .header('Content-Type', 'text/plain')
+              .send(crypto.randomBytes(20).toString('base64'));
+          });
+        </code></pre>
+      </section>
+
+      <section>
+        <h3>vertx</h3>
+        <pre><code data-trim class="java">
+          final Router app = Router.router(vertx);
+          final VertxContextPRNG rnd = VertxContextPRNG.current(vertx);
+
+          app.get("/api").handler(ctx -> {
+              ctx.response()
+                .putHeader("Content-Type", "text/plain")
+                .end(rnd.nextString(20));
+          });
+        </code></pre>
+      </section>
+
+      <section>
+        <h3>quarkus</h3>
+        <pre><code data-trim class="java">
+          @Path("/api")
+          public class DummyResource {
+
+            private final var random = new SecureRandom();
+
+            @GET
+            @Produces(MediaType.TEXT_PLAIN)
+            public String hello() {
+              byte[] data = new byte[20];
+              random.nextBytes(data);
+              return Base64.getEncoder().encodeToString(data);
+            }
+          }
+        </code></pre>
+      </section>
+
+      <section>
+        <h3>springboot</h3>
+        <pre><code data-trim class="java">
+          @RestController
+          public class EnergyController {
+
+            private final var random = new SecureRandom();
+
+            @GetMapping("/api")
+            public String home() {
+              byte[] data = new byte[20];
+              random.nextBytes(data);
+
+              return Base64.getEncoder().encodeToString(data);
+            }
+          }
+        </code></pre>
+      </section>
+
+      <section>
+        <h3>Test</h3>
+        <ul>
+          <li class="fragment">30s <small>warmup</small></li>
+          <li class="fragment">30s <small>concurrency: 16req/connection</small></li>
+          <li class="fragment">30s <small>concurrency: 64req/connection</small></li>
+          <li class="fragment">30s <small>concurrency: 256req/connection</small></li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>2000 req/s (constant)</h3>
+        <img data-src="media/reference-2000.png" class="stretch">
+      </section>
+
+      <section>
+        <h3>12350 req/s (constant)</h3>
+        <img data-src="media/all-12350.png" class="stretch">
+      </section>
+
+      <section>
+        <h1>What if?</h1>
+        <h2>we increase the load</h2>
+        <h2 class="fragment">Only JVM can handle it 🤷</h2>
+      </section>
+
+      <section>
+        <h3>42750 req/s (constant)</h3>
+        <img data-src="media/jvm-42750.png" class="stretch">
+      </section>
+
+      <section>
+        <h2>Conclusion</h2>
+        <ul>
+          <li>Know your linux fu</li>
+          <li>Frameworks are not all born equal</li>
+          <li>If you're not maxing the CPU you can save 🌍 </li>
+          <li class="fragment">choose <a href="https://vertx.io">https://vertx.io</a> 😊 </li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>28500 req/s (constant)</h3>
+        <img data-src="media/native-28500.png" class="stretch">
+      </section>
+
+      <section style="text-align: left">
+        <h2>Let's connect!</h2>
+
+        <ul>
+          <li><i class="fab fa-twitter"></i> <code>@pml0pes</code></li>
+          <li><i class="fab fa-github"></i> <code>pmlopes</code></li>
+          <li><i class="fab fa-linkedin"></i> <code>www.linkedin.com/in/pmlopes</code></li>
+          <li><a href="https://vertx.io">https://vertx.io</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/reveal.js"></script>
+
+  <script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+
+      controls: false,
+      progress: true,
+      center: true,
+      hash: true,
+
+      dependencies: [
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/notes/notes.js', async: true },
+        { src: 'plugin/highlight/highlight.js', async: true },
+        { src: 'plugin/zoom-js/zoom.js' },
+      ],
+    });
+  </script>
+</body>
+
+</html>
