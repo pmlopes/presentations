@@ -1,0 +1,1410 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Async + Reactive = Fast and Productive</title>
+
+	<meta name="author" content="Paulo Lopes">
+
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+	<style>
+    .reveal code { font-family: "Fira Code"; }
+    .hl-yellow { color: #cc0; }
+
+    img {
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Process colors */
+    .proc-0 {
+      display: inline-block;
+      width: 118px;
+      height: 120px;
+      background-color: #ee1111;
+    }
+
+    .proc-1 {
+      display: inline-block;
+      width: 118px;
+      height: 120px;
+      background-color: #e3a21a;
+    }
+
+    .proc-2 {
+      display: inline-block;
+      width: 118px;
+      height: 120px;
+      background-color: #2b5797;
+    }
+
+    .proc-3 {
+      display: inline-block;
+      width: 118px;
+      height: 120px;
+      background-color: #eff4ff;
+    }
+
+    .proc-4 {
+      display: inline-block;
+      width: 118px;
+      height: 120px;
+      background-color: #1d1d1d;
+    }
+
+    .proc-5 {
+      display: inline-block;
+      width: 118px;
+      height: 120px;
+      background-color: #7e3878;
+    }
+
+    .proc-6 {
+      display: inline-block;
+      width: 118px;
+      height: 120px;
+      background-color: #ff0097;
+    }
+
+    .proc-7 {
+      display: inline-block;
+      width: 118px;
+      height: 120px;
+      background-color: #00a300;
+    }
+
+    .proc-wait {
+      display: inline-block;
+      width: 60px;
+      height: 120px;
+    }
+
+    .proc-hl {
+      border-top: 2rem solid;
+      border-color: lightcyan;
+    }
+
+    .proc-short {
+      width: 60px;
+    }
+
+    .proc-micro {
+      width: 10px;
+    }
+
+    .proc-switch {
+      display: inline-block;
+      width: 20px;
+      height: 120px;
+      background-color: lightcyan;
+    }
+  </style>
+
+	<!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/atom-one-dark.css">
+  
+  <!-- font awesome -->
+  <link href="css/fontawesome/css/all.min.css" rel="stylesheet">
+  <script defer src="css/fontawesome/js/all.min.js"></script>
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+
+	<div class="reveal">
+
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+			<section style="text-align: left">
+        <h3>Async + Reactive = Fast and Productive</h3>
+  
+        <span style="font-size: 0.6em">
+          <strong>Paulo Lopes</strong>
+          <i class="fab fa-redhat"></i>
+          <br/>Principal Software Engineer
+          <p>
+            <i class="fab fa-twitter"></i> <code>@pml0pes</code><br>
+            <i class="fab fa-linkedin"></i> <code>https://www.linkedin.com/in/pmlopes/</code><br>
+            <i class="fab fa-github"></i> <code>pmlopes</code>
+          </p>
+        </span>
+      </section>
+
+			<section>
+				<h2>Summary</h2>
+				<ul>
+					<li class="fragment">Reactive <span class="hl-yellow">Programming</span></li>
+          <li class="fragment">Reactive <span class="hl-yellow">Systems</span></li>
+          <li class="fragment" style="text-decoration: line-through"><span class="hl-yellow">Functional</span> Reactive <span class="hl-yellow">Programming</span></li>
+        </ul>
+        <aside data-markdown class="notes">
+          In this talk I will be speaking about Reactive.
+
+          Reactive is quite popular these days and aparently everyone claims to be reactive.
+
+          We can classify **Reactive** in 3 main areas:
+
+          * ***&gt;slide&lt;*** Reactive programming
+          * ***&gt;slide&lt;*** Reactive Systems
+          * ***&gt;slide&lt;*** Functional Reactive Programming
+
+          I will stay away from the last one because it is an totally different topic and talk.
+
+          I will talk about the first two, so we can finally **Reactive all the things!**
+        </aside>
+			</section>
+
+			<section>
+				<h2>Reactive <span class="hl-yellow">Programming</span></h2>
+				<blockquote class="fragment">
+					In computing, reactive programming is an <span class="hl-yellow">asynchronous</span> programming paradigm concerned with data <span class="hl-yellow">streams</span> and the propagation of change.
+					<small>Wikipedia</small>
+        </blockquote>
+        <aside data-markdown class="notes">
+          What is Reactive Programming?
+
+          ***&gt;slide&lt;*** Wikipedia says:
+
+          In computing, reactive programming is an asynchronous programming paradigm concerned with data streams and the propagation of change.
+
+          If this is to vague, I've highlighted the important parts!
+        </aside>
+			</section>
+
+      <section data-background-image="img/boring.jpeg" data-background-size="contain">
+        <aside data-markdown class="notes">
+          Small hands up! Who here is familiar with:
+
+          * Node.js?
+          * Vert.x?
+          * Spring 5?
+
+          If your hand was up, sorry but this next couple of slides will be a bit boring...
+        </aside>
+      </section>
+
+      <section>
+        <h2>Asynchronous programming</h2>
+        <blockquote>
+          ... refers to the occurrence of <span class="hl-yellow">events independently of the main program flow</span> and <span class="hl-yellow">ways to deal with such events</span>.<small>wikipedia</small>
+        </blockquote>
+        <aside data-markdown class="notes">
+          If we continue reading Wikipedia we get:
+
+          Asynchronous programming refers to the occurrence of events independently of the main program flow and ways to deal with such events.
+
+          And continues...
+
+          These may be "outside" events such as the arrival of signals, or actions instigated by a program that take place concurrently with program execution, without the program blocking to wait for results.
+        </aside>
+      </section>
+
+      <section>
+        <h2><span class="hl-yellow">Why</span> Asynchronous programming<span class="hl-yellow">?</span></h2>
+        <aside data-markdown class="notes">
+          But the question is:
+
+          * Why is this important?
+          * Why the sudden need to change how we program?
+        </aside>
+      </section>
+
+      <section>
+				<pre><code data-trim data-noescape class="java">
+        for (int i = 0; i < 10 * 1024; i++) {
+          new Thread(() -> {
+            URLConnection conn = new URL("http://localhost:8080/")
+              .openConnection();
+
+            try (InputStream in = conn.getInputStream()) {
+              int ch;
+              while ((ch = in.read()) != -1) {
+                System.out.print((char) ch);
+              }
+              System.out.println();
+            }
+          }).start();
+        }
+        </code></pre>
+        <aside data-markdown class="notes">
+          Let's imagine the scenario where we want to test if our application can handle 10000 client in parallel.
+
+          The application is an hello world (for the sake of completion).
+
+          In a synchronous world, we would loop 10000 times, creating a thread and each thread would then connect to the server.
+
+          We would again synchronously wait for the response and print as the stream offer data to us to the console.
+
+          * It's 2017 we have big servers this should work, right?
+          * 10000 threads, what's the deal with that, right?
+          * But this is so trivial why not test on a Raspberry Pi?
+        </aside>
+      </section>
+
+      <section data-background-video="img/threaded.webm" data-background-size="contain">
+        <aside data-markdown class="notes">
+          * Lets connect to the Pi
+          * Start top to see the state of the machine
+          * Lets connect on another shell
+          * And now run the application
+          * What did just happen?
+          * It died, Out of Memory allocating threads...
+          * As you can see the synchronous world does not scale as they promised us.
+
+          * Sure run on a bigger server, add more RAM...
+          * But we can make the problem more complex
+          * Add a database here, and external system there...
+          * it does not scale!
+        </aside>
+      </section>
+
+
+      <section>
+        <h2>How do we change?</h2>
+        <aside data-markdown class="notes">
+          So how does a developer change the mind set from synchronous to asynchronous?
+        </aside>
+      </section>
+
+      <section>
+        <h2><span class="hl-yellow">STOP</span> thinking about Iterators</h2>
+        <aside data-markdown class="notes">
+          Simple:
+
+          We must stop thinking about **Iterators**
+        </aside>
+      </section>
+
+      <section>
+        <h2><span class="hl-yellow">START</span> thinking about Streams</h2>
+        <aside data-markdown class="notes">
+          And we must start think about **Streams**.
+        </aside>
+      </section>
+
+			<section data-transition="slide-in fade-out">
+        <h4>Iterators...</h4>
+				<pre><code data-trim data-noescape class="java">
+					<mark>List&lt;MyPOJO&gt; filtered = new ArrayList&lt;&gt;();</mark>
+					int count = 0;
+					for (Iterator&lt;MyPOJO&gt; i = pojos.iterator());
+					  i.hasNext() &amp;&amp; count &lt; 10; ) {
+					    MyPOJO data = i.next();
+					      if (data.getName().contains(nameQuery)) {
+					        <mark>filtered.add(data);</mark>
+					        count++;
+					      }
+					}
+        </code></pre>
+        <aside data-markdown class="notes">
+          Let's look at this code. Imagine that we want to select the first 10 elements which name contains a given pattern.
+
+          In a synchronous world, one would think of creating a placeholder list where items can be added.
+        </aside>
+			</section>
+
+			<section data-transition="fade-in fade-out">
+        <h4>Iterators...</h4>
+        <pre><code data-trim data-noescape class="java">
+					List&lt;MyPOJO&gt; filtered = new ArrayList&lt;&gt;();
+					<mark>int count = 0;</mark>
+					for (Iterator&lt;MyPOJO&gt; i = pojos.iterator());
+					  i.hasNext() &amp;&amp; <mark>count &lt; 10;</mark> ) {
+					    MyPOJO data = i.next();
+					      if (data.getName().contains(nameQuery)) {
+					        filtered.add(data);
+					        <mark>count++;</mark>
+					      }
+					}
+        </code></pre>
+        <aside data-markdown class="notes">
+          If we only want the first 10 matches, we need before hand to keep track of the state, plus during the iteration we need to maintain the state.
+        </aside>
+			</section>
+
+			<section data-transition="fade-in fade-out">
+        <h4>Iterators...</h4>
+        <pre><code data-trim data-noescape class="java">
+          List&lt;MyPOJO&gt; filtered = new ArrayList&lt;&gt;();
+          int count = 0;
+          for (<mark>Iterator&lt;MyPOJO&gt; i = pojos.iterator());
+            i.hasNext()</mark> &amp;&amp; count &lt; 10; ) {
+              <mark>MyPOJO data = i.next();</mark>
+                if (data.getName().contains(nameQuery)) {
+                  filtered.add(data);
+                  count++;
+                }
+          }
+        </code></pre>
+        <aside data-markdown class="notes">
+          Due to the synchronous programming model we must explicitly iterate the list.
+        </aside>
+      </section>
+
+			<section data-transition="fade-in slide-out">
+        <h4>Iterators...</h4>
+        <pre><code data-trim data-noescape class="java">
+          List&lt;MyPOJO&gt; filtered = new ArrayList&lt;&gt;();
+          int count = 0;
+          for (Iterator&lt;MyPOJO&gt; i = pojos.iterator());
+            i.hasNext() &amp;&amp; count &lt; 10; ) {
+              MyPOJO data = i.next();
+                <mark>if (data.getName().contains(nameQuery)) {</mark>
+                  filtered.add(data);
+                  count++;
+                <mark>}</mark>
+          }
+        </code></pre>
+        <aside data-markdown class="notes">
+          And finally if the item from the list matches our query it gets processed.
+        </aside>
+      </section>
+
+			<section data-transition="slide-in fade-out">
+        <h4>Streams...</h4>
+        <pre><code data-trim data-noescape class="java">
+          <mark>pojos.stream()</mark>
+            .filter(p -> p.getName().contains(nameQuery))
+            .limit(10)
+            .collect(Collectors.toList());
+        </code></pre>
+        <aside data-markdown class="notes">
+          Now, lets look into streams.
+
+          With streams we have no control over the step over of elements, but that is fine. We must think in terms of **reactions**.
+        </aside>
+      </section>
+
+			<section data-transition="fade-in fade-out">
+        <h4>Streams...</h4>
+        <pre><code data-trim data-noescape class="java">
+          pojos.stream()
+            <mark>.filter(p -> p.getName().contains(nameQuery))</mark>
+            .limit(10)
+            .collect(Collectors.toList());
+        </code></pre>
+        <aside data-markdown class="notes">
+          We specify filter functions (as a reaction to the event of element being available).
+
+          In this case, given `p` as a stream element, if the name of `p` contains our `query` then it is further processed.
+        </aside>
+      </section>
+
+			<section data-transition="fade-in fade-out">
+        <h4>Streams...</h4>
+        <pre><code data-trim data-noescape class="java">
+          pojos.stream()
+            .filter(p -> p.getName().contains(nameQuery))
+            <mark>.limit(10)</mark>
+            .collect(Collectors.toList());
+        </code></pre>
+        <aside data-markdown class="notes">
+          We specify that we want to limit the results to 10 elements.
+        </aside>
+      </section>
+
+			<section data-transition="fade-in slide-out">
+        <h4>Streams...</h4>
+        <pre><code data-trim data-noescape class="java">
+          pojos.stream()
+            .filter(p -> p.getName().contains(nameQuery))
+            .limit(10)
+            <mark>.collect(Collectors.toList());</mark>
+        </code></pre>
+        <aside data-markdown class="notes">
+          And finally we collect the results. And in this case we ask the API to collect into a `List`.
+        </aside>
+      </section>
+
+      <section data-background-video="media/sushi.mp4" data-background-video-loop="true" data-background-size="contain">
+        <aside data-markdown class="notes">
+          Once you get familiar with this mindset, you will see that reactive programming can be more concise and easier to read that traditional synchronous programming.
+        </aside>
+      </section>
+
+      <section>
+        <h2>Example <span class="hl-yellow">#1</span></h2>
+        <h3><span class="hl-yellow">C10k</span> Problem</h3>
+        <aside data-markdown class="notes">
+          Lets look at a real world example.
+
+          The C10k problem.
+        </aside>
+      </section>
+
+      <section>
+        <blockquote>
+          <p>The C10k problem is the problem of optimising network sockets to handle a large number of clients at the same time.</p>
+          <p>The term was coined in 1999 by Dan Kegel, citing the Simtel FTP host serving 10,000 clients at once over 1 gigabit per second Ethernet in that year.<small>Wikipedia</small></p>
+        </blockquote>
+        <aside data-markdown class="notes">
+          So what is the C10k problem?
+
+          The challenge with this problem is that if you have a traditional Thread per connection server, you will need 10 000 threads to handle the load. Once you manage to spawn this amount of threads you will notice that your application will be rendered unusable due to the fact that the operating system is constantly switching the thread context.
+
+          But remember we're talking about reactive programming, so lets implement a reactive server that can do this:
+        </aside>
+      </section>
+
+      <section>
+        <h4>Server.java</h4>
+        <pre><code data-trim data-noescape class="java">
+          final Router app = Router.router(vertx);
+          app.route("/eventbus/*").handler(SockJSHandler.create(vertx));
+          vertx.createHttpServer()
+            .requestHandler(app::accept)
+            .listen(8080, res -> {
+              // publish a new message every 10 sec
+              vertx.setPeriodic(10000L, t ->
+                vertx.eventBus().publish(
+                "time", new JsonObject()
+                  .put("unixtime", System.currentTimeMillis())));
+          });
+        </code></pre>
+        <aside data-markdown class="notes">
+          I'm using Vert.x for this example, in order to keep the connections open all the time, I will be using websockets instead of plain HTTP requests.
+
+          Let me read the code:
+
+          1. Create a router to map HTTP requests to handlers (a handler is like a callback for node people)
+          2. All requests to `eventbus` are handled by sockjs (one helper library we have for websockets)
+          3. We create a HTTP server
+          4. Requests are handled by the router
+          5. We listen on port 8080
+          6. Every 10 seconds we publish a message to all websockets with the current time.
+        </aside>
+      </section>
+      <section>
+        <h4>Client.java</h4>
+        <pre><code data-trim data-noescape class="java">
+          final WebSocket[] sockets = new WebSocket[10 * 1024];
+          for (int i = 0; i < sockets.length; i++) {
+            vertx.createHttpClient()
+              .websocket(8080, "localhost", "/eventbus/websocket", ws -> {
+                sockets[i] = ws;
+                ws.frameHandler(System.out::println);
+                ws.exceptionHandler(Throwable::printStackTrace);
+                ws.endHandler(v -> {
+                  System.err.println("Connection ended: " + i);
+                  sockets[i] = null;
+                });
+            });
+          }
+        </code></pre>
+        <aside data-markdown class="notes">
+          The client code is also small, instead of spawning 10000 processes (which would be pretty much as having 10000 threads in terms of performance), we will manage all websockets from a single process.
+
+          Let me read the code:
+
+          1. For the length of the sockets array (10000)
+          2. Create a websocket to port 8080 at localhost using the resource `eventbus/resource`
+          3. On frame received print to the console
+          4. On error print the exception
+          5. On end log
+        </aside>
+      </section>
+
+      <section>
+        <h1>DEMO</h1>
+        <h3><span class="hl-yellow">Reactive</span></h3>
+        <aside data-markdown class="notes">
+          To make things more exciting I will not run on my laptop. Remember the problem was defined in 1999 the CPU of the time was the first generation Intel Xeon.
+
+          My laptop has a Intel i7 so it wouldn't be fair. Let me run this again on the Raspberry Pi 2. It's a 2! not a 3!
+
+          So lets do this!
+        </aside>
+      </section>
+
+      <section data-background-video="img/raspberrypi.webm" data-background-size="contain">
+        <aside data-markdown class="notes">
+          I'll connect to the Pi and start the server. Ignore the warnings for now, those are a vert.x protection to let you know that your code is blocking the event loop so your application will not be abble to process other events until the event loop is unblocked.
+
+          Start top and lets count the number of sockets. So far so good.
+
+          Now start the client again the event loop block check warns that your code is doing something too heavy... ignore for now...
+
+          Ok, everything is runnig, the CPU remains low, thats good!
+
+          What about the number of sockets? More than 20000, well that is correct since we use 10000 from the client to connect to the server which requires another 10000 so we're in fact running the C20k problem :)
+
+          And again the CPU remains low.
+        </aside>
+      </section>
+
+      <section data-background-video="img/job-done.mp4" data-background-video-loop="true" data-background-size="contain">
+        <aside data-markdown class="notes">
+          And there! Job done!
+
+          Reactive programming is quite powerful, but **it is not** a silver bullet.
+        </aside>
+      </section>
+
+      <section>
+        <h2>Reactive <span class="hl-yellow">System</span></h2>
+        <ul>
+          <li class="fragment hl-yellow">Elastic</li>
+          <li class="fragment hl-yellow">Resilient</li>
+          <li class="fragment hl-yellow">Responsive</li>
+          <li class="fragment hl-yellow">Message Driven</li>
+        </ul>
+        <aside data-markdown class="notes">
+          Lets talk reactive systems, because **we** need:
+
+          * ***&gt;slide&lt;*** Elasticity - because we need to handle varying load, we need to write our applications so that it can be split up and be distributed across several machines
+          * ***&gt;slide&lt;*** Resilience - because 1) most applications must provide high availability and 2) things will go wrong, we must not put all eggs into one basket. Again, our application must be distributed.
+
+          Based on the assumption that we want Elasticity and Resilience we will get:
+
+
+          * ***&gt;slide&lt;*** Responsiveness: we want to have systems that respond in a timely manner, under varying load and in the case of failures
+          * ***&gt;slide&lt;*** Asynchronous Messaging: is required to achieve the properties mentioned before
+
+          By having asynchronous messages we also get:
+
+          * Decoupling: we want compartmentalization (required for Resilience), which forces us to have clear system boundaries and loose coupling
+          * Maintainability & Flexibility: is a result we get from clear boundaries and loose coupling
+        </aside>
+      </section>
+
+      <section>
+        <h2>Example <span class="hl-yellow">#2</span></h2>
+        <div>Consider an application with 2 endpoints:</div>
+        <br>
+        <ul>
+          <li>/ - the current process id</li>
+          <li>/work - value of π Gregory-Leibniz Series<small>[1]</small></li>
+        </ul>
+        <div>
+          <br>
+          <small>[1] <a href="https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80">https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80</a></small>
+        </div>
+        <aside data-markdown class="notes">
+          why do we need a reactive system? Consider the following web application to calculate the value of Pi using the Gregory-Leibniz Series.
+
+          It will expose 2 REST end points:
+
+          1. / will return the current process id
+          2. /work will return the value of Pi
+        </aside>
+      </section>
+
+      <section>
+        <h4>Spring5 WebFlux Reactive</h4>
+        <pre><code data-trim data-noescape class="java">
+          @RestController
+          public class PiController {
+            private static final String PID =
+                ManagementFactory.getRuntimeMXBean().getName();
+            @GetMapping("/")
+            public Mono&lt;String&gt; home() {
+              return Mono.just("Current PID: ")
+                  .map(w -> w + PID);
+            }
+            @GetMapping("/work")
+            public Mono&lt;String&gt; work() {
+              return Mono.just("Pi is: ")
+                  .map(w -> w + Pi.calculate(100_000_000));
+            }
+          }
+        </code></pre>
+        <aside data-markdown class="notes">
+          In the latest and greatest Spring Reactive we would implement the controller as this.
+
+          Spring Reactive claims to be Reactive (duh!) and uses their Mono/Flux API to process streams.
+
+          Since the application is trivial, we only use Mono of a single value.
+        </aside>
+      </section>
+
+      <section>
+        <h4>node.js</h4>
+        <pre><code data-trim data-noescape class="js">
+          var process = require('process');
+          var express = require('express');
+          var pi = require('./pi');
+          var app = express();
+
+          app.get('/', function (req, res) {
+            res.send('Request served by ' + process.pid);
+          });
+
+          app.get('/work', function (req, res) {
+            res.send('Pi = (' + process.pid + ') ' + pi(100000000));
+          });
+        </code></pre>
+        <aside data-markdown class="notes">
+          Node JS which is also reactive in conjuction with Express.js could be implemented as this.
+
+          Node API relies on callbacks, callbacks are continuations, where the flow control is resumed on the given last argument of the call.
+
+          For simplicity I'm still using the ES5 notation but that is not a requirement the same could be achieved with ES6.
+        </aside>
+      </section>
+
+      <section>
+        <h4>vert.x</h4>
+        <pre><code data-trim data-noescape class="java">
+            final Router app = Router.router(vertx);
+            final PiService pi = ProxyHelper
+              .createProxy(PiService.class, vertx, "pi");
+
+            app.get("/").handler(ctx -> ctx.response().end("PID: " + PID));
+
+            app.get("/work").handler(ctx ->
+              pi.calculatePi(ar -> {
+                if (ar.failed()) {
+                  ctx.fail(ar.cause());
+                } else {
+                  ctx.response().end("Pi = " + ar.result());
+                }
+              }));
+        </code></pre>
+        <aside data-markdown class="notes">
+          Finally the Vert.x application, In a way it is similar to Node but introduces the concept of Services and Proxies. A Proxy Service is a way to abstract the message driven code and invoke the service regardless of the physical location on the cluster.
+        </aside>
+      </section>
+
+      <section data-background-image="img/willitbereactive.jpg" data-background-size="contain">
+        <aside data-markdown class="notes">
+          The moment of truth! How do these frameworks compare?
+        </aside>
+      </section>
+
+      <section>
+        <h1>DEMO</h1>
+        <h3><span class="hl-yellow">Responsive</span></h3>
+      </section>
+
+      <section data-background-video="img/responsive.webm" data-background-size="contain">
+        <aside data-markdown class="notes">
+          Start with spring.
+
+          Test that the server is Ok.
+
+          Now let's generate lots of load so the server gets saturated.
+
+          And lets try to get the value of Pi...
+
+          It timed out, so the responsive test failed under load.
+
+          Lets repeat for node.
+
+          It timed out, so the responsive test failed under load.
+
+          Finally lets start vert.x.
+
+          It takes some time but the result arrives. Vert.x achieves this because it can off load CPU intensive tasks from the the event loop so it won't block the rest of the application as Spring or Node do.
+        </aside>
+      </section>
+
+      <section>
+        <h1>DEMO</h1>
+        <h3><span class="hl-yellow">Resilient</span></h3>
+      </section>
+
+      <section data-background-video="img/resilient.webm" data-background-size="contain">
+        <aside data-markdown class="notes">
+          Only Vert.x has out of the box support for being resilient, the important flags are: `ha` `cluster`.
+
+          So lets start a jvm and join to cluster.
+
+          As you see there is nothing running, now start the application.
+
+          Lets kill the application Pid
+
+          Back to the shell, but notice the empty JVM, it noticed that the application died so it respawn it there!
+
+          Lets test the API the PID is different now!
+
+          Your application has survived your OPS team can have a peaceful night of sleep!
+        </aside>
+      </section>
+
+      <section>
+        <h1>DEMO</h1>
+        <h3><span class="hl-yellow">Elastic</span></h3>
+      </section>
+
+      <section data-background-video="img/elastic.webm" data-background-size="contain">
+        <aside data-markdown class="notes">
+          Elastic means that we can horizontally scale and again only Vert.x offers this out of the box, lets see, start a server.
+
+          Test the API, the PID never changes as it is obvious.
+
+          Now start a second node and see that both nodes discover each other.
+
+          Test the API, note the PID, it changes in a round robin although you're going always to the same HTTP server.
+
+          The load is now shared across the nodes automatically.
+        </aside>
+      </section>
+
+      <section data-background-image="img/rdp_reactive-traits.png" data-background-size="contain">
+        <aside data-markdown class="notes">
+          Lets look again at the reactive system model.
+
+          * A reactive system **is** elastic and resilient
+          * This **gives** us a responsive application
+          * To **build** such a system we need a message driven architecture
+
+          Which in turn also **gives** us:
+
+          * a maintainable and extensible application
+        </aside>
+      </section>
+
+      <section>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th><b>Spring5</b></th>
+              <th><b>node.js</b></th>
+              <th><b>vert.x</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><i>Responsive</i></td>
+              <td>✔️*</td>
+              <td>✔️*</td>
+              <td>✔️</td>
+            </tr>
+            <tr>
+              <td><i>Message Driven</i></td>
+              <td></td>
+              <td></td>
+              <td>✔️</td>
+            </tr>
+            <tr>
+              <td><i>Resilient</i></td>
+              <td></td>
+              <td></td>
+              <td>✔️</td>
+            </tr>
+            <tr>
+              <td><i>Elastic</i></td>
+              <td></td>
+              <td></td>
+              <td>✔️</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <div class="fragment hl-yellow"><small>* to some extent!</small></div>
+        <aside data-markdown class="notes">
+          Let's close this small analysis and look at the scoreboard.
+
+          All frameworks adopt a reactive programming model but not all are reactive systems.
+        </aside>
+      </section>
+
+
+      <section>
+        <h2>Why Threads 🤮?</h2>
+      </section>
+  
+      <section>
+        <h3>5ms / req time</h3>
+  
+        <div>
+          <div class="proc-0 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-1 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-5 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-6 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-7 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          ...
+        </div>
+  
+        <pre><code data-trim class="bash">
+          # In optimal circumstances
+  
+          1 Thread => 200 req/sec
+          8 Cores => 1600 req/sec
+        </code></pre>
+        <aside data-markdown class="notes">
+          Consider an API that has a SLA of 5ms
+          In optimal circumstances 1 thread will handle 200 req/s
+          So My laptop which has 8 cores shall be able to handle 1600 req/s
+        </aside>
+      </section>
+  
+      <section>
+        <h3>req time grows as threads fight for execution time</h3>
+  
+        <div>
+          <div class="proc-0">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-1 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-5 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-6">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-5 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-7">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="proc-1 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          ...
+        </div>
+  
+        <pre><code data-trim class="bash">
+        # PROCESS STATE CODES
+        #   D    Uninterruptible sleep (usually IO)
+  
+        ps aux | awk '$8 ~ /D/  { print $0 }'
+        root 9324 0.0 0.0 8316 436 ? D<   Oct15 0:00 /usr/bin/java...
+        </code></pre>
+      </section>
+  
+      <section>
+        <h3>when load is higher than max threads queuing builds up</h3>
+  
+        <div>
+          <div class="proc-0">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="fragment fade-in-then-out proc-switch"></div>
+          <div class="proc-1 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="fragment fade-in-then-out proc-switch"></div>
+          <div class="proc-5 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="fragment fade-in-then-out proc-switch"></div>
+          <div class="proc-6">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="fragment fade-in-then-out proc-switch"></div>
+          <div class="proc-5 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="fragment fade-in-then-out proc-switch"></div>
+          <div class="proc-wait">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="fragment fade-in-then-out proc-switch"></div>
+          <div class="proc-7">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          <div class="fragment fade-in-then-out proc-switch"></div>
+          <div class="proc-1 proc-short">
+            <div class="fragment fade-in-then-out proc-hl"></div>
+          </div>
+          ...
+        </div>
+  
+        <pre><code data-trim class="bash">
+        # git@github.com:tsuna/contextswitch.git
+  
+        ./cpubench.sh
+        model name : Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+        1 physical CPUs, 4 cores/CPU, 2 hardware threads/core
+        2000000  thread context switches in 2231974869ns
+                                            (1116.0ns/ctxsw)
+        </code></pre>
+      </section>
+  
+      <section>
+        <img src="media/did-you-know.jpg" class="stretch">
+        <pre><code data-trim class="bash">
+          grep 'CONFIG_HZ=' /boot/config-$(uname -r)
+          # CONFIG_HZ=1000
+        </code></pre>
+  
+        <aside class="notes">
+          given the benchmark from the previous slide and my linux kernel tick configuration, I waste for each second
+          1.116ms in context switches?
+        </aside>
+      </section>
+  
+      <section>
+        <h2>Practical example: <small>Tomcat 9.0</small></h2>
+  
+        <ul>
+          <li>Default <code>maxThreads</code>: <strong>200</strong></li>
+          <li class="fragment">Avg req time: <strong>5ms</strong></li>
+          <li class="fragment">Hypothetical High load: <strong>1000 req</strong></li>
+          <li class="fragment">Wasted wait/queue time: <strong><small>(1000 / 200 - 1) * 5
+            = </small><big>0~20ms</big></strong></li>
+        </ul>
+  
+        <p>
+          <small>
+            <a href="https://tomcat.apache.org/tomcat-9.0-doc/config/executor.html">https://tomcat.apache.org/tomcat-9.0-doc/config/executor.html</a></small>
+        </p>
+      </section>
+  
+      <section>
+        <h4><em>at max utilization</em></h4>
+        <h2 class="fragment">CPU is mostly waiting</h2>
+      </section>
+  
+      <section>
+        <h2>Non-Blocking I/O</h2>
+      </section>
+  
+      <section>
+  
+        <h3>Vert.x</h3>
+  
+        <div style="display: inline-block; width: 45%; float: left;">
+          <div class="stretch">
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="1"></div>
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="10"></div>
+            <img data-src="media/eventloop-white.png">
+          </div>
+        </div>
+  
+        <div style="display: inline-block; width: 45%; text-align: left">
+          <div class="proc-0">
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="2"></div>
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="4"></div>
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="6"></div>
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="8"></div>
+          </div>
+          <small><pre>requestHandler(req => { ... })</pre></small><br/>
+          <div class="proc-1">
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="3"></div>
+          </div>
+          <small><pre>authHandler(auth => { ... })</pre></small><br/>
+          <div class="proc-5">
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="5"></div>
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="7"></div>
+          </div>
+          <small><pre>dbHandler(db => { ... })</pre></small><br/>
+          <div class="proc-6">
+            <div class="fragment fade-in-then-out proc-hl" data-fragment-index="9"></div>
+          </div>
+          <small><pre>renderHandler(res => req.json(res))</pre></small>
+        </div>
+  
+      </section>
+  
+      <section>
+        <h2>1 CPU core fully used!</h2>
+      </section>
+  
+      <section>
+        <h2>Vert.x</h2>
+        <h4>Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz</h4>
+  
+        <span><img width="20%" heigth="20%" src="media/eventloop-white.png"></span>
+        <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                            src="media/eventloop-white.png"></span>
+        <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                            src="media/eventloop-white.png"></span>
+        <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                            src="media/eventloop-white.png"></span>
+        <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                            src="media/eventloop-white.png"></span>
+        <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                            src="media/eventloop-white.png"></span>
+        <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                            src="media/eventloop-white.png"></span>
+        <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                            src="media/eventloop-white.png"></span>
+  
+      </section>
+  
+      <section>
+        <h2>100% CPU cores used!</h2>
+      </section>
+  
+      <section>
+        <h2>Benchmarking <span class="fragment">is hard</span></h2>
+  
+        <ul>
+          <li class="fragment"><em>Meaningful benchmarks are even harder</em></li>
+          <li class="fragment">Techempower Framework Benchmarks</li>
+          <ul>
+            <li class="fragment">Contributors: <strong>545</strong></li>
+            <li class="fragment">Pull Requests: <strong>4138</strong></li>
+            <li class="fragment">Commits: <strong>11230</strong></li>
+            <li class="fragment">Frameworks: <strong>658</strong></li>
+          </ul>
+        </ul>
+  
+        <p>
+          <small>
+            <a href="https://github.com/TechEmpower/FrameworkBenchmarks/">https://github.com/TechEmpower/FrameworkBenchmarks</a>
+          </small>
+        </p>
+      </section>
+  
+      <section>
+        <h2>Baseline: JAX-RS</h2>
+  
+        <ul>
+          <li>Blocking API</li>
+          <li>Thread Based</li>
+          <li>Java</li>
+        </ul>
+  
+      </section>
+  
+      <section>
+        <div style="display: inline-block; width: 45%; float: left;">
+          <h2>jax-rs</h2>
+  
+          <pre><code data-trim data-noescape>
+          <small>
+          @GET
+          @Path("/queries")
+          World[]
+          queries(@QueryParam("queries") String queries)
+          {
+            World[] worlds = new World[queries];
+            Session session = emf.createEntityManager();
+  
+            for (int i = 0; i < queries; i++) {
+              worlds[i] = session
+                .byId(World.class)
+                .load(randomWorld());
+            }
+  
+            return worlds;
+          }
+          </small></code></pre>
+        </div>
+  
+        <div style="display: inline-block; width: 45%; text-align: left">
+          <h2>vert.x</h2>
+  
+          <pre><code data-trim data-noescape class="java">
+          <small>
+          void
+          queriesHandler(final RoutingContext ctx) {
+  
+            World[] worlds = new World[getQueries(ctx)];
+            AtomicInteger cnt = new AtomicInteger();
+  
+            for (int i = 0; i < getQueries(ctx); i++) {
+              db.preparedQuery(FIND_WORLD, ..., res -> {
+                final Row row = res.result()
+                            .iterator()
+                            .next();
+  
+                worlds[cnt.incrementAndGet()] =
+                  new World(row);
+  
+                if (cnt.get() == queries) {
+                  ctx.response()
+                    .end(Json.encodeToBuffer(worlds));
+                }
+              });
+            }
+          }
+          </small></code></pre>
+        </div>
+      </section>
+  
+      <section data-background-image="media/baseline.png" data-background-size="contain">
+  
+      </section>
+  
+      <section>
+        <h2>Simple results</h2>
+  
+        <ul>
+          <li>Vert.x: <big><strong>37,157</strong></big> req/s</li>
+          <li>Jax-RS: <big><strong>14,493</strong></big> req/s</li>
+        </ul>
+      </section>
+  
+      <section>
+        <img src="media/did-you-know.jpg" class="stretch">
+  
+        <aside class="notes">
+          Did you know that using non blocking frameworks (like vert.x) you will not need as much hardware as with
+          blocking frameworks. Which means, lower cloud bills and also very important, less resource waste, which is
+          always good for the planet.
+        </aside>
+      </section>
+
+      <section data-background-image="media/base.png" data-background-size="contain">
+        <aside class="notes">
+          Let me elaborate more on this. Here's a rotated result of the benchmark run on 2019-12-31.
+          I've truncated the results to the top 128 results, the list contains more than 400 frameworks but then it would really be
+          impossible to read...
+
+          Quizz time, who uses nodejs? where do you think it will be ranked?
+        </aside>
+      </section>
+  
+      <section data-background-image="media/node.png" data-background-size="contain">
+        <aside class="notes">
+          No so fast after all...
+          That would be another talk on it's own I'm afraid!
+          So who uses Micronaut? You know it's native and fast right?
+        </aside>
+      </section>
+
+      <section data-background-image="media/micronaut.png" data-background-size="contain">
+        <aside class="notes">
+          A bit better than node but not impressive...
+          Spring? anyone uses spring reactive and the fastest postgres driver <b>pg-client?</b>
+        </aside>
+      </section>
+
+      <section data-background-image="media/spring.png" data-background-size="contain">
+        <aside class="notes">
+          Ouch...
+          OK, what if you were using vert.x?
+        </aside>
+      </section>
+
+      <section data-background-image="media/vertx.png" data-background-size="contain">
+        <aside class="notes">
+          Well this is what I'm trying to tell you, reactive and fully async programming are fast and productive!
+        </aside>
+      </section>
+
+      <section>
+        <table>
+          <thead>
+            <tr>
+              <th></th>
+              <th><b>Spring5</b></th>
+              <th><b>node.js</b></th>
+              <th><b>Micronaut</b></th>
+              <th><b>vert.x</b></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><i>req/s</i></td>
+              <td>129.556</td>
+              <td>175.195</td>
+              <td>209.863</td>
+              <td>582.077</td>
+            </tr>
+            <tr>
+              <td><i>RAM (G)</i></td>
+              <td>7.27</td>
+              <td>4.92</td>
+              <td>6.36</td>
+              <td>4.10</td>
+            </tr>
+            <tr>
+              <td><i>Max CPU</i></td>
+              <td>71%</td>
+              <td>86%</td>
+              <td>79%</td>
+              <td>66%</td>
+            </tr>
+          </tbody>
+        </table>
+        <br>
+        <aside data-markdown class="notes">
+          Let's close this small analysis and look at the scoreboard.
+
+          All frameworks adopt a reactive programming model but not all are reactive systems.
+        </aside>
+      </section>
+
+      <section data-background-image="img/secret.gif" data-background-size="contain">
+        <aside data-markdown class="notes">
+          Now that you've seen the benefits of choosing a reactive system...
+
+          Let me show you some secrets about Vert.x
+        </aside>
+      </section>
+
+      <section>
+        <h2>Example <span class="hl-yellow">#3</span></h2>
+        <ul>
+          <li class="fragment">Vert.x</li>
+          <li class="fragment">node.js</li>
+          <li class="fragment"><span class="hl-yellow">the browser</span></li>
+        </ul>
+        <aside data-markdown class="notes">
+          Vert.x Message Driven EventBus is so simple that it can be extended to anything
+
+          I mean anything, for example:
+
+          * an external application in NodeJS
+          * and even the Browser!!!
+        </aside>
+      </section>
+
+      <section>
+        <h4>Vert.x</h4>
+        <pre><code data-trim data-noescape class="java">
+            final Router router = Router.router(vertx);
+            BridgeOptions sockjsConfig = ...;
+            router
+              .route("/eventbus/*")
+              .handler(SockJSHandler.create(vertx).bridge(sockjsConfig));
+
+            router.route().handler(StaticHandler.create());
+            vertx.createHttpServer()
+              .requestHandler(router)
+              .listen(8080);
+
+            vertx.setPeriodic(500, t ->
+              vertx.eventBus().send("greetings",
+                new JsonObject().put("msg", "Greetings from Vert.x!")));
+          }
+        </code></pre>
+        <aside data-markdown class="notes">
+          So the vertx code to create a HTTP server and publish a greeting message every 500 milliseconds would be like this.
+        </aside>
+      </section>
+
+      <section>
+        <h4>node.js</h4>
+        <pre><code data-trim data-noescape class="js">
+          var EventBus = require('vertx3-eventbus-client');
+
+          var eb = new EventBus('http://localhost:8080/eventbus');
+
+          eb.onopen = () => {
+            setInterval(() => {
+              eb.publish('greetings', {msg: 'Hello from Node.js!'});
+            }, 500);
+
+            eb.registerHandler('greetings', (err, msg) => {
+              console.log(msg.body.msg);
+            });
+          };
+        </code></pre>
+        <aside data-markdown class="notes">
+          From node we can pretty much do the same, connect to the vert.x node and both listen and publish greeting messages.
+        </aside>
+      </section>
+
+      <section>
+        <h4>react.js</h4>
+        <pre><code data-trim class="js">
+          const eb = new EventBus(`//${window.location.host}/eventbus`);
+
+          class App extends React.Component {
+            componentWillMount() {
+              eb.registerHandler('greetings', (err, msg) => {
+                this.state.messages.unshift(msg.body.msg);
+                this.setState({ messages: this.state.messages });
+              });
+            }
+            static sayHello(e) {
+              e.preventDefault();
+              eb.publish('greetings', {msg: 'Hello from React.js!'})
+            }
+            ...
+          }
+        </code></pre>
+        <aside data-markdown class="notes">
+          Finally from your browser, say in your react application also listen and publish events...
+        </aside>
+      </section>
+
+      <section data-background-video="img/eventbus.webm" data-background-size="contain">
+      </section>
+
+      <section>
+        <h1>Conclusion</h1>
+      </section>
+
+      <section>
+        <h3>Reactive Programming <span class="hl-yellow fragment">!= Reactive Systems</span></h3>
+      </section>
+
+      <section>
+        <h2>How do I start?</h2>
+        <ul>
+          <li><a href="http://vertx.io">http://vertx.io</a></li>
+          <li><a href="https://www.techempower.com/benchmarks/">https://www.techempower.com/benchmarks/</a></li>
+          <li><a href="https://github.com/vert-x3/">https://github.com/vert-x3</a><br></li>
+          <li><a href="https://twitter.com/pml0pes"><code>@pml0pes</code></a></li>
+        </ul>
+
+        <aside data-markdown class="notes">
+          So where do you go from here?
+
+          There is a free book, feel free to get a copy, scan the QR code!
+          And here's our project github organization and twitter account!
+        </aside>
+      </section>
+
+			<section style="text-align: left">
+				<h1>The End</h1>
+				<ul>
+					<li>Thanks you!</li>
+				</ul>
+      </section>
+
+    </div>
+	</div>
+
+	<script src="lib/js/head.min.js"></script>
+	<script src="js/reveal.js"></script>
+
+	<script>
+						  // More info https://github.com/hakimel/reveal.js#configuration
+						  Reveal.initialize({
+							  // width: "60%",
+							  // height: "60%",
+
+							  controls: true,
+							  progress: true,
+							  history: true,
+							  center: true,
+
+							  transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+							  // More info https://github.com/hakimel/reveal.js#dependencies
+							  dependencies: [
+								  { src: 'lib/js/classList.js', condition: function () { return !document.body.classList; } },
+								  { src: 'plugin/markdown/marked.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+								  { src: 'plugin/markdown/markdown.js', condition: function () { return !!document.querySelector('[data-markdown]'); } },
+								  { src: 'plugin/highlight/highlight.js', async: true, callback: function () { hljs.initHighlightingOnLoad(); } },
+								  { src: 'plugin/zoom-js/zoom.js', async: true },
+								  { src: 'plugin/notes/notes.js', async: true }
+							  ]
+						  });
+	</script>
+
+</body>
+
+</html>
