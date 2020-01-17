@@ -1,0 +1,510 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>Vert.x 4.0: what's cool and new!</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/white.css">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/monokai.css">
+
+  <!-- font awesome -->
+  <link href="css/fontawesome/css/all.min.css" rel="stylesheet">
+  <script defer src="css/fontawesome/js/all.min.js"></script>
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+
+  <style>
+    img {
+      border: none !important;
+      box-shadow: none !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section style="text-align: left" data-background-image="media/paulo_lopes-lunaconfslides-wide.jpg" data-background-size="100% 100%">
+        <div style="font-size: 0.4em">
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          <p>&nbsp;</p>
+          <p style="color: white;">
+            <i class="fab fa-twitter"></i> <code>@pml0pes</code><br>
+            <i class="fab fa-linkedin"></i> <code>https://www.linkedin.com/in/pmlopes/</code><br>
+            <i class="fab fa-github"></i> <code>pmlopes</code>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Vert.x 4</h2>
+        <ul>
+          <li>Time to modernize some aspects of Vert.x</li>
+          <li>Will introduce some breaking changes <b></b>!</li>
+          <ul>
+            <li>as little as possible</li>
+            <li>3.x migration must be easy</li>
+          </ul>
+          <li>Goal (&gt;50% users migrated within 1 year)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Vert.x 4 shall be a non event</h2>
+        <ul>
+          <li>Not be much different than the 3.x releases</li>
+          <li>Think of it as 3.9 but with breaking changes that modernize a couple of important aspects</li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Thank you!</h1>
+      </section>
+
+      <section>
+        <h2>Callback hell</h2>
+        <ul>
+          <li>All existing Async APIs will have an Promise base counterpart</li>
+        </ul>
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="java" data-line-numbers>
+          vertx.createHttpServer()
+            .requestHandler(req -> {
+              WebClient.create()
+                .reqAbs("http://google.com", webReq -> {
+                  if (webReq.succeeded()) {
+                    SqlClient.create()
+                    .query("INSERT INTO...", dbReq -> {
+                      if (dbReq.succeeded()) {
+                        ...
+                      }
+                    })
+                  }
+                })
+            })
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="java">
+          // with 4.0 we will have the common async method...
+          void asyncMethod(String s, Handler&lt;AsyncResult&lt;T&gt;&gt;)
+
+          // and the Promise base variant...
+          Future&lt;T&gt; asyncMethod(String s)
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="java" data-line-numbers="3-12">
+          vertx.createHttpServer()
+            .requestHandler(req -> {
+              WebClient.create()
+                .reqAbs("http://google.com")
+                .onComplete(webReq -> {
+                  SqlClient.create()
+                    .query("INSERT INTO...")
+                    .onComplete(dbReq -> {
+                      ...
+                  })
+                  .otherwise(err -> ...)
+                })
+            })
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Polyglot upgrade</h2>
+
+        <ul>
+          <li>Scala 2.13</li>
+          <ul>
+            <li>Use Scala Value Types (no more wrapping)</li>
+            <li>No more reflection</li>
+            <li>less allocations (even better performance)</li>
+          </ul>
+          <li>ES4X (JavaScript)</li>
+          <ul>
+            <li>GraalJS based</li>
+            <li>NPM workflow based</li>
+          </ul>
+          <li>Kotlin</li>
+          <ul>
+            <li>Idiomatic</li>
+            <li>Coroutines</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section>
+        <img src="media/await.jpg" class="stretch">
+      </section>
+
+      <section>
+        <h1>What about Scala?</h1>
+      </section>
+
+      <section data-background-image="media/polyglot.png" data-background-size="100% 100%">
+      </section>
+
+      <section>
+        <h1>Quiz?</h1>
+      </section>
+
+      <section data-background-image="media/quiz.png" data-background-size="100% 100%">
+      </section>
+
+      <section>
+        <h2>High performance DB access</h2>
+
+        <ul>
+          <li>Postgres</li>
+          <li>MySQL</li>
+          <li>Microsoft SQLServer</li>
+          <li>IBM DB2</li>
+        </ul>
+
+        <div>
+          <a href="https://github.com/eclipse-vertx/vertx-sql-client">https://github.com/eclipse-vertx/vertx-sql-client</a>
+        </div>
+
+      </section>
+
+      <section data-background-image="media/reactive.png" data-background-size="100% 100%">
+      </section>
+
+      <section>
+        <h2>Tracing</h2>
+
+        <ul>
+          <li>Distributed Tracing</li>
+          <ul>
+            <li>OpenTracing</li>
+            <li>ZipKin</li>
+          </ul>
+          <li>MDC</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Distributed Tracing</h2>
+
+        <ul>
+          <li>HTTP requests</li>
+          <li>EventBus messages</li>
+          <li>gRPC</li>
+        </ul>
+
+        <div>
+          <a href="https://github.com/eclipse-vertx/vertx-tracing">https://github.com/eclipse-vertx/vertx-tracing</a>
+        </div>
+
+      </section>
+
+      <section data-background-image="media/tracer.png" data-background-size="100% 100%">
+      </section>
+
+      <section>
+        <h2>MDC Tracing</h2>
+
+        <ul>
+          <li>Logback</li>
+          <li>Log4J2</li>
+          <li>JUL</li>
+        </ul>
+
+        <div>
+          <a href="https://github.com/tsegismont/vertx-contextual-logging">https://github.com/tsegismont/vertx-contextual-logging</a>
+        </div>
+        
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="java" data-line-numbers="3-10">
+          vertx.createHttpServer()
+            .requestHandler(req -> {
+              String requestId = generateId(req);
+              ContextualData.put("requestId", requestId);
+              log.info("Received HTTP request");
+              // ... handle request
+              webClient.send(ar -> {
+                // ... requestId is still present
+                // in contextual data map here
+              })
+            }).listen(8080);
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>OpenAPI</h2>
+
+        <ul>
+          <li>Vert.x JSON Validator</li>
+          <li>OpenAPI across the cluster with EB Services</li>
+          <li>POJO mapping</li>
+        </ul>
+        
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="java"><small>
+          // Retrieve aParam
+          String aParamUnparsed = routingContext.queryParam("aParam").get(0);
+          if (aParamUnparsed == null) {
+            routingContext.fail(400);
+            return;
+          }
+          // Parse aParam
+          int aParam;
+          try {
+            aParam = Integer.parseInt(aParamUnparsed);
+          } catch (NumberFormatException e) {
+            routingContext.fail(400, e);
+            return;
+          }
+          // Check if aParam is maximum 100
+          if (aParam > 100) {
+            routingContext.fail(400);
+            return;
+          }
+  
+          // aParam is ready, now we can focus on
+          // Business logic to process the request
+        </small></code></pre>
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="java">
+          ValidationHandler
+          .builder(schemaParser)
+          .queryParameter(param(
+            "aParam",
+            intSchema().with(maximum(100))
+          ))
+          .build()
+        </code></pre>
+        <small>
+          <a href="https://tools.ietf.org/html/draft-handrews-json-schema-02">https://tools.ietf.org/html/draft-handrews-json-schema-02</a>
+        </small>
+      </section>
+
+      <section>
+        <h2>Web</h2>
+
+        <ul>
+          <li>Redis Session store</li>
+          <li>Sub router support</li>
+          <li>GraphQL</li>
+          <li>Performance and locking improvements</li>
+        </ul>
+        
+      </section>
+
+      <section>
+        <img src="media/redis-session.jpg" class="stretch">
+      </section>
+
+      <section>
+        <img src="media/all-posts-desktop-throughput.svg" class="stretch">
+      </section>
+
+      <section>
+        <h2>Redis</h2>
+
+        <ul>
+          <li>All connections supported</li>
+          <ul>
+            <li>single node</li>
+            <li>sentinel node</li>
+            <li>cluster</li>
+          </ul>
+          <li>All extensions supported</li>
+          <li>Better performance</li>
+        </ul>
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="java" data-line-numbers>
+          private final RedisOptions options = new RedisOptions()
+            .setType(RedisClientType.CLUSTER)
+            .setUseSlave(RedisSlaves.SHARE)
+            // one server is enough, we'll discover the rest...
+            .addConnectionString("redis://127.0.0.1:7000")
+            .addConnectionString("redis://127.0.0.1:7005");
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code data-trim data-noescape class="java" data-line-numbers>
+          client
+            .send(
+              "JSON.SET",  // Redis Extension command
+              Args.args("foo", ".", "bar"),
+              send ->
+              ...
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Auth</h2>
+
+        <ul>
+          <li>Split AuthN and AuthZ</li>
+          <li>WebAuthn support</li>
+          <li>AsyncSQL backend</li>
+          <li>Deprecated Shiro</li>
+          <ul>
+            <li>New async properties provider</li>
+            <li>New LDAP provider dependency free</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section>
+        <pre><code  data-trim data-noescape class="java"><small>
+          // Need "list_products" authorization to list products
+          router.route("/listproducts/*").handler(
+            // create the handler that will perform the attestation
+            AuthorizationHandler.create(
+              // what to attest
+              PermissionBasedAuthorization.create("list_products"))
+              // where to lookup the authorizations for the user
+              .addAuthorizationProvider(authProvider));
+      
+          // Only "admin" has access to /private/settings
+          router.route("/private/settings/*").handler(
+            // create the handler that will perform the attestation
+            AuthorizationHandler.create(
+              // what to attest
+              RoleBasedAuthorization.create("admin"))
+              .addAuthorizationProvider(authProvider));
+        </small></code></pre>
+      </section>
+
+      <section>
+        <img src="media/webauthn.png" class="stretch">
+      </section>
+      <section>
+        <img src="media/webauthn.jpg" class="stretch">
+      </section>
+
+
+      <section>
+        <h2>JSON</h2>
+
+        <ul>
+          <li>Droped the required dependency jackson-databind</li>
+          <ul>
+            <li>source of many CVEs</li>
+            <li>bad with native images</li>
+            <li>bloated</li>
+          </ul>
+        </ul>
+
+        <pre><code data-trim data-noescape class="sh">
+          # 3.x
+          -rw-rw-r--. 1 paulo paulo 6526621  9 jan 14:27 myapp.jar
+          # 4.x
+          -rw-rw-r--. 1 paulo paulo 5135644  9 jan 14:28 myapp.jar
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>GraalVM Native-Images?</h2>   
+        <ul>
+          <li>Works out of the box</li>
+          <li>No plugins needed!</li>
+        </ul>     
+      </section>
+
+      <section>
+        <img src="media/native.jpg" class="stretch">
+        <a href="https://how-to.vertx.io/graal-native-image-howto/">https://how-to.vertx.io/graal-native-image-howto</a>
+      </section>
+
+      <section>
+        <h2>Ecco friendly 🍃</h2>   
+        <ul>
+          <li>Yeap!</li>
+        </ul>     
+      </section>
+
+      <section>
+        <img src="media/all-12350.png" class="stretch">
+        <a href="https://www.jetdrone.xyz/presentations/fight-climate-change-with-code">https://www.jetdrone.xyz/presentations/fight-climate-change-with-code</a>
+      </section>
+
+      <section>
+        <h2>Are you using vert.x?</h2>
+        <ul>
+          <li>https://quarkus.io/</li>
+          <li>https://strimzi.io/</li>
+          <li>https://besu.hyperledger.org/</li>
+          <li>https://servicecomb.apache.org/</li>
+          <li>many many more...</li>
+        </ul>
+      </section>
+
+      <section data-background-image="media/whois.png" data-background-size="100% 100%">
+      </section>
+
+      <section data-background-video="media/boom.mp4" data-background-size="100% 100%">
+      </section>
+
+      <section style="text-align: left">
+
+        <h2>Let's connect!</h2>
+
+        <ul>
+          <li><i class="fab fa-twitter"></i> <code>@pml0pes</code></li>
+          <li><i class="fab fa-github"></i> <code>pmlopes</code></li>
+          <li><i class="fab fa-linkedin"></i> <code>www.linkedin.com/in/pmlopes</code></li>
+          <li><a href="https://vertx.io">https://vertx.io</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/reveal.js"></script>
+
+  <script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+
+      controls: false,
+      progress: true,
+      center: true,
+      hash: true,
+
+      dependencies: [
+        { src: 'plugin/markdown/marked.js' },
+        { src: 'plugin/markdown/markdown.js' },
+        { src: 'plugin/notes/notes.js', async: true },
+        { src: 'plugin/highlight/highlight.js', async: true },
+        { src: 'plugin/zoom-js/zoom.js' },
+      ],
+    });
+  </script>
+</body>
+
+</html>
