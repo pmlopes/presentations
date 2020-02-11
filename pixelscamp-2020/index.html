@@ -1,0 +1,1003 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>webauthn: a better alternative for securing webapps</title>
+
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/night.css">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="lib/css/monokai.css">
+
+  <!-- font awesome -->
+  <link href="css/fontawesome/css/all.min.css" rel="stylesheet">
+  <script defer src="css/fontawesome/js/all.min.js"></script>
+
+  <!-- Printing and PDF exports -->
+  <script>
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+
+  <style>
+
+    img {
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .reveal {
+      background-image: url("media/QCon2019_template.jpeg");
+      background-size: 100% 100%;
+    }
+  </style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+    <!-- TODO: shows where node ranks, explain truffle
+    -->
+
+    <section style="text-align: left">
+      <h2>webauthn</h2>
+      <h4>a better alternative for securing webapps</h4>
+
+      <p>&nbsp;</p>
+      <p>&nbsp;</p>
+
+      <div style="font-size: 0.6em">
+        <strong>Paulo Lopes</strong>
+        <i class="fab fa-redhat"></i> Principal Software Engineer
+        <p>
+          <i class="fab fa-twitter"></i> <code>@pml0pes</code><br>
+          <i class="fab fa-linkedin"></i> <code>https://www.linkedin.com/in/pmlopes/</code><br>
+          <i class="fab fa-github"></i> <code>pmlopes</code>
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <img data-src="media/1961.ctss.jpg" class="stretch">
+      <small>MIT: Compatible Time-Sharing System</small>
+
+      <aside class="notes">
+        $30 million computer
+        Shared between users (private files)
+        They were developing: e-mail, virtual machines, instant messaging, and file sharing.
+      </aside>
+    </section>
+
+    <section data-background-video="media/password.mp4">
+      <aside class="notes">
+        So they could have gone with an "expert system" which were also at its infancy...
+      </aside>
+    </section>
+
+    <section>
+      <h2>Expert System</h2>
+
+      <ul>
+        <li class="fragment">What's your Mother Maiden name?</li>
+        <li class="fragment">What's the name of your first teacher?</li>
+        <li class="fragment">What's your childhood nickname?</li>
+      </ul>
+      <aside class="notes">
+        In a nutshell, an expert system, knows several facts about the user and makes some questions. If the questions are correct then it allows access to the system.
+
+        Long story short... this would take more space for storage and computing power, remember, back in the days we measure RAM and storage in kilo bytes.
+
+        Of course, this was way before we dumped all our personal life into social media.
+
+        No one will ever figure out the answers to these questions, right?
+      </aside>
+    </section>
+
+    <section data-background-video="media/facebook.mp4">
+      <aside class="notes">
+        Right...
+      </aside>
+    </section>
+
+    <section>
+      <h2>Once upon the time...</h2>
+      <aside class="notes">
+        Let me get back to the topic, once upon the time... I've received an email...
+      </aside>
+    </section>
+
+    <section>
+      <img data-src="media/phishing.jpg" class="stretch">
+      <aside class="notes">
+        It was very friendly and I wanted to help...
+      </aside>
+    </section>
+
+    <section>
+      <img data-src="media/phishing.png" class="stretch">
+      <aside class="notes">
+        So I was sent to a payment service...
+      </aside>
+    </section>
+
+    <section>
+      <h2>So... <span class="fragment">2019!</span></h2>
+      <aside class="notes">
+        Wait, this was so... 2019... webauthn killed phishing!
+      </aside>
+    </section>
+
+    <section>
+      <img data-src="media/fido-logo.jpg" class="stretch">
+      <aside class="notes">
+        FIDO or FIDO Alliance is a consortium that develops secure, open, standard, phishing proof authentication protocols.
+        FIDO Alliance was created in 2013, and now it has over 250 members across the globe.
+        FIDO has three protocols: UAF, U2F and FIDO2. They are the same family of the protocols, since they are all origin based,
+        challenge-response, phishing proof, digital signature authentication protocols.
+      </aside>
+    </section>
+
+    <section>
+      <img data-src="media/fido-flow.png" class="stretch">
+      <aside class="notes">
+        The relying party(the server) send a challenge and credential identifier of the previously registered credential to the client(the browser). The client then attaches relying party information, such as origin of the call, and sends it to the authenticator.
+
+        Authenticator first either checks if user is present, by requesting user to press the button, or doing full user verification using on-device pin, biometrics, etc.
+
+        When verification is done, the device then signs the payload, using the private key, identified by the credential id, and returns the assertion to the client. Client then attaches information that it has given to the authenticator, as part of the signature payload, and forwards it to the relying party.
+
+        The relying party checks that information, and ensures that RP information contains expected origin, and challenge, after which it checks the signature. If any of those steps are failed, we can detect that there was a phishing attack, thus preventing it.
+      </aside>
+    </section>
+
+    <section>
+      <img data-src="media/fido2.png" class="stretch">
+      <aside class="notes">
+        So there is general confusion about the terms. FIDO, FIDO2, WebAuthn, CTAP1, CTAP2… What does this all even mean?
+      </aside>
+    </section>
+
+    <section>
+      <ul>
+        <li><b>FIDO</b> — <b>F</b>ast <b>ID</b>entity <b>O</b>nline, or FIDO Alliance</li>
+        <li><b>FIDO2</b> — A project name for a new, modern, simple, secure, phishing proof, passwordless authentication protocol.</li>
+        <li><b>CTAP</b> — Client to Authenticator Protocols.</li>
+        <li><b>CTAP1</b> — A formal name of U2F protocol.</li>
+        <li><b>CTAP2</b> — Second version of the CTAP protocol.</li>
+        <li><b>WebAuthn</b> — A browser JS API that describes an interface for creating and managing public key credentials.</li>
+      </ul>
+
+      <aside class="notes">
+        As I explained earlier it’s a consortium that develops secure, open, phishing proof, passwordless authentication standards. FIDO Protocol Family is a set of protocol that was developed by FIDO Alliance. UAF — Universal Authentication Framework. U2F — Universal Second Factor, and FIDO2. When I say use “FIDO” I generally mean “Use any of the three protocols”, as they are all conceptually the same protocol, with the difference being structural (UAF — TLV, U2F — RAW, FIDO2 — CBOR).
+
+        Its core specifications are WebAuthn(the client API) and CTAP(the authenticator API). There are other support specifications that we will ignore in this article
+
+        A set of low level protocols to communicate with the authenticators over the BLE/NFC/USB. CTAP family includes CTAP1 and CTAP2 protocols
+
+        The main characteristic is use of CBOR for encoding structures, backwards compatibility with CTAP1(U2F), extensions and new attestation formats. Both CTAP1 and CTAP2 share same transport layer, so the version difference is mainly the structural.
+
+
+        So let’s break it all down:
+
+        TL;DR: WebAuthn — is the JS API. FIDO2 is the name for the whole projects. The right way to say about you authentication, is “Authentication with FIDO2" not “Authentication with WebAuthn”, but that’s just semantics.
+      </aside>
+    </section>
+
+    <section>
+      <blockquote>
+        WebAuthn — is the JS API.
+      </blockquote>
+      <blockquote>
+        FIDO2 is the name for the whole projects. The right way to say about you authentication, is “Authentication with FIDO2" not “Authentication with WebAuthn”.
+      </blockquote>
+
+      <aside class="notes">
+        ... but that’s just semantics
+      </aside>
+    </section>
+
+    <section>
+      <h3>Credentials Management API</h3>
+      <pre><code data-trim data-noescape>
+      var passwordcred = new PasswordCredential({
+        'type': 'password',
+        'id': 'alice',
+        'password': 'VeryRandomPassword123456'
+      })
+
+      navigator.credentials.store(passwordcred)
+      </code></pre>
+    </section>
+
+    <section>
+      <h3>Credentials Management API</h3>
+
+      <img data-src="media/credmanager-1.png" class="stretch">
+
+    </section>
+
+    <section>
+      <h3>Credentials Management API</h3>
+      <pre><code data-trim data-noescape>
+        navigator.credentials.get({ 'password': true })
+        .then((credential) => {
+            if(!credential)
+                throw new Error('No credential found')
+
+            // { iconURL: "",
+            //   name: "",
+            //   password: "VeryRandomPassword123456",
+            //   id: "alice",
+            //   type: "password" }
+        })
+      </code></pre>
+    </section>
+
+    <section>
+      <h3>Credentials Management API</h3>
+
+      <img data-src="media/credmanager-2.png" class="stretch">
+
+    </section>
+
+
+    <section style="text-align: left;">
+      <strong>latency</strong> <small>noun</small><br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;<small><em>la·​ten·cy | \ ˈlā-tᵊn(t)-sē \</em></small>
+
+      <blockquote>
+        <img data-src="media/latency-explained.png">
+        <small><em>Network latency is the term used to indicate any kind of delay that happens in data communication
+          over a network.</em><br><br>(techopedia.com)</small>
+      </blockquote>
+
+    </section>
+
+    <section>
+      <h3>Latency by the numbers</h3>
+
+      <ul>
+        <li class="fragment"><strong>Amazon</strong>: every 100ms of latency costs 1% in sales<br>
+          <small><a href="http://home.blarg.net/~glinden/StanfordDataMining.2006-11-29.ppt">http://home.blarg.net/~glinden/StanfordDataMining.2006-11-29.ppt</a></small>
+        </li>
+        <li class="fragment"><strong>Google</strong>: an extra 0.5 seconds in search page generation time dropped
+          traffic by 20%<br>
+          <small><a href="http://glinden.blogspot.com/2006/11/marissa-mayer-at-web-20.html">http://glinden.blogspot.com/2006/11/marissa-mayer-at-web-20.html</a></small>
+        </li>
+        <li class="fragment"><strong>A broker</strong>: could lose $4 million in revenues per millisecond if their
+          electronic trading platform is 5 milliseconds behind the competition<br>
+          <small><a href="http://www.tabbgroup.com/PublicationDetail.aspx?PublicationID=346">http://www.tabbgroup.com/PublicationDetail.aspx?PublicationID=346</a></small>
+        </li>
+      </ul>
+
+    </section>
+
+    <section>
+      <h3>Latency is not the problem</h3>
+      <h2 class="fragment">it's the symptom!</h2>
+    </section>
+
+    <section>
+      <h2><small>2007:</small> Dan Pritchett</h2>
+
+      <ul>
+        <li class="fragment">Loosely Couple Components</li>
+        <li class="fragment">Use Asynchronous Interfaces</li>
+        <li class="fragment">Horizontally Scale from the Start</li>
+        <li class="fragment">Create an Active/Active Architecture</li>
+        <li class="fragment">Use a <strong>BASE</strong> instead of <strong>ACID</strong> Shared Storage Mode</li>
+      </ul>
+
+      <p>
+        <small>
+          <a href="https://www.infoq.com/articles/pritchett-latency/">www.infoq.com/articles/pritchett-latency</a>
+        </small>
+      </p>
+
+      <aside class="notes">
+        <p>
+          Many developers are familiar with ACID transactions from working with relational databases. As such, the ACID
+          consistency model has been the norm for some time. The key ACID guarantee is that it provides a safe
+          environment
+          in which to operate on your data.
+        </p>
+
+        <p>
+          <b>Atomic</b> - <b>Consistent</b> - <b>Isolated</b> - <b>Durable</b>
+        </p>
+
+        <p>
+          For many domains and use cases, ACID transactions are far more pessimistic (i.e., they’re more worried about
+          data safety) than the domain actually requires.
+        </p>
+
+        <p>
+          <b>Basic Availability</b> - <b>Soft-state</b> - <b>Eventual consistency</b>
+        </p>
+
+        <p>
+          There’s no right answer to whether your application needs an ACID versus BASE consistency model. Developers
+          and
+          data architects should select their data consistency trade-offs on a case-by-case basis - not based just on
+          what’s trending or what model was used previously.
+        </p>
+      </aside>
+    </section>
+
+    <section>
+      <h2><small>2011 (Tim Fox):</small> Vert.x</h2>
+
+      <ul>
+        <li class="fragment">Loosely Couple Components <small>(event bus)</small></li>
+        <li class="fragment">Use Asynchronous Interfaces<small>(non blocking I/O)</small></li>
+        <li class="fragment">Horizontally Scale from the Start <small>(clustered)</small></li>
+      </ul>
+
+      <p>
+        <em>Eclipse Vert.x is a tool-kit for building reactive applications on the JVM.</em>
+
+        <small>
+          <a href="https://vertx.io/">https://vertx.io/</a>
+        </small>
+      </p>
+    </section>
+
+    <section>
+      <h2>Why Non-Blocking I/O?</h2>
+    </section>
+
+    <section>
+      <h3>5ms / req time</h3>
+
+      <div>
+        <div class="proc-0">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-6">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-7">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        ...
+      </div>
+
+      <pre><code data-trim class="bash">
+        # In optimal circumstances
+
+        1 Thread => 200 req/sec
+        8 Cores => 1600 req/sec
+      </code></pre>
+    </section>
+
+    <section>
+      <h3>req time grows as threads fight for execution time</h3>
+
+      <div>
+        <div class="proc-0">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-6">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-7">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        ...
+      </div>
+
+      <pre><code data-trim class="bash">
+      # PROCESS STATE CODES
+      #   D    Uninterruptible sleep (usually IO)
+
+      ps aux | awk '$8 ~ /D/  { print $0 }'
+      root 9324 0.0 0.0 8316 436 ? D<   Oct15 0:00 /usr/bin/java...
+      </code></pre>
+    </section>
+
+    <section>
+      <h3>when load is higher than max threads queuing builds up</h3>
+
+      <div>
+        <div class="proc-0">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="fragment fade-in-then-out proc-switch"></div>
+        <div class="proc-1 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="fragment fade-in-then-out proc-switch"></div>
+        <div class="proc-5 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="fragment fade-in-then-out proc-switch"></div>
+        <div class="proc-6">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="fragment fade-in-then-out proc-switch"></div>
+        <div class="proc-5 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="fragment fade-in-then-out proc-switch"></div>
+        <div class="proc-wait">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="fragment fade-in-then-out proc-switch"></div>
+        <div class="proc-7">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="fragment fade-in-then-out proc-switch"></div>
+        <div class="proc-1 proc-short">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        ...
+      </div>
+
+      <pre><code data-trim class="bash">
+      # git@github.com:tsuna/contextswitch.git
+
+      ./cpubench.sh
+      model name : Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz
+      1 physical CPUs, 4 cores/CPU, 2 hardware threads/core
+      2000000  thread context switches in 2231974869ns
+                                          (1116.0ns/ctxsw)
+      </code></pre>
+    </section>
+
+    <section>
+      <img src="media/did-you-know.jpg" class="stretch">
+      <pre><code data-trim class="bash">
+        grep 'CONFIG_HZ=' /boot/config-$(uname -r)
+        # CONFIG_HZ=1000
+      </code></pre>
+
+      <aside class="notes">
+        given the benchmark from the previous slide and my linux kernel tick configuration, I waste for each second
+        1.116ms in context switches?
+      </aside>
+    </section>
+
+    <section>
+      <h2>Practical example: <small>Tomcat 9.0</small></h2>
+
+      <ul>
+        <li>Default <code>maxThreads</code>: <strong>200</strong></li>
+        <li class="fragment">Avg req time: <strong>5ms</strong></li>
+        <li class="fragment">Hypothetical High load: <strong>1000 req</strong></li>
+        <li class="fragment">Wasted wait/queue time: <strong><small>(1000 / 200 - 1) * 5
+          = </small><big>0~20ms</big></strong></li>
+      </ul>
+
+      <p>
+        <small>
+          <a href="https://tomcat.apache.org/tomcat-9.0-doc/config/executor.html">https://tomcat.apache.org/tomcat-9.0-doc/config/executor.html</a></small>
+      </p>
+    </section>
+
+    <section>
+      <h4><em>at max utilization</em></h4>
+      <h2 class="fragment">CPU is mostly waiting</h2>
+    </section>
+
+    <section>
+      <h2>Non-Blocking I/O</h2>
+    </section>
+
+    <section>
+
+      <h3>Vert.x</h3>
+
+      <div style="display: inline-block; width: 45%; float: left;">
+        <div class="stretch">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="1"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="6"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="11"></div>
+          <img data-src="media/eventloop-white.png">
+        </div>
+      </div>
+
+      <div style="display: inline-block; width: 45%; text-align: left">
+        <div class="proc-0">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="2"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="4"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="8"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="10"></div>
+        </div>
+        <small>Request handler</small><br/>
+        <div class="proc-1">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="3"></div>
+        </div>
+        <small> AUTH handler</small><br/>
+        <div class="proc-5">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="5"></div>
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="7"></div>
+        </div>
+        <small> DB handler</small><br/>
+        <div class="proc-6">
+          <div class="fragment fade-in-then-out proc-hl" data-fragment-index="9"></div>
+        </div>
+        <small> JSON handler</small>
+      </div>
+
+    </section>
+
+    <section>
+      <h2>1 CPU core fully used!</h2>
+    </section>
+
+    <section>
+      <h2>Vert.x</h2>
+      <h4>Intel(R) Core(TM) i7-8650U CPU @ 1.90GHz</h4>
+
+      <span><img width="20%" heigth="20%" src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+      <span class="fragment" data-fragment-index="1"><img width="20%" heigth="20%"
+                                                          src="media/eventloop-white.png"></span>
+
+    </section>
+
+    <section>
+      <h2>100% CPU cores used!</h2>
+    </section>
+
+    <section>
+      <h2>Benchmarking <span class="fragment">is hard</span></h2>
+
+      <ul>
+        <li class="fragment"><em>Meaningful benchmarks are even harder</em></li>
+        <li class="fragment">Techempower Framework Benchmarks</li>
+        <ul>
+          <li class="fragment">Contributors: <strong>545</strong></li>
+          <li class="fragment">Pull Requests: <strong>4138</strong></li>
+          <li class="fragment">Commits: <strong>11230</strong></li>
+          <li class="fragment">Frameworks: <strong>658</strong></li>
+        </ul>
+      </ul>
+
+      <p>
+        <small>
+          <a href="https://github.com/TechEmpower/FrameworkBenchmarks/">https://github.com/TechEmpower/FrameworkBenchmarks</a>
+        </small>
+      </p>
+    </section>
+
+    <section>
+      <h2>Baseline: JAX-RS</h2>
+
+      <ul>
+        <li>Blocking API</li>
+        <li>Thread Based</li>
+        <li>Java</li>
+      </ul>
+
+    </section>
+
+    <section>
+      <div style="display: inline-block; width: 45%; float: left;">
+        <h2>jax-rs</h2>
+
+        <pre><code data-trim data-noescape>
+        <small>
+        @GET
+        @Path("/queries")
+        World[]
+        queries(@QueryParam("queries") String queries)
+        {
+          World[] worlds = new World[queries];
+          Session session = emf.createEntityManager();
+
+          for (int i = 0; i < queries; i++) {
+            worlds[i] = session
+              .byId(World.class)
+              .load(randomWorld());
+          }
+
+          return worlds;
+        }
+        </small></code></pre>
+      </div>
+
+      <div style="display: inline-block; width: 45%; text-align: left">
+        <h2>vert.x</h2>
+
+        <pre><code data-trim data-noescape class="java">
+        <small>
+        void
+        queriesHandler(final RoutingContext ctx) {
+
+          World[] worlds = new World[getQueries(ctx)];
+          AtomicInteger cnt = new AtomicInteger();
+
+          for (int i = 0; i < getQueries(ctx); i++) {
+            db.preparedQuery(FIND_WORLD, ..., res -> {
+              final Row row = res.result()
+                          .iterator()
+                          .next();
+
+              worlds[cnt.incrementAndGet()] =
+                new World(row);
+
+              if (cnt.get() == queries) {
+                ctx.response()
+                  .end(Json.encodeToBuffer(worlds));
+              }
+            });
+          }
+        }
+        </small></code></pre>
+      </div>
+    </section>
+
+    <section data-background-image="media/baseline.png" data-background-size="contain">
+
+    </section>
+
+    <section>
+      <h2>Simple results</h2>
+
+      <ul>
+        <li>Vert.x: <big><strong>37,157</strong></big> req/s</li>
+        <li>Jax-RS: <big><strong>14,493</strong></big> req/s</li>
+      </ul>
+    </section>
+
+    <section>
+      <img src="media/did-you-know.jpg" class="stretch">
+
+      <aside class="notes">
+        Did you know that using non blocking frameworks (like vert.x) you will not need as much hardware as with
+        blocking frameworks. Which means, lower cloud bills and also very important, less resource waste, which is
+        always good for the planet.
+      </aside>
+    </section>
+
+    <section>
+      <h1>Polyglot</h1>
+      <h4>English - 简体中文 - Português</h4>
+    </section>
+
+    <section>
+      <h3>What happens when you say Hello?</h3>
+
+      <div>
+        <div class="proc-5">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-1 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5 proc-micro">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+        <div class="proc-5">
+          <div class="fragment fade-in-then-out proc-hl"></div>
+        </div>
+      </div>
+
+      <pre><code data-trim>
+      function handler (context) {
+        // the exchange context
+        context
+        // get the response object
+        .response()
+        // send the message and end
+        // the response
+        .end('你好');
+      }
+      </code></pre>
+    </section>
+
+    <section>
+      <h3>Getting the response object</h3>
+
+      <pre><code data-trim data-line-numbers="5-7">
+        this.response =  function() {
+          var __args = arguments;
+          if (__args.length === 0) {
+            if (that.cachedresponse == null) {
+              that.cachedresponse = utils.convReturnVertxGen(
+                HttpServerResponse,
+                j_routingContext["response()"]());
+            }
+            return that.cachedresponse;
+          } else if (typeof __super_response != 'undefined') {
+            return __super_response.apply(this, __args);
+          }
+          else throw new TypeError('invalid arguments');
+        };
+      </code></pre>
+    </section>
+
+    <section>
+      <h2>In a nutshell</h2>
+
+      <ul>
+        <li class="fragment">Lots of conversions (GC)</li>
+        <li class="fragment">Constant switch from JS engine to Java code
+          (somehow similar to context switching)
+        </li>
+        <li class="fragment">Not suited for performance</li>
+        <li class="fragment"><strong>JIT optimization will stop at language cross</strong></li>
+      </ul>
+
+    </section>
+
+    <section>
+      <h2>Node.js</h2>
+
+      <img data-src="media/libuv.png" alt="libuv" class="stretch">
+
+    </section>
+
+    <section>
+      <h2>JIT can't optimize it all</h2>
+
+      <img data-src="media/iceberg.jpg" alt="iceberg" class="stretch">
+    </section>
+
+    <section>
+      <h2>Where's Node?</h2>
+      <img data-src="media/TechEmpower-node.png" alt="iceberg" class="stretch">
+    </section>
+
+    <section data-transition="zoom" data-background-image="media/TechEmpower-node-2.png" data-background-size="contain">
+    </section>
+
+    <section>
+      <h1>🤔</h1>
+      <h2>Can we make polyglot fast?</h2>
+    </section>
+
+    <section>
+      <img data-src="media/graal.jpg" alt="graalvm" class="stretch">
+
+      <p>
+        <small>
+          <a href="https://graalvm.org">https://graalvm.org</a></small>
+      </p>
+
+      <aside class="notes">
+        GraalVM is a universal virtual machine for running applications written in JavaScript, Python, Ruby, R,
+        JVM-based languages like Java, Scala, Groovy, Kotlin, Clojure, and LLVM-based languages such as C and C++.
+      </aside>
+
+    </section>
+
+    <section>
+      <img data-src="media/truffle.jpg" alt="truffle" class="stretch">
+
+      <p>
+        <small>
+          <a href="https://graalvm.org">https://graalvm.org</a></small>
+      </p>
+
+      <aside class="notes">
+        GraalVM removes the isolation between programming languages and enables interoperability in a shared
+        runtime. It can run either standalone or in the context of OpenJDK,
+      </aside>
+    </section>
+
+    <section>
+      <h2>GraalVM: In a nutshell</h2>
+
+      <ul>
+        <li class="fragment"><strike>Lots of conversions (GC)</strike></li>
+        <li class="fragment"><strike>Constant switch from JS engine to Java code
+          (somehow similar to context switching)</strike></li>
+        <li class="fragment"><strike>Not suited for performance</strike></li>
+        <li class="fragment"><strike><strong>JIT optimization will stop at language cross</strong></strike></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>ES4X</h2>
+
+      <img data-src="media/es4x.png" class="stretch">
+
+      <div>
+        <ul>
+          <li class="fragment">GraalVM based</li>
+          <li class="fragment">Vert.x for I/O</li>
+          <li class="fragment">commonjs and ESM loader</li>
+          <li class="fragment">debug/profile chrome-devtools</li>
+        </ul>
+      </div>
+
+      <p>
+        <small>
+          <a href="https://reactiverse.io/es4x">https://reactiverse.io/es4x</a></small>
+      </p>
+    </section>
+
+    <section>
+      <h2>ES4X design principles</h2>
+
+      <ul>
+        <li>GraalJS (for fast JS runtime)</li>
+        <li class="fragment">Vert.x (for fast I/O + event loops)</li>
+        <li class="fragment">GraalVM (for full JIT)</li>
+        <li class="fragment"><code>.d.ts</code> (for IDE support)</li>
+      </ul>
+
+      <pre><code data-trim data-noescape class="bash">
+      <small>
+      github.com/AlDanial/cloc v 1.72  T=0.09 s (401.5 files/s, 51963.8 lines/s)
+      -------------------------------------------------------------------------------
+      Language                     files          blank        comment           code
+      -------------------------------------------------------------------------------
+      Java                            26            389            683           1778
+      JavaScript                       9            201            253           1226
+      -------------------------------------------------------------------------------
+      SUM:                            35            590            936           3004
+      -------------------------------------------------------------------------------
+      </small>
+      </code></pre>
+    </section>
+
+    <section>
+      <h2>Node.js <small>vs</small> ES4X</h2>
+
+      <div style="display: inline-block; width: 45%; float: left;">
+        <pre><code data-trim data-noescape>
+        <small>
+        const cluster = require('cluster'),
+          numCPUs = require('os').cpus().length,
+          express = require('express');
+
+        if (cluster.isMaster) {
+          for (let i = 0; i < numCPUs; i++)
+            cluster.fork();
+        } else {
+          const app = module.exports = express();
+          app.get('/plaintext', (req, res) =>
+            res
+              .header('Content-Type', 'text/plain')
+              .send('Hello, World!'));
+        }
+        </small></code></pre>
+      </div>
+
+      <div style="display: inline-block; width: 45%; text-align: left">
+        <pre><code data-trim data-noescape>
+        <small>
+        import { Router } from '@vertx/web';
+
+        const app = Router.router(vertx);
+
+        app.get("/plaintext").handler(ctx => {
+          ctx.response()
+            .putHeader("Content-Type", "text/plain")
+            .end('Hello, World!');
+        });
+        </small></code></pre>
+      </div>
+    </section>
+
+    <section data-background-image="media/es4x-single.png" data-background-size="100% 100%">
+
+    </section>
+
+    <section data-background-image="media/es4x-multi.png" data-background-size="100% 100%">
+
+    </section>
+
+    <section>
+      <h2>Polyglot GraalVM is fast.</h2>
+      <h4>what about latency?</h4>
+    </section>
+
+    <section data-background-image="media/latency.png" data-background-size="100% 100%">
+
+    </section>
+
+    <section style="text-align: left">
+      <h1>Conclusion</h1>
+
+      <ul>
+        <li>latency is not a problem, it's a symptom</li>
+        <li>use non-blocking to fully use the CPU</li>
+        <li><strong>use vert.x <span class="fragment">;-)</span></strong></li>
+        <li>polyglot is fine</li>
+        <li>use graalvm for polyglot JIT optimizations</li>
+        <li>node can be slow for server applications</li>
+        <li><strong>use ES4X <span class="fragment">;-)</span></strong></li>
+      </ul>
+    </section>
+
+    <section style="text-align: left">
+      <h2>Let's connect!</h2>
+
+      <ul>
+        <li><i class="fab fa-twitter"></i> <code>@pml0pes</code></li>
+        <li><i class="fab fa-github"></i> <code>pmlopes</code></li>
+        <li><i class="fab fa-linkedin"></i> <code>https://www.linkedin.com/in/pmlopes/</code></li>
+        <li><a href="https://reactiverse.io/es4x">https://reactiverse.io/es4x</a></li>
+        <li><a href="https://vertx.io">https://vertx.io</a></li>
+        <li><a href="https://graalvm.org">https://graalvm.org</a></li>
+      </ul>
+    </section>
+
+    <section data-background-image="media/QCon2019_last_page.jpeg" data-background-size="100% 100%"
+             style="text-align: left">
+    </section>
+
+  </div>
+</div>
+
+<script src="js/reveal.js"></script>
+
+<script>
+    // More info about config & dependencies:
+    // - https://github.com/hakimel/reveal.js#configuration
+    // - https://github.com/hakimel/reveal.js#dependencies
+    Reveal.initialize({
+
+        controls: false,
+        progress: true,
+        center: true,
+        hash: true,
+
+        dependencies: [
+            {src: 'plugin/markdown/marked.js'},
+            {src: 'plugin/markdown/markdown.js'},
+            {src: 'plugin/notes/notes.js', async: true},
+            {src: 'plugin/highlight/highlight.js', async: true}
+        ]
+    });
+</script>
+</body>
+</html>
