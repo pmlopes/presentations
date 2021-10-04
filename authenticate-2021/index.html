@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Authenticate.com 2021</title>
+
+  <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+  <meta name="author" content="Paulo Lopes">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/theme/white.css" id="theme">
+
+  <!-- Theme used for syntax highlighting of code -->
+  <link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+
+<body>
+
+<div class="reveal">
+
+  <!-- Any section element inside of this container is displayed as a slide -->
+  <div class="slides">
+    <section data-background-image="media/bg0.png" data-background-size="contain">
+      <aside class="notes">
+        Hi Everyone, my name is Paulo, and I am a Open Source Principal Software Engineer at Red Hat.
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h2>Authentication</h2>
+
+      <aside class="notes">
+        I'll be talking about authentication and how to modernize your current and future projects with
+        the secure standard FIDO2 also known as Web Authentication.
+
+        Before we start, lets do a small recap on the the origins of authentication and it's current state.
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h3>~1960: CTSS</h3>
+      <img data-src="media/1961.ctss.jpg" class="stretch">
+      <p style="font-style: italic">
+        <small>source: Wikipedia</small>
+      </p>
+
+      <aside class="notes">
+        The history around passwords is blurry as the invention of the wheel. Most people say that one of the first usages was
+        in the mid nineteen sixties, when MIT was building the Compatible Time-Sharing System (CTSS). This was a 30 million
+        dollar computer, that was being shared between users.
+
+        Quickly there was a need to keep private homes for each user. Computing resources and storage were scarce at that time
+        so the solution was to store a secret (the password) that would be checked against the user login and verify the
+        identity.
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h3>1989: World Wide Web</h3>
+      <img data-src="media/internet.jpg" class="stretch">
+
+      <aside class="notes">
+        Many years later, around nineteen, eightly nine, Tim Berners-Lee developed the HTTP protocol which allowed us to have
+        the internet as we know it today. Since then, many standards have been defined:
+
+        <ul>
+          <li>HTTP Basic Authentication - Which encodes usernames and passwords in Base64, which by the way, is not a encryption algorithm.</li>
+          <li>HTTP Digest Authentication - Which improves the previous status quo by hashing using MD5 the user credentials with the requested resource HTTP method and URI. By today's standard, MD5 is not considered secure and should be avoided as it can be brute forced in a very short amount of time.</li>
+          <li>HTTP Bearer tokens - Which improves the security by using better hashing algorithms, yet doesn't solve issues such as replay attacks</li>
+          <li>Form based Authentication - Where developers "invent" their own security, which sadly ends up on big security breaches.</li>
+          <li>One Time Password - Using authenticators with a pre shared key. Given that the key is pre-shared, it can be leaked easily.</li>
+          <li>And we could be keep the list going if we wanted...</li>
+        </ul>
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h3>What's wrong with the status quo?</h3>
+      <ul class="fragment">
+        <li>Yahoo (Aug 2013) 3 billion accounts</li>
+        <li>Alibaba (Nov 2019) 1.1 billion users</li>
+        <li>LinkedIn (Jun 2021) 700 million users</li>
+        <li>Sina Weibo (Mar 2020) 538 million accounts</li>
+        <li>Facebook (Apr 2019) 533 million users</li>
+        <li>...</li>
+      </ul>
+      <aside class="notes">
+        So what is wrong with the status quo? Well, the world has now billions of connected devices to the internet. Dozens of authentication
+        mechanisms, which sadly all have big flaws. Let me just list a couple of well know security breaches to illustrate
+        the severity of the problem.
+
+        Sadly this is just a scratch of the top of the iceberg. Probably there's a breach happening right now and the list will never
+        end.
+      </aside>
+    </section>
+
+    <section data-background-image="media/fido-alliance.png" data-background-size="contain">
+      <div
+        style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+        <p style="color: #fff">FIDO2/Webauth is a secure, convenient, privacy aware and scalable authentication mechanism, which offers secure data at rest and is phishing free.</p>
+        <p style="color: #fff">https://fidoalliance.org/fido2/</p>
+      </div>
+
+      <aside class="notes">
+        So, what do we need? We need a secure, convenient and scalable solution to implement privacy aware authentication. This
+        mechanism must also ensure that data at rest is secure, so database dumps are not a liability to secure web.
+
+        In this conference you will learn a lot about FIDO2. I'll leave it's details to other speakers. If you want to know more
+        I'd recommend you to visit the fidoalliance.org/fido2 website.
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+
+      <h3>modernization <span><small>[ mod-er-nahy-zey-shuhn ]</small></span></h3>
+      <ul>
+        <li><p style="font-weight: bolder">noun</p> the act or process of making or becoming up-to-date, or the state of being up-to-date or modern</li>
+      </ul>
+
+      <p style="font-style: italic">
+        <small>source: <a href="https://www.dictionary.com/browse/modernization">https://www.dictionary.com</a></small>
+      </p>
+
+      <aside class="notes">
+        Let's dive to this presentation main topic. Modernizing your existing JVM based codebases to use Web Authentication.
+      </aside>
+    </section>
+
+    <section data-background-image="media/vertx-io.png" data-background-size="contain">
+      <div
+        style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+        <p style="color: #fff">Eclipse Vert.x is a small <span style="font-weight: bolder">library</span> to build scalable high performance reactive applications on the JVM/GraalVM.</p>
+        <p style="color: #fff">https://vertx.io</p>
+      </div>
+
+      <aside class="notes">
+        In the beginning of the presentation, I introduced myself as an Open-Source developer. Let me complete that with by saying that
+        I am a core developer for Eclipse Vert.x and the maintainer of all security related modules of the toolkit.
+
+        Probably you never heard about Eclipse Vert.x. In a nutshell, Vert.x is a small library to build scalable high performance
+        reactive application on the JVM. I should stress the library aspect. This means you are in charge of the application,
+        vert.x is very unopionated toolkit.
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h3>FIDO2.0 Conformant</h3>
+      <div style="display: inline-block; width: 50%; float: left;">
+        <img data-src="media/compliant0.png" width="100%">
+      </div>
+      <div style="display: inline-block; width: 50%">
+        <img data-src="media/compliant1.png" width="100%">
+      </div>
+
+      <aside class="notes">
+        Even though Vert.x is an open source project, we make sure that our FIDO2/Webauthn implementation is passes all the
+        conformance tests as required by the FIDO Alliance.
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h1>Let's look at some code</h1>
+
+      <aside class="notes">
+        So how easy is to build a Vert.x webauthn based web application?
+      </aside>
+    </section>
+
+    <section data-auto-animate data-background-image="media/bg2.png" data-background-size="contain">
+      <h2 data-id="code-title">Vert.x Application</h2>
+      <pre data-id="code-animation"><code class="hljs java" data-trim data-line-numbers="|6-14|8-11|12-13|15|17-18|20-23|25-32|27|28|29-30|31-32|34|36-42|44-45">
+        <script type="text/template">
+public class MainVerticle extends AbstractVerticle {
+
+  @Override
+  public void start(Promise start) {
+
+    WebAuthn webAuthN = WebAuthn.create(
+      vertx,
+      new WebAuthnOptions()
+        .setRelyingParty(
+          new RelyingParty()
+            .setName("Vert.x Demo Server")))
+      .authenticatorFetcher(authr -> { ... })
+      .authenticatorUpdater(authr -> { ... });
+
+      final Router app = Router.router(vertx);
+
+      app.post().handler(BodyHandler.create());
+      app.route().handler(FaviconHandler.create(vertx));
+
+      app.route()
+        .handler(SessionHandler
+          .create(LocalSessionStore.create(vertx))
+          .setCookieSameSite(CookieSameSite.STRICT));
+
+      app.route("/protected/*").handler(
+        WebAuthnHandler.create(webAuthN)
+          .setOrigin("https://server.com")
+          .setupCallback(app.post("/callback"))
+          .setupCredentialsCreateCallback(
+             app.post("/register"))
+          .setupCredentialsGetCallback(
+             app.post("/login")));
+
+      app.route().handler(StaticHandler.create());
+
+      vertx.createHttpServer(
+        new HttpServerOptions()
+          .setSsl(true)
+          .setKeyStoreOptions(
+            new JksOptions()
+              .setPath("cert-store.jks")
+              .setPassword("secret")));
+
+      .requestHandler(app)
+      .listen(8443, "0.0.0.0")
+      .onFailure(start::fail)
+      .onSuccess(start::complete);
+      });
+  }
+}
+        </script></code></pre>
+
+      <aside class="notes">
+        Let me illustrate how you could write such an application in about 50 lines of code.
+      </aside>
+    </section>
+
+    <section data-auto-animate data-background-image="media/bg2.png" data-background-size="contain">
+      <h2 data-id="code-title">Spring Application</h2>
+      <pre data-id="code-animation"><code class="hljs java" data-trim data-line-numbers="|1|4-6|8-13|10-11">
+        <script type="text/template">
+@SpringBootApplication
+public class Main {
+
+  public static void main(String[] args) {
+    SpringApplication.run(Main.class, args);
+  }
+
+  @PostConstruct
+  public void startVertx() {
+    final Vertx vertx = Vertx.vertx();
+    final Router app = Router.router(vertx);
+    ...
+  }
+}
+        </script></code></pre>
+
+      <aside class="notes">
+        As I mentioned earlier, vert.x is a library so you can quickly embed it in your Spring application like this.
+      </aside>
+    </section>
+
+    <section data-auto-animate data-background-image="media/bg2.png" data-background-size="contain">
+      <h2 data-id="code-title">Quarkus Application</h2>
+      <pre data-id="code-animation"><code class="hljs java" data-trim data-line-numbers="|1|4-6|8-11|16-23|32-39|43-44">
+        <script type="text/template">
+@QuarkusMain
+public class Main implements QuarkusApplication {
+
+  public static void main(String... args) {
+    Quarkus.run(Main.class, args);
+  }
+
+  @Inject
+  Vertx vertx;
+  @Inject
+  Router app;
+
+  @Override
+  public int run(String... args) {
+
+    WebAuthn webAuthN = WebAuthn.create(
+      vertx,
+      new WebAuthnOptions()
+        .setRelyingParty(
+          new RelyingParty()
+            .setName("Vert.x Demo Server")))
+      .authenticatorFetcher(authr -> { ... })
+      .authenticatorUpdater(authr -> { ... });
+
+    app.post().handler(BodyHandler.create());
+
+    app.route()
+      .handler(SessionHandler
+        .create(LocalSessionStore.create(vertx))
+        .setCookieSameSite(CookieSameSite.STRICT));
+
+    app.route("/protected/*").handler(
+      WebAuthnHandler.create(webAuthN)
+        .setOrigin("https://server.com")
+        .setupCallback(app.post("/callback"))
+        .setupCredentialsCreateCallback(
+           app.post("/register"))
+        .setupCredentialsGetCallback(
+           app.post("/login")));
+
+    app.route().handler(StaticHandler.create());
+
+    Quarkus.waitForExit();
+    return 0;
+  }
+}
+        </script></code></pre>
+
+      <aside class="notes">
+        If you're building a Qaurkus application, then it's even easier to use as Qaurkus uses Vert.x internally so
+        you already have a lot of work done for you by the framework.
+      </aside>
+    </section>
+
+    <section data-background-image="media/es4x.png" data-background-size="contain">
+      <div
+        style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+        <p style="color: #fff">ES4X is a <span style="font-weight: bolder">shell</span> to run modern JavaScript Vert.x Applications on the polyglot GraalVM.</p>
+        <p style="color: #fff">https://reactiverse.io/es4x</p>
+      </div>
+
+      <aside class="notes">
+        If Java isn't your cup of tea, and you're using JavaScript for example, by using GraalVM and Vert.x It is easy
+        to mix both languages together and use the same code I've just shown but of course in JavaScript.
+      </aside>
+    </section>
+
+    <section data-background-image="media/github.png" data-background-size="contain">
+      <div
+        style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+        <p style="color: #fff">DEMOs for all the mentioned examples are available on github.</p>
+        <p style="color: #fff">https://github.com/pmlopes/authenticatecon</p>
+      </div>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h3>Security Gateway</h3>
+      <img data-src="media/reverse.png" class="stretch">
+
+      <aside class="notes">
+        Until now I've been showing how to embed FIDO2 into an existing application. There are many situations where
+        this isn't possible, for example:
+
+        <ul>
+          <li>Closed source application</li>
+          <li>Legacy application which we don't have the knowldge or resources to modify</li>
+          <li>Non JVM based applications</li>
+        </ul>
+
+        For this cases we can create a simple Reverse Proxy to add the security layer outside and keep interacting with
+        the original application without modifications.
+      </aside>
+    </section>
+
+    <section data-auto-animate data-background-image="media/bg2.png" data-background-size="contain">
+      <h2 data-id="code-title">Gateway Application</h2>
+      <pre data-id="code-animation"><code class="hljs java" data-trim data-line-numbers="|34-38">
+        <script type="text/template">
+public class MainVerticle extends AbstractVerticle {
+
+  @Override
+  public void start(Promise start) {
+
+    WebAuthn webAuthN = WebAuthn.create(
+      vertx,
+      new WebAuthnOptions()
+        .setRelyingParty(
+          new RelyingParty()
+            .setName("Vert.x Demo Server")))
+      .authenticatorFetcher(authr -> { ... })
+      .authenticatorUpdater(authr -> { ... });
+
+      final Router app = Router.router(vertx);
+
+      app.post().handler(BodyHandler.create());
+      app.route().handler(FaviconHandler.create(vertx));
+
+      app.route()
+        .handler(SessionHandler
+          .create(LocalSessionStore.create(vertx))
+          .setCookieSameSite(CookieSameSite.STRICT));
+
+      app.route("/protected/*").handler(
+        WebAuthnHandler.create(webAuthN)
+          .setOrigin("https://server.com")
+          .setupCallback(app.post("/callback"))
+          .setupCredentialsCreateCallback(
+             app.post("/register"))
+          .setupCredentialsGetCallback(
+             app.post("/login")));
+
+    app.route()
+      .handler(ProxyHandler.create(
+        HttpProxy.reverseProxy(vertx.createHttpClient()),
+        8000,
+        "localhost"));
+
+      vertx.createHttpServer(
+        new HttpServerOptions()
+          .setSsl(true)
+          .setKeyStoreOptions(
+            new JksOptions()
+              .setPath("cert-store.jks")
+              .setPassword("secret")));
+
+      .requestHandler(app)
+      .listen(8443, "0.0.0.0")
+      .onFailure(start::fail)
+      .onSuccess(start::complete);
+      });
+  }
+}
+        </script></code></pre>
+
+      <aside class="notes">
+        Writing such a proxy isn't that different from the original Vert.x application we've seen. Given that Vert.x is
+        asynchronous by nature it can scale very well to lots of load, plus if needed the sessions can be stored on a
+        local database or across a cluster allowing it to scale horizontally as well.
+      </aside>
+    </section>
+
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h1>Demo</h1>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <img data-src="media/productivity.jpg" class="stretch">
+      <p style="font-style: italic">
+        <small>source: Linkedin (The Cyber Security Hub™)</small>
+      </p>
+
+      <aside class="notes">
+        If you use these techniques to secure your current or future applications then you can focus on the important
+        things.
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h2>Closing notes</h2>
+      <ul>
+        <li class="fragment">Eclipse Vert.x is a versatile toolkit to help you modernize your JVM/GraalVM applications</li>
+        <li class="fragment">It has builtin support for FIDO2/Webauthn</li>
+        <li class="fragment">Easy to embed in any JVM Application</li>
+        <li class="fragment">Or to build your own security gateway in a few lines of code</li>
+      </ul>
+
+      <aside class="notes">
+        Before I go, I'd like you to take away the following thoughts:
+      </aside>
+    </section>
+
+    <section data-background-image="media/bg2.png" data-background-size="contain">
+      <h2>Links</h2>
+      <ul>
+        <li><a href="https://vertx.io">https://vertx.io</a></li>
+        <li><a href="https://quarkus.io">https://quarkus.io</a></li>
+        <li><a href="https://reactiverse.io/es4x">https://reactiverse.io/es4x</a></li>
+        <li>Examples <a href="https://github.com/pmlopes/authenticatecon">https://github.com/pmlopes/authenticatecon</a></li>
+      </ul>
+    </section>
+
+    <section data-background-image="media/bg1.png" data-background-size="contain">
+      <aside class="notes">
+        Thank you.
+      </aside>
+    </section>
+
+  </div>
+
+</div>
+
+<script src="dist/reveal.js"></script>
+<script src="plugin/zoom/zoom.js"></script>
+<script src="plugin/notes/notes.js"></script>
+<script src="plugin/search/search.js"></script>
+<script src="plugin/markdown/markdown.js"></script>
+<script src="plugin/highlight/highlight.js"></script>
+<script>
+
+  // Also available as an ES module, see:
+  // https://revealjs.com/initialization/
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    center: true,
+    hash: true,
+
+    // Learn about plugins: https://revealjs.com/plugins/
+    plugins: [RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight]
+  });
+
+</script>
+
+</body>
+</html>
