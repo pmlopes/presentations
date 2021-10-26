@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>Passwordless FIDO2/WebAuthn 101: Or how to build strong security and stop worry about data breaches</title>
+    <link rel="shortcut icon" href="./favicon.ico"/>
+    <link rel="stylesheet" href="./dist/reveal.css" />
+    <link rel="stylesheet" href="./dist/theme/night.css" id="theme" />
+    <link rel="stylesheet" href="./css/highlight/zenburn.css" />
+    <link rel="stylesheet" href="././fa/css/all.css" />
+
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template"><!-- .element style="text-align: left" data-background-image="assets/jfall-bg.png" data-background-size="contain" -->
+
+#### Passwordless
+### FIDO2/WebAuthn 101:
+###### Or how to build strong security and stop worry about data breaches
+##### Paulo Lopes <small><b><i class="fab fa-twitter"></i> `@pml0p35`</b></small>
+
+<aside class="notes"><p>€20 million or 4% of annual global turnover is the fine your company will have to pay if your user database gets breached.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Strong password rules
+
+* At least 8 characters
+* A mixture of both uppercase and lowercase letters
+* A mixture of letters and numbers
+* Inclusion of at least one special character
+
+<aside class="notes"><p>I&#39;ve heard these simple rules, far too many times. Back at university in the 90s when I was studying CS and during my 20+ years of software engineering experience.</p>
+<p>You all did, right? Use at least 8 characters, a mixture of upper and lower case characters, use letters and numbers, include special characters...</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element: data-background-video="assets/confused.mp4" data-background-video-loop="loop" -->
+
+<aside class="notes"><p>But have you ever seen a strong password?</p>
+<p>In no possible way, a password is strong, it is time to stop believing in this nonsense and start using strong security. Let me tell you about computer passwords and why they are not safe at all.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Computer system passwords
+
+<div style="display: inline-block; width: 50%; float: left;">
+
+![](assets/ctss.png)
+
+</div>
+<div style="display: inline-block; width: 50%; text-align: left">
+<ol style="list-style: none">
+  <li ><code>$</code> <code class="fragment">PASSWORD</code></li>
+  <li><code class="fragment">****</code></li>
+</ol>
+</div>
+
+<aside class="notes"><p>Computer passwords have been used since the early days of computing. One of the first usages was in 1961, when MIT was building the Compatible Time-Sharing System (CTSS).</p>
+<p>The CTSS was the first computer system to implement a password login. This was a 30 million dollar computer, shared between users. They needed to keep private homes for each user.</p>
+<p>The system was simple:</p>
+<ol>
+<li>The user types the command <code>PASSWORD</code></li>
+<li>the system turns off the echo and the user can type their password with <strong>privacy</strong></li>
+</ol>
+</aside></script></section><section  data-markdown><script type="text/template">
+### CTSS.java
+
+```java [|5|6-7|8-13]
+Console console = System.console();
+String command;
+while((command = console.readLine() != null) {
+  switch (command) {
+    case "PASSWORD":
+      char[] password = console
+        .readPassword("Enter the password: ");
+      // really, don't do this!!!
+      if (password.equals("1234")) {
+          // OK
+      } else {
+        break;
+      }
+...
+```
+
+<aside class="notes"><p>Anyone learning application security development has built something like this.</p>
+<ol>
+<li>Read a command</li>
+<li>Case <code>PASSWORD</code>, disable echo and read</li>
+<li>Plain text comparison</li>
+</ol>
+<p>This is a <strong>bad</strong> implementation! passwords are stored in plain text, you can attempt a timing attack, etc...</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Passphrase Hashing
+
+```text
+CRYPT(3)                 BSD Library Functions Manual
+
+NAME
+     crypt, crypt_r, crypt_rn, crypt_ra — passphrase hashing
+
+LIBRARY
+     Crypt Library (libcrypt, -lcrypt)
+
+SYNOPSIS
+     #include <crypt.h>
+
+     char *
+     crypt(const char *phrase, const char *setting);
+```
+
+<aside class="notes"><p>In 1976 Robert Morris developed a system to store <strong>hashed</strong> passwords for UNIX 6th Edition. Later, the algorithm was improved with the use of a 12-bit salt and invoked a modified DES algorithm 25 times to reduce the risk of dictionary attacks.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Password lifecycle (2020)
+
+<div style="display: inline-block; width: 50%; float: left;">
+
+![](assets/fragile.png)
+
+</div>
+<div style="display: inline-block; width: 50%; text-align: left" class="fragment">
+
+1. `123456`
+2. `123456789`
+3. `qwerty`
+4. `password`
+5. `12345`
+6. `qwerty123`
+7. `1q2w3e`
+8. `12345678`
+9. `111111`
+10. `1234567890`
+
+</div>
+
+<aside class="notes"><p>Today we need a password for <code>Google</code>, <code>Facebook</code>, <code>Instagram</code>, <code>Twitter</code>, <code>Netflix</code>, <code>Amazon</code>, <code>Bank</code>, <code>Work</code>... so we tend to pick something <strong>easy to remember</strong> and <strong>reuse</strong> across services.</p>
+<p>The problem is that passwords are very fragile.</p>
+<ol>
+<li>If we look at the most common passwords report from 2020, it proves that humans are sometimes a dumb species.</li>
+</ol>
+</aside></script></section><section  data-markdown><script type="text/template">
+### https://haveibeenpwned.com/
+
+![](assets/haveibeenpwnd.png)
+
+<aside class="notes"><p>If a user password is compromised in a service <strong>A</strong>, then an attacker can just go on a try to re-use the password to login at service <strong>B</strong> and in most cases they will succeed.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Password Cracking 101
+
+```sh [|1|3-6|4-5]
+~ $ sudo useradd JFall
+
+~ $ sudo passwd JFall
+New password: ******
+Retype new password: ****** 
+passwd: password updated successfully
+```
+
+<aside class="notes"><p>As complicated as this can sound, it is not. Let&#39;s try:</p>
+<ol>
+<li>Create a JFall user</li>
+<li>Set the password to 123456 (because it&#39;s the most popular password) </li>
+<li>And now let&#39;s crack it!</li>
+</ol>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Password Cracking 101 c'ted
+
+```shell [1|3|4-9|7]
+~ $ sudo cat /etc/shadow | grep JFall > hashes.txt 
+
+~ $ john --wordlist=top10.txt hashes.txt
+Loaded 1 password hash (crypt, generic crypt(3) [?/64])
+Will run 8 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for s...
+123456           (JFall)
+1g 0:00:00:00 100% 33.33g/s 333.3p/s 333.3c/s 333.3C/s 1...
+Session completed
+```
+
+<aside class="notes"><ol>
+<li>Extract the hash from the UNIX <strong>shadow</strong> file. Passwords were traditionally stored in the <code>/etc/passwd</code> file in an encrypted format. However, because of advances in processor speed, encrypted passwords are now almost universally stored in a separate shadow password file.</li>
+<li>Run <code>John the Ripper</code> with a dictionary attack using the top 10 list from before. John the Ripper is an Open-Source password security auditing and password recovery tool available for many operating systems.</li>
+<li>And it&#39;s done.</li>
+<li>The password is recovered in a matter of milliseconds!</li>
+</ol>
+<p>Password security is not just about how far are you going with choosing a strong password, but also how strong is the service you are using in terms of keeping the data safe. It&#39;s just a matter of time until another database leaks online.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/phishing-base.png)
+
+<aside class="notes"><p>Cracking passwords can be hard if your users pick a password that isn&#39;t on a dictionary, a password hash not found on Google, a password that is hashed with a secure hashing algorithm, yet it can still be broken in a matter of seconds.</p>
+<p>In general, if we want to break something strong, we always exploit the weakest link. Concerning computer security, we just exploit the user.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/phishing-email.png)
+
+<aside class="notes"><p>Phishing is a type of social engineering where an attacker sends a fraudulent message created to trick a victim into revealing sensitive information to the attacker.</p>
+<p>Most phishing messages are delivered by email, and are not personalized or targeted to a specific individual or company.</p>
+<p>The content of a phishing message varies widely depending on the goal of the attacker. Common targets for impersonation include banks and financial services, email and cloud productivity providers, and streaming services.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/phishing.png)
+
+<aside class="notes"><p>Another example of such attacks is spoofing. Spoofing is when someone disguises an email address, sender name, phone number, or website URL, often just by changing one letter, symbol, or number to convince you that you are interacting with a trusted source.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Two-Factor Authentication
+#### (Legacy <i class="fas fa-laugh-wink"></i>)
+
+<aside class="notes"><p>Do you use Two-Factor Authentication?</p>
+<p>Two-Factor Authentication is a method in which a user is granted access to a website or application only after successfully presenting two or more pieces of evidence to an authentication mechanism: knowledge (something only the user knows), possession (something only the user has).</p>
+<p>2FA protects user data which may include personal identification or financial assets from being accessed by an unauthorized third party that may have been able to discover, for example, a single password.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Types of 2FA
+
+* Apps
+* Hardware Tokens
+* SMS
+
+<aside class="notes"><p>There are 3 types of 2FA.</p>
+<ul>
+<li>Apps like Google Authenticator</li>
+<li>Hardware Tokens like RSA Keys</li>
+<li>And SMS</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template">
+### What's wrong with 2FA?
+
+| Apps        | Tokens      | SMS               |
+|-------------|-------------|-------------------|
+| Phishable   | Phishable   | Phishable         |
+
+<aside class="notes"><p>So, what is wrong with 2FA?</p>
+<p>No mater which type you use, it can still be phished.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/notifications.png)
+
+<aside class="notes"><p>For example, How many of you have a smartwatch? Do you receive your phone notifications on your watch?</p>
+<p>You have an app that can read your notifications (which also include the 2FA codes) and sends them over the air to your watch.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### What's wrong with 2FA?
+
+| Apps        | Tokens      | SMS               |
+|-------------|-------------|-------------------|
+| Phishable   | Phishable   | Phishable         |
+| UX          | UX          | UX                |
+
+<aside class="notes"><p>Then there&#39;s the terrible user experience. This affects all kinds of 2FA. Here&#39;s how:</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Bad User Experience
+
+1. Ask for a new code <!-- .element class="fragment" -->
+2. Be fast, the clock is ticking <!-- .element class="fragment" -->
+3. Don't make typpos <!-- .element class="fragment" -->
+4. Didn't made it? <!-- .element class="fragment" --> `GOTO 1` <!-- .element class="fragment" -->
+
+<aside class="notes"><ol>
+<li>This website asks me for a 2FA code.</li>
+<li>Where&#39;s m phone? Let&#39;s find the right code... I need to get the right code from the huge list...</li>
+<li>Start typing it, wait... did I type it right? Did the code just change?</li>
+<li>Many times I&#39;m either out of time, or I just typed it wrong.</li>
+<li>Try again.</li>
+</ol>
+</aside></script></section><section  data-markdown><script type="text/template">
+### What's wrong with 2FA?
+
+| Apps        | Tokens      | SMS               |
+|-------------|-------------|-------------------|
+| Phishable   | Phishable   | Phishable         |
+| UX          | UX          | UX                |
+| Synced time |             |                   |
+| Shared key  |             |                   |
+
+<aside class="notes"><p>And then there are specific problems per type. Let&#39;s quickly go over them.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/google-authenticator-ss.png)
+
+<aside class="notes"><p>Apps rely on the device clock. If the device is out of sync, it will never generate the right token.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/2fa-app-setup.png)
+
+<aside class="notes"><p>Apps, rely on an initial shared secret, usually encoded as a QR code. (if it leaks, then anyone can issue the tokens for you).</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/2fa-token.png)
+
+<aside class="notes"><p>Hardware Tokens, do you have one of these?</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### What's wrong with 2FA?
+
+| Apps        | Tokens      | SMS               |
+|-------------|-------------|-------------------|
+| Phishable   | Phishable   | Phishable         |
+| UX          | UX          | UX                |
+| Shared key  | Fragile     |                   |
+| Synced time | Centralized |                   |
+
+<aside class="notes"><p>Hardware Tokens are fragile, and centralized and in some cases (any IT department nightmare) they require OS drivers. Plus, they cost money.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/2fa-SMS.png)
+
+<aside class="notes"><p>SMS, that is probably the worst idea ever. Let me explain why...</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/duocard-kpn.png)
+
+<aside class="notes"><p>You can call a mobile phone operator and request a SIM reissue or a get a <code>duocard</code>. This is game over, you can receive anyone&#39;s codes.</p>
+<p>And there&#39;s the coverage problem, no tower reception or service available, means you can&#39;t receive codes.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### What's wrong with 2FA?
+
+| Apps        | Tokens      | SMS               |
+|-------------|-------------|-------------------|
+| Phishable   | Phishable   | Phishable         |
+| UX          | UX          | UX                |
+| Shared key  | Fragile     | SIM reissue/spoof |
+| Synced time | Centralized | Coverage          |
+
+<aside class="notes"><p>For this reason, the American N.I.S.T. (National Institute of Standards and Technology) has banned the use of SMS for secure applications from their FIPS certifications.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## What is fido2 and webauthn?
+
+<aside class="notes"><p>Passwords tried to solve a problem in the 60s, today we have a different problem. Adding more factors and terrible UX isn&#39;t a good solution.</p>
+<p>Let&#39;s talk about passwordless security. Fast Identity Online, FIDO, is a noncommercial alliance of companies, actively interested in ending the use of passwords. FIDO2 is the latest specification, which was created with the aim of developing open and license-free standards for secure, worldwide authentication on the World Wide Web.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![](assets/fido2.png)
+
+<aside class="notes"><p>At its core, FIDO2 consists of the Client to Authenticator Protocol (CTAP) and the W3C standard WebAuthn.</p>
+<p>Together, they enable authentication where users identify themselves with cryptographic authenticators (such as biometrics or PINs) or external authenticators (such as U2F keys, wearables or mobile devices) to a trusted WebAuthn remote peer (also known as a FIDO2 server) that typically belongs to a website or web app.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Why is it better?
+
+<div class="fragment">
+<div style="display: inline-block; width: 50%; float: left;">
+
+![](assets/no-ssl.png)
+
+</div>
+<div style="display: inline-block; width: 50%; text-align: left">
+
+![](assets/secure-context.png)
+
+</div>
+</div>
+
+<aside class="notes"><p>The main goal of FIDO Alliance is to increasingly eliminate passwords on the web. To achieve this, a secure communication path between the client (browser) and the respective web services must be present.</p>
+<p>Without a secure channel (HTTPS), the client will not allow you to use the <code>navigator.credentials</code> API.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+
+![](assets/fido2-sequence.png)
+
+<aside class="notes"><p>Once the channel is secure, credentials are first set up or registered to be permanently available for later logins.</p>
+<p>In this process, FIDO2 keys are generated and verified, which provide the basic encryption for the logon procedure. The procedure is as follows:</p>
+<ol>
+<li>The user registers with an online service and generates a new key pair on the device used — consisting of a private key and a public FIDO2 key. </li>
+<li>While the private key is stored on the device and is only known on the client side, the public key is registered in the service&#39;s key database. </li>
+<li>Subsequent authentications are now only possible by verification with a private key, which must always be unlocked by a user action. There are various options such as entering a PIN, pressing a button, voice input, or inserting separate two-factor hardware (FIDO2 token).</li>
+</ol>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Let's code!
+
+<aside class="notes"><p>It sounds complex, but let me just quickly walk over an example application, and share with you a few more examples on <code>github</code> that you can later, with time, go over and investigate yourself.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background="assets/vertx-io.png" -->
+
+<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+  <p style="color: #fff">Eclipse Vert.x is a small <span style="font-weight: bolder">library</span> to build scalable high performance reactive applications on the JVM.</p>
+  <p style="color: #fff">https://vertx.io</p>
+</div>
+
+<aside class="notes"><p>I am a core developer for Eclipse Vert.x and the maintainer of all security related modules of the toolkit.</p>
+<p>Have you heard about Eclipse Vert.x? In a nutshell, Vert.x is a small library to build scalable high performance reactive application on the JVM. I should stress the library aspect. This means you are in charge of the application, vert.x is very unopionated.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background="assets/quarkus-io.png" -->
+
+<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+  <p style="color: #fff"><i class="fa fa-lightbulb"></i> Quarkus uses Eclipse Vert.x for its high performance IO!</p>
+  <p style="color: #fff">https://quarkus.io</p>
+</div>
+
+<aside class="notes"><p>Have you tried Quarkus yet? That&#39;s fine. Vert.x is the IO engine under the hood. And you know what, you can code vert.x in Quarkus too.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+```java [|8-15|23-31|36-40|42-52|61-62]
+@QuarkusMain
+public class Main implements QuarkusApplication {
+  
+  public static void main(String... args) {
+    Quarkus.run(Main.class, args);
+  }
+  
+  @Inject
+  Vertx vertx;
+  
+  @Inject
+  Router app;
+  
+  @ConfigProperty(name = "fido2.origin")
+  String origin;
+  
+  @Override
+  public int run(String... args) {
+    // Dummy database, real world workloads
+    // use a persistent store or course!
+    final InMemoryStore database = new InMemoryStore();
+    
+    // create the webauthn security object
+    WebAuthn webAuthN = WebAuthn.create(
+        vertx,
+        new WebAuthnOptions()
+          .setRelyingParty(new RelyingParty()
+            .setName("Vert.x Demo Server")))
+      // where to load/update authenticators data
+      .authenticatorFetcher(database::fetcher)
+      .authenticatorUpdater(database::updater);
+    
+    // parse the BODY
+    app.post()
+      .handler(BodyHandler.create());
+    // add a session handler
+    app.route()
+      .handler(SessionHandler
+        .create(LocalSessionStore.create(vertx))
+        .setCookieSameSite(CookieSameSite.STRICT));
+    
+    // security handler
+    WebAuthnHandler webAuthnHandler = WebAuthnHandler
+      .create(webAuthN)
+        .setOrigin(origin)
+        // required callback
+        .setupCallback(app.post("/callback"))
+        // optional register callback
+        .setupCredentialsCreateCallback(
+          app.post("/register"))
+        // optional login callback
+        .setupCredentialsGetCallback(app.post("/login"));
+    
+    // secure the remaining routes
+    app.route("/protected/*").handler(webAuthnHandler);
+    
+    // serve the SPA
+    app.route()
+      .handler(StaticHandler.create());
+    
+    Quarkus.waitForExit();
+    return 0;
+  }
+}
+```
+
+<aside class="notes"><ol>
+<li>Start by injecting the vert.x and web router objects to your application and your application web origin.</li>
+<li>Create the webauthn object and configure it to reflect your app name, and key database access.</li>
+<li>We use a session to keep the state of the user.</li>
+<li>Secure the routes and configure the origin. Setup all the webhook callbacks required by the protocol.</li>
+<li>Quarkus will start an HTTPS server for you. Don&#39;t forget that without HTTPS, your browser will not enable the client-side API to your JavaScript scripts!</li>
+</ol>
+</aside></script></section><section  data-markdown><script type="text/template">
+## DEMO
+
+https://github.com/pmlopes/authenticatecon
+
+<aside class="notes"><p>I&#39;ll now show you these 50 lines of code application, if you want to know how-to use vert.x FIDO2 with Quarkus, Spring, Polyglot GraalVM or even build a security gateway, visit this GitHub repository for more examples.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Registration flow
+
+```mermaid
+sequenceDiagram
+    actor Paulo
+    participant Browser
+    participant Server
+    Paulo->>Browser: I'd like to register!
+    Browser->>+Server: GET /webauthn/register
+    Server-->>-Browser: {user: {...}, challenge: "ReD5Eq6tdm0hkL-SGuzOUA"}
+    Note over Server,Browser: No more replay attacks!
+    Browser->>+Paulo: Are you there?
+    Paulo-->>-Browser: Biometric check
+    Browser->>+Server: POST /webauthn/callback {challenge, origin, publicKey}
+    Server-->>-Browser: Welcome
+    Note over Browser,Server: No more reuse of keys
+```
+
+<aside class="notes"><p>This is what happens during the registration.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Authentication flow
+
+```mermaid
+sequenceDiagram
+    actor Paulo
+    participant Browser
+    participant Server
+    Paulo->>Browser: I'd like to login!
+    Browser->>+Server: GET /webauthn/login {name: Paulo}
+    Server-->>-Browser: {challenge: "_DJH_E8PNTQCBtMSMXxVcg"}
+    Note over Server,Browser: No more replay attacks!
+    Browser->>+Paulo: Are you there?
+    Paulo-->>-Browser: Biometric check
+    Browser->>+Server: POST /webauthn/callback {challenge, signature, counter}
+    Server-->>-Browser: Welcome back!
+    Note over Browser,Server: No more reuse of keys
+```
+
+<aside class="notes"><p>This is what happens during authentication.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Device Attestation
+
+* none
+* U2F (FIDO-U2F tokens, e.g.: Yubikey’s)
+* Packed
+* Android Key
+* Android Safetynet
+* TPM (Intel Trusted Platform Module 2.0)
+* Apple
+
+<aside class="notes"><p>Can we trust an authenticator?</p>
+<p>During manufacturing time, an attestation certificate is burned into the device that is specific to a device model that chains to a root certificate.  The attestation is specific to a device and can be used to cryptographically prove that a user has a specific model of device when they register.</p>
+<p>There are 7 kinds of attestation. Most apps should use none.</p>
+<p>None because you aren&#39;t really concerned about the device, you only want your users not to use passwords!</p>
+<p>If you&#39;re building more secure services, like, PSD2 banking, you may want to be sure your user device can be trusted.</p>
+<p>For example, when validating android devices, you can check if a device is rooted or not and prevent it from being registered as it could be a security compromise.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Meta Data Service 3.0
+
+![](assets/titan.png)
+
+<aside class="notes"><p>Attestation introduces a strong chain of trust. There is a fully secure chain of certificates from the hardware of the device to your application. But there always will be bugs, or worse, security bugs.</p>
+<p>FIDO Alliance offers a public service. The MDS3. The Metadata Service, allows the verification of devices which pass the chain of trust, but are known to have security issues.</p>
+<p>The vert.x library, I&#39;ve shown, can query the service and deny registration of devices known to have such problems.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Privacy
+
+![](assets/faang.jpg)
+
+<aside class="notes"><p>The FIDO2 specification is designed to protect the user&#39;s privacy. No information is passed on that could give a hint about further web activities. Furthermore, biometric data, when used, never leaves the user device.</p>
+<p>FIDO2 gives us a truly decentralized, secure, convenient and scalable solution to implement privacy-aware authentication.</p>
+<p>This mechanism also ensures that data at rest is secure. Database dumps are not a security liability.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### GDPR + Data at rest
+
+```json [|2-4|5-8]
+{
+  "credID"    : "lqxqLLT7ulN8i8mkp7yp5srG11hYGKn" ↩
+                "-8un_r74qb9DmbqUyebEgCiEKjgWJ_X" ↩
+                "aGghwLTIV6kAd5Z8NTbvuDeg",
+  "publicKey" : "pQECAyYgASFYIKzxplZIgPrWFVpzhCJ" ↩
+                "xVcyVHoePsltgJaNTlTpsh1DnIlggNG" ↩
+                "ar93ygDFCrOv1lUZGRFl3IOXpmlRbHO" ↩
+                "-zpsldDzu0",
+  "counter"   : 2
+}
+```
+
+<aside class="notes"><p>While in most traditional systems, we store hashed passwords with variable salts to delay the time to break, with FIDO2, we only store a public key. Public keys were never intended to be used as secrets, so there is absolutely no problem storing them or worrying about them to be leaked.</p>
+<p>The public key, without the secret counterpart (which <strong>NEVER</strong> leaves the authenticator) is of no use to an attacker.</p>
+<p>The protocol goes a step further by replacing usernames, with an anonymized credential ID, making it truly GDPR-compliant.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## FIDO2 caveats
+
+* Token management <i class="fab fa-chrome"></i> <i class="fab fa-edge"></i> <i class="fab fa-safari"></i> <i class="fab fa-firefox"></i>
+* Account recovery
+
+<aside class="notes"><p>FIDO2 is advantageous in many respects, it also has its caveats: There are currently only a few web services that offer this form of authentication, we need you to use vert.x, humm... FIDO2 in your services.</p>
+<p>Who doesn&#39;t have either an Android or iOS phone?</p>
+<p>ALL of you already have an authenticator in your pocket. Your mobile phone (Android 7 or higher), iOS 13 or higher, Windows 10 or higher with Windows HELLO are, in fact, security authenticators too.</p>
+<p>When using a mobile device, your biometrics will be used to unlock the private key in the hardware. And no, your biometrics will not be shared with any FIDO2 application. They just unlock the private key.</p>
+<p>What about account recovery? What if you lose your device/authenticator? Then you&#39;re locked. This is a good thing! If there are no backdoors to get the private keys, it means you can&#39;t leak sensitive information that could be used against you. Remember, if you lose your phone, the private key must be unlocked with your biometrics!</p>
+<p>It is important to always account for multiple key registration in your services. Multiple keys are important as they allow users to perform recovery without falling back to less secure authentication mechanisms like 2FA or passwords.</p>
+<p>Of course, FIDO Alliance is working on improving the account recovery flow, and Apple, for example, already supports this to some extent with the FIDO2 iCloud.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Closing notes
+
+* FIDO2 is a standard!
+* <i class="fab fa-chrome"></i> <i class="fab fa-edge"></i> <i class="fab fa-safari"></i> <i class="fab fa-firefox"></i>
+* Decentralized
+* Safe for data at rest (GDPR)
+* Respects user privacy
+* https://vertx.io makes it trivial to adopt
+
+<aside class="notes"><p>Before I go, let me share some thoughts on why you should care about FIDO2:</p>
+<ul>
+<li>FIDO2 is a standard!</li>
+<li>Already available on all Browsers and OSes (Linux too)</li>
+<li>Decentralized </li>
+<li>Safe for data at rest (GDPR-compliant)</li>
+<li>Respects your users privacy</li>
+<li><a href="https://vertx.io">https://vertx.io</a> makes it trivial to adopt</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template">
+# Thank you
+
+* <i class="fab fa-twitter"></i> <code>@pml0p35</code>
+* <i class="fab fa-github"></i> <code>pmlopes</code>
+* <i class="fab fa-linkedin"></i> https://www.linkedin.com/in/pmlopes
+* https://vertx.io
+</script></section></div>
+    </div>
+
+    <script src="./dist/reveal.js"></script>
+
+    <script src="./plugin/markdown/markdown.js"></script>
+    <script src="./plugin/highlight/highlight.js"></script>
+    <script src="./plugin/zoom/zoom.js"></script>
+    <script src="./plugin/notes/notes.js"></script>
+    <script src="./plugin/math/math.js"></script>
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath
+        ]
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {}, queryOptions);
+    </script>
+
+    <script src="././lib/mermaid.min.js"></script>
+    <script src="././lib/reveal-mermaid.js"></script>
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+</html>
