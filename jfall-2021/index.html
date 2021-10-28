@@ -7,7 +7,7 @@
     <title>Passwordless FIDO2/WebAuthn 101: Or how to build strong security and stop worry about data breaches</title>
     <link rel="shortcut icon" href="./favicon.ico"/>
     <link rel="stylesheet" href="./dist/reveal.css" />
-    <link rel="stylesheet" href="./dist/theme/night.css" id="theme" />
+    <link rel="stylesheet" href="./dist/theme/league.css" id="theme" />
     <link rel="stylesheet" href="./css/highlight/zenburn.css" />
     <link rel="stylesheet" href="././fa/css/all.css" />
 
@@ -21,7 +21,7 @@
 ###### Or how to build strong security and stop worry about data breaches
 ##### Paulo Lopes <small><b><i class="fab fa-twitter"></i> `@pml0p35`</b></small>
 
-<aside class="notes"><p>€20 million or 4% of annual global turnover is the fine your company will have to pay if your user database gets breached.</p>
+<aside class="notes"><p>20 million Euro is the fine your company will have to pay if your user database gets breached. What are you going to do?</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 ## Strong password rules
 
@@ -30,8 +30,8 @@
 * A mixture of letters and numbers
 * Inclusion of at least one special character
 
-<aside class="notes"><p>I&#39;ve heard these simple rules, far too many times. Back at university in the 90s when I was studying CS and during my 20+ years of software engineering experience.</p>
-<p>You all did, right? Use at least 8 characters, a mixture of upper and lower case characters, use letters and numbers, include special characters...</p>
+<aside class="notes"><p>Back at university in the 90s when I was studying CS and during my 20+ years of software engineering experience. I&#39;ve heard these simple rules.</p>
+<p>You all did, right?</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 <!-- .element: data-background-video="assets/confused.mp4" data-background-video-loop="loop" -->
 
@@ -52,8 +52,8 @@
 </ol>
 </div>
 
-<aside class="notes"><p>Computer passwords have been used since the early days of computing. One of the first usages was in 1961, when MIT was building the Compatible Time-Sharing System (CTSS).</p>
-<p>The CTSS was the first computer system to implement a password login. This was a 30 million dollar computer, shared between users. They needed to keep private homes for each user.</p>
+<aside class="notes"><p>One of the first usages of computer passwords was in 1961, when MIT was building the Compatible Time-Sharing System (CTSS).</p>
+<p>This was the first computer system to implement a password login. This was a 30 million dollar computer, shared between users. They needed to keep private homes for each user.</p>
 <p>The system was simple:</p>
 <ol>
 <li>The user types the command <code>PASSWORD</code></li>
@@ -105,7 +105,8 @@ SYNOPSIS
      crypt(const char *phrase, const char *setting);
 ```
 
-<aside class="notes"><p>In 1976 Robert Morris developed a system to store <strong>hashed</strong> passwords for UNIX 6th Edition. Later, the algorithm was improved with the use of a 12-bit salt and invoked a modified DES algorithm 25 times to reduce the risk of dictionary attacks.</p>
+<aside class="notes"><p>15 years later, in 1976 Robert Morris developed a system to store <strong>hashed</strong> passwords for UNIX 6th Edition.</p>
+<p>Several years later, the algorithm was improved with the use of a 12-bit salt and invoked a modified DES algorithm 25 times to reduce the risk of dictionary attacks.</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 ### Password lifecycle (2020)
 
@@ -154,10 +155,11 @@ passwd: password updated successfully
 
 <aside class="notes"><p>As complicated as this can sound, it is not. Let&#39;s try:</p>
 <ol>
-<li>Create a JFall user</li>
-<li>Set the password to 123456 (because it&#39;s the most popular password) </li>
-<li>And now let&#39;s crack it!</li>
+<li>Create a user</li>
+<li>Set the password to 123456</li>
+<li>because it&#39;s the most popular password </li>
 </ol>
+<p>And now let&#39;s crack it!</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 ### Password Cracking 101 c'ted
 
@@ -174,7 +176,7 @@ Session completed
 ```
 
 <aside class="notes"><ol>
-<li>Extract the hash from the UNIX <strong>shadow</strong> file. Passwords were traditionally stored in the <code>/etc/passwd</code> file in an encrypted format. However, because of advances in processor speed, encrypted passwords are now almost universally stored in a separate shadow password file.</li>
+<li>Extract the hash from the UNIX <strong>shadow</strong> file. Passwords were traditionally stored in the <code>/etc/passwd</code> file in an encrypted format. However, because processors are stronger, faster, encrypted passwords are now almost universally stored in a separate shadow password file.</li>
 <li>Run <code>John the Ripper</code> with a dictionary attack using the top 10 list from before. John the Ripper is an Open-Source password security auditing and password recovery tool available for many operating systems.</li>
 <li>And it&#39;s done.</li>
 <li>The password is recovered in a matter of milliseconds!</li>
@@ -183,7 +185,7 @@ Session completed
 </aside></script></section><section  data-markdown><script type="text/template">
 ![](assets/phishing-base.png)
 
-<aside class="notes"><p>Cracking passwords can be hard if your users pick a password that isn&#39;t on a dictionary, a password hash not found on Google, a password that is hashed with a secure hashing algorithm, yet it can still be broken in a matter of seconds.</p>
+<aside class="notes"><p>Cracking passwords can take longer if your users pick a password that isn&#39;t on a dictionary or a password that is hashed with a secure hashing algorithm, yet it can still be broken in a matter of seconds.</p>
 <p>In general, if we want to break something strong, we always exploit the weakest link. Concerning computer security, we just exploit the user.</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 ![](assets/phishing-email.png)
@@ -201,7 +203,7 @@ Session completed
 
 <aside class="notes"><p>Do you use Two-Factor Authentication?</p>
 <p>Two-Factor Authentication is a method in which a user is granted access to a website or application only after successfully presenting two or more pieces of evidence to an authentication mechanism: knowledge (something only the user knows), possession (something only the user has).</p>
-<p>2FA protects user data which may include personal identification or financial assets from being accessed by an unauthorized third party that may have been able to discover, for example, a single password.</p>
+<p>2FA protects user data from being accessed by an unauthorized third party that may have been able to discover, for example, a single password.</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 ### Types of 2FA
 
@@ -286,7 +288,7 @@ Session completed
 | Shared key  | Fragile     |                   |
 | Synced time | Centralized |                   |
 
-<aside class="notes"><p>Hardware Tokens are fragile, and centralized and in some cases (any IT department nightmare) they require OS drivers. Plus, they cost money.</p>
+<aside class="notes"><p>Hardware Tokens are fragile, and centralized and in some cases they require OS drivers. Plus, they cost money.</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 ![](assets/2fa-SMS.png)
 
@@ -469,7 +471,7 @@ sequenceDiagram
     Note over Browser,Server: No more reuse of keys
 ```
 
-<aside class="notes"><p>This is what happens during the registration.</p>
+<aside class="notes"><p>But first, a quick recap on what happens during the registration.</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 ### Authentication flow
 
@@ -489,7 +491,30 @@ sequenceDiagram
     Note over Browser,Server: No more reuse of keys
 ```
 
-<aside class="notes"><p>This is what happens during authentication.</p>
+<aside class="notes"><p>And what happens during authentication.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background-video="assets/desktop.webm" data-background-size="contain" -->
+
+<aside class="notes"><p>Let use the desktop browser and an external authenticator.</p>
+<p>After acknowledging that test certificates are not safe we can register and confirm our presence.</p>
+<p>Finally, we can just login by confirming our presence to the authenticator.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background-video="assets/external.mp4" data-background-size="contain" -->
+
+<aside class="notes"><p>On a mobile device this is still possible, takes a bit of time, as we need to plug the key all the time.</p>
+<p>We can all agree that this isn&#39;t a great user experience though.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Do you need a FIDO2 token?
+
+* Token management <i class="fab fa-chrome"></i> <i class="fab fa-edge"></i> <i class="fab fa-safari"></i> <i class="fab fa-firefox"></i>
+
+<aside class="notes"><p>Who doesn&#39;t have either an Android or iOS phone?</p>
+<p>ALL of you already have an authenticator in your pocket. Your mobile phone (Android 7 or higher), iOS 13 or higher, Windows 10 or higher with Windows HELLO are, in fact, security authenticators too.</p>
+<p>When using a mobile device, your biometrics will be used to unlock the private key in the hardware. And no, your biometrics will not be shared with any FIDO2 application. They just unlock the private key.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background-video="assets/biometrics.mp4" data-background-size="contain" -->
+
+<aside class="notes"><p>Luckily all android, ios and windows hello devices have builtin support for biometric security, so FIDO can rely on this to unlock the private key. Remember, biometrics never leave your device! they just unlock the keys!</p>
 </aside></script></section><section  data-markdown><script type="text/template">
 ### Device Attestation
 
@@ -541,18 +566,13 @@ sequenceDiagram
 
 <aside class="notes"><p>While in most traditional systems, we store hashed passwords with variable salts to delay the time to break, with FIDO2, we only store a public key. Public keys were never intended to be used as secrets, so there is absolutely no problem storing them or worrying about them to be leaked.</p>
 <p>The public key, without the secret counterpart (which <strong>NEVER</strong> leaves the authenticator) is of no use to an attacker.</p>
-<p>The protocol goes a step further by replacing usernames, with an anonymized credential ID, making it truly GDPR-compliant.</p>
+<p>The protocol goes a step further by replacing usernames, with an anonymous credential ID, making it truly GDPR-compliant.</p>
 </aside></script></section><section  data-markdown><script type="text/template">
-## FIDO2 caveats
+## Account recovery
 
-* Token management <i class="fab fa-chrome"></i> <i class="fab fa-edge"></i> <i class="fab fa-safari"></i> <i class="fab fa-firefox"></i>
-* Account recovery
+![](assets/pheonix.jpeg)
 
-<aside class="notes"><p>FIDO2 is advantageous in many respects, it also has its caveats: There are currently only a few web services that offer this form of authentication, we need you to use vert.x, humm... FIDO2 in your services.</p>
-<p>Who doesn&#39;t have either an Android or iOS phone?</p>
-<p>ALL of you already have an authenticator in your pocket. Your mobile phone (Android 7 or higher), iOS 13 or higher, Windows 10 or higher with Windows HELLO are, in fact, security authenticators too.</p>
-<p>When using a mobile device, your biometrics will be used to unlock the private key in the hardware. And no, your biometrics will not be shared with any FIDO2 application. They just unlock the private key.</p>
-<p>What about account recovery? What if you lose your device/authenticator? Then you&#39;re locked. This is a good thing! If there are no backdoors to get the private keys, it means you can&#39;t leak sensitive information that could be used against you. Remember, if you lose your phone, the private key must be unlocked with your biometrics!</p>
+<aside class="notes"><p>What about account recovery? What if you lose your device/authenticator? Then you&#39;re locked. This is a good thing! If there are no backdoors to get the private keys, it means you can&#39;t leak sensitive information that could be used against you. Remember, if you lose your phone, the private key must be unlocked with your biometrics!</p>
 <p>It is important to always account for multiple key registration in your services. Multiple keys are important as they allow users to perform recovery without falling back to less secure authentication mechanisms like 2FA or passwords.</p>
 <p>Of course, FIDO Alliance is working on improving the account recovery flow, and Apple, for example, already supports this to some extent with the FIDO2 iCloud.</p>
 </aside></script></section><section  data-markdown><script type="text/template">
@@ -569,7 +589,7 @@ sequenceDiagram
 <ul>
 <li>FIDO2 is a standard!</li>
 <li>Already available on all Browsers and OSes (Linux too)</li>
-<li>Decentralized </li>
+<li>Truly Decentralized</li>
 <li>Safe for data at rest (GDPR-compliant)</li>
 <li>Respects your users privacy</li>
 <li><a href="https://vertx.io">https://vertx.io</a> makes it trivial to adopt</li>
