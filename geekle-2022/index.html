@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>FIDO2/Webauthn: Replace passwords with strong phishing free security</title>
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./dist/reset.css" />
+    <link rel="stylesheet" href="./dist/reveal.css" />
+    <link rel="stylesheet" href="./dist/theme/white.css" id="theme" />
+    <link rel="stylesheet" href="./css/highlight/zenburn.css" />
+
+    <link rel="stylesheet" href="./_assets/fa/css/all.css" />
+
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template">
+
+# FIDO2/Webauthn
+#### Replace passwords with strong phishing free security
+
+<aside class="notes"><p>Have you ever cursed at your computer, while trying to fill a new password form?</p>
+<ul>
+<li>At least 8 characters</li>
+<li>A mixture of both uppercase and lowercase letters</li>
+<li>A mixture of letters and numbers</li>
+<li>Inclusion of at least one special character</li>
+</ul>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element style="text-align: left" -->
+
+## Paulo Lopes
+#### Principal Software Engineer <i class="fab fa-redhat"></i>
+#### W3C Webauthn WG
+<small><b><i class="fab fa-twitter"></i> `@pml0p35`</b></small><br>
+<small><b><i class="fab fa-linkedin"></i> `https://www.linkedin.com/in/pmlopes`</b></small><br>
+<small><b><i class="fab fa-github"></i> `pmlopes`</b></small>
+
+<aside class="notes"><p>Who am I?</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## 1961: MIT C.T.S.S.
+
+![undraw/undraw_Maintenance_re_59vn.png](undraw/undraw_Maintenance_re_59vn.png)
+
+<aside class="notes"><p>One of the first usages of computer passwords was in 1961, when MIT was building the Compatible Time-Sharing System (CTSS).</p>
+<p>This was the first computer system to implement a password login (according to wikipedia).</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### 1961: Personal Homes
+
+![undraw/undraw_my_files_swob.png](undraw/undraw_my_files_swob.png)
+
+<aside class="notes"><p>This was a 30 million dollar computer, shared between users. They needed to keep private homes for each user.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## 1976: UNIX 6th Edition
+
+```text
+CRYPT(3)                 BSD Library Functions Manual
+
+NAME
+     crypt, crypt_r, crypt_rn, crypt_ra — passphrase hashing
+
+LIBRARY
+     Crypt Library (libcrypt, -lcrypt)
+
+SYNOPSIS
+     #include <crypt.h>
+
+     char *
+     crypt(const char *phrase, const char *setting);
+```
+
+<aside class="notes"><p>15 years later, in 1976 Robert Morris developed a system to store <strong>hashed</strong> passwords for UNIX 6th Edition.</p>
+<p>Several years later, the algorithm was improved with the use of a 12-bit salt and invoked a modified DES algorithm 25 times to reduce the risk of dictionary attacks.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## 2021: Avg. 100 Passwords P.P.
+
+
+![undraw/undraw_Social_media_re_sulg.png](undraw/undraw_Social_media_re_sulg.png)
+
+<aside class="notes"><p><a href="https://tech.co/password-managers/how-many-passwords-average-person">https://tech.co/password-managers/how-many-passwords-average-person</a></p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Most Popular passwords
+
+1. `123456`
+2. `123456789`
+3. `qwerty`
+4. `password`
+5. `12345`
+
+...
+
+<aside class="notes"><p>Wikipedia keeps a list of most used passwords, and it is unbelievable that we still do this kind of choices.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Why Passwords are Bad?
+</script></section><section  data-markdown><script type="text/template">
+## https://haveibeenpwned.com
+
+![assets/haveibeenpwnd.png](assets/haveibeenpwnd.png)
+
+<aside class="notes"><p>If a user password is compromised in a service <strong>A</strong>, then an attacker can just go on a try to re-use the password to login at service <strong>B</strong> and in most cases they will succeed.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Easy to crack
+
+```sh [1|2-5|6-12]
+~ $ sudo useradd geekle
+~ $ sudo passwd geekle
+New password: ******
+Retype new password: ****** 
+passwd: password updated successfully
+~ $ john --wordlist=top10.txt /etc/shadow
+Loaded 1 password hash (crypt, generic crypt(3) [?/64])
+Will run 8 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for ...
+123456           (geekle)
+1g 0:00:00:00 100% 33.33g/s 333.3p/s 333.3c/s 333.3C/s ...
+Session completed
+```
+</script></section><section  data-markdown><script type="text/template">
+### Phishable
+
+![undraw_fishing_hoxa.png](undraw/undraw_fishing_hoxa.png)
+
+<aside class="notes"><p>Phishing is a type of social engineering where an attacker sends a fraudulent message created to trick a victim into revealing sensitive information to the attacker.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+#### Phishing > Email
+
+![assets/phishing-email.png](assets/phishing-email.png)
+
+<aside class="notes"><p>Most phishing messages are delivered by email, and are not personalized or targeted to a specific individual or company.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+#### Phishing > Spoofing
+
+![assets/phishing.png](assets/phishing.png)
+
+<aside class="notes"><p>Another example of such attacks is spoofing. Spoofing is when someone disguises an email address, sender name, phone number, or website URL, often just by changing one letter, symbol, or number to convince you that you are interacting with a trusted source.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Today: dream world
+
+![](assets/xkdc-com-538-security.png)
+
+<small>https://xkdc.com/538</small>
+
+<aside class="notes"></aside></script></section><section  data-markdown><script type="text/template">
+## Password weaknesses
+
+* Reuse across accounts
+* Security questions easily found on Social Media
+* <strong>symmetric</strong>
+* Not securely stored
+</script></section><section  data-markdown><script type="text/template">
+## Multi Factor
+
+![undraw_two_factor_authentication_namy.png](undraw/undraw_two_factor_authentication_namy.png)
+
+<aside class="notes"><p>Two-Factor Authentication is a method in which a user is granted access to a website or application only after successfully presenting two or more pieces of evidence to an authentication mechanism.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Factors
+
+* Something you **know**
+* Something you **have**
+
+<aside class="notes"><p>Knowledge (something only the user knows), Possession (something only the user has).</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Types of MFA
+
+* **Apps** like Google Authenticator
+* **Hardware Tokens** like RSA Keys
+* And **SMS**
+
+<aside class="notes"><p>All types are not really secure, but still better than no MFA!</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+![assets/2fa.png](assets/2fa.png)
+</script></section><section  data-markdown><script type="text/template">
+### MFA bad UX
+
+| Apps        | Tokens      | SMS               |
+|-------------|-------------|-------------------|
+| Phishable   | Phishable   | Phishable         |
+| UX          | UX          | UX                |
+</script></section><section  data-markdown><script type="text/template">
+### MFA bad UX
+
+1. Ask for a new code <!-- .element class="fragment" -->
+2. Be fast, the clock is ticking <!-- .element class="fragment" -->
+3. Don't make typpos <!-- .element class="fragment" -->
+4. Didn't made it? <!-- .element class="fragment" --> `GOTO 1` <!-- .element class="fragment" -->
+</script></section><section  data-markdown><script type="text/template">
+### What's wrong with MFA?
+
+| Apps        | Tokens      | SMS               |
+|-------------|-------------|-------------------|
+| _Phishable_ | _Phishable_ |  _Phishable_      |
+| _UX_        | _UX_        | _UX_              |
+| Shared key  | Fragile     | SIM reissue/spoof |
+| Synced time | Centralized | Coverage          |
+</script></section><section  data-markdown><script type="text/template">
+## Quiz!
+
+<div style="display: inline-block; width: 50%; float: left;">
+  <a href="#" class="fragment">https://googlе.com</a>
+  <a href="#" class="fragment">https://google.com</a>
+</div>
+
+<div style="display: inline-block; width: 50%;">
+  <div class="fragment">cyrillic e: <code>0xD0 0xB5</code></div>
+  <div class="fragment">e: <code>0x65</code></div>
+</div>
+</script></section><section  data-markdown><script type="text/template">
+## FIDO2 / Webauthn
+
+<aside class="notes"><p>Passwords tried to solve a problem in the 60s, today we have a different problem. Adding more factors and terrible UX isn&#39;t a good solution.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### FIDO = Fast Identity Online
+
+![assets/fido-members.png](assets/fido-members.png)
+
+<aside class="notes"><p>Let&#39;s talk about passwordless security. Fast Identity Online, FIDO, is a noncommercial alliance of companies, actively interested in ending the use of passwords.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Web Authentication
+
+* Standard web API (Credentials Management)
+* On all browsers <i class="fab fa-chrome"></i> <i class="fab fa-edge"></i> <i class="fab fa-safari"></i> <i class="fab fa-firefox"></i>
+* Allows very secure 2FA
+* Based on the FIDO specification
+
+https://www.w3.org/TR/webauthn/
+
+<aside class="notes"><p>FIDO2 is the latest specification, which was created with the aim of developing open and license-free standards for secure, worldwide authentication on the World Wide Web.</p>
+<p>FIDO2 consists of the Client to Authenticator Protocol (CTAP) and the W3C standard WebAuthn.</p>
+<p>Together, they enable authentication where users identify themselves with cryptographic authenticators (such as biometrics or PINs) or external authenticators (such as U2F keys, wearables or mobile devices) to a trusted WebAuthn remote peer (also known as a FIDO2 server) that typically belongs to a website or web app.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Factors
+
+![undraw/undraw_Fingerprint_re_uf3f.png](undraw/undraw_Fingerprint_re_uf3f.png)
+
+<aside class="notes"><p>Webauthn is still a MFA, but there&#39;s a big difference.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Factors
+
+* Something you **are**
+* Something you **have**
+
+<aside class="notes"><p>Identity (something only user is), Possession (something only the user has).</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Secure context
+
+![assets/no-ssl.png](assets/no-ssl.png)
+
+<aside class="notes"><p>The main goal of FIDO Alliance is to increasingly eliminate passwords on the web. To achieve this, a secure communication path between the client (browser) and the respective web services must be present.</p>
+<p>Without a secure channel (HTTPS), the client will not allow you to use the <code>navigator.credentials</code> API.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### FIDO2 Ceremonies
+
+![assets/fido2-sequence.png](assets/fido2-sequence.png)
+</script></section><section  data-markdown><script type="text/template">
+### PKI Security
+
+![assets/xkdc-com-1553-public_key.png](assets/xkdc-com-1553-public_key.png)
+
+<small>https://xkdc.com/1553</small>
+
+<aside class="notes"></aside></script></section><section  data-markdown><script type="text/template">
+### Registration
+
+![assets/mermaid-diagram-20220207141048.png](assets/mermaid-diagram-20220207141048.png)
+</script></section><section  data-markdown><script type="text/template">
+### Authentication
+
+![assets/mermaid-diagram-20220207141141.png](assets/mermaid-diagram-20220207141141.png)
+</script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background="assets/vertx-io.png" -->
+
+<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+  <p style="color: #fff">Eclipse Vert.x is a small <span style="font-weight: bolder">library</span> to build scalable high performance reactive applications on the JVM.</p>
+  <p style="color: #fff">https://vertx.io</p>
+</div>
+
+<aside class="notes"><p>I am a core developer for Eclipse Vert.x and the maintainer of all security related modules of the toolkit.</p>
+<p>Have you heard about Eclipse Vert.x? In a nutshell, Vert.x is a small library to build scalable high performance reactive application on the JVM. I should stress the library aspect. This means you are in charge of the application, vert.x is very unopionated.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background="assets/quarkus-io.png" -->
+
+<div style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+  <p style="color: #fff"><i class="fa fa-lightbulb"></i> Quarkus uses Eclipse Vert.x for its high performance IO!</p>
+  <p style="color: #fff">https://quarkus.io</p>
+</div>
+
+<aside class="notes"><p>Have you tried Quarkus yet? That&#39;s fine. Vert.x is the IO engine under the hood. And you know what, you can code vert.x in Quarkus too.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Demo
+
+https://github.com/pmlopes/authenticatecon
+
+<aside class="notes"><p>If you would like to see some code in Java, JavaScript or even a API gateway protecting some Python app, go to this
+GitHub URL. I&#39;ll continue by showing the application in action.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background-video="assets/video.webm" data-background-size="contain" -->
+
+<div style="position: absolute; width: 30%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+  <p style="color: #fff"><i class="fa fa-lightbulb"></i> Desktop using roaming authenticator.</p>
+</div>
+</script></section><section  data-markdown><script type="text/template">
+<!-- .element data-background-video="assets/biometrics.mp4" data-background-size="contain" -->
+
+<div style="position: absolute; width: 30%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.1), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #000; padding: 20px; font-size: 20px; text-align: left;">
+  <p style="color: #fff"><i class="fa fa-lightbulb"></i> Mobile full flow using platform authenticator.</p>
+</div>
+</script></section><section  data-markdown><script type="text/template">
+## Trust
+
+![undraw/undraw_Security_on_re_e491.png](undraw/undraw_Security_on_re_e491.png)
+</script></section><section  data-markdown><script type="text/template">
+### Device Attestation
+
+* none
+* U2F (FIDO-U2F tokens, e.g.: Yubikey’s)
+* Packed
+* Android Key
+* Android Safetynet
+* TPM (Intel Trusted Platform Module 2.0)
+* Apple
+
+<aside class="notes"><p>During manufacturing time, an attestation certificate is burned into the device that is specific to a device model that chains to a root certificate.  The attestation is specific to a device and can be used to cryptographically prove that a user has a specific model of device when they register.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Meta Data Service 3.0
+
+![assets/titan.png](assets/titan.png)
+
+
+<aside class="notes"><p>Attestation introduces a strong chain of trust. There is a fully secure chain of certificates from the hardware of the device to your application. But there always will be bugs, or worse, security bugs.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Privacy
+
+```json [|5-8|2-4|9]
+{
+  "credID"    : "lqxqLLT7ulN8i8mkp7yp5srG11hYGKn" ↩
+                "-8un_r74qb9DmbqUyebEgCiEKjgWJ_X" ↩
+                "aGghwLTIV6kAd5Z8NTbvuDeg",
+  "publicKey" : "pQECAyYgASFYIKzxplZIgPrWFVpzhCJ" ↩
+                "xVcyVHoePsltgJaNTlTpsh1DnIlggNG" ↩
+                "ar93ygDFCrOv1lUZGRFl3IOXpmlRbHO" ↩
+                "-zpsldDzu0",
+  "counter"   : 2
+}
+```
+</script></section><section  data-markdown><script type="text/template">
+### Challenges
+
+![undraw/undraw_warning_cyit.png](undraw/undraw_warning_cyit.png)
+
+<aside class="notes"><p>While in most traditional systems, we store hashed passwords with variable salts to delay the time to break, with FIDO2, we only store a public key. Public keys were never intended to be used as secrets, so there is absolutely no problem storing them or worrying about them to be leaked.</p>
+<p>The public key, without the secret counterpart (which <strong>NEVER</strong> leaves the authenticator) is of no use to an attacker.</p>
+<p>The protocol goes a step further by replacing usernames, with an anonymous credential ID, making it truly GDPR-compliant.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+### Challenges
+
+* Multi device registration
+* Account recovery
+</script></section><section  data-markdown><script type="text/template">
+### Account recovery
+
+![undraw/undraw_mission_impossible_bwa2.png](undraw/undraw_mission_impossible_bwa2.png)
+</script></section><section  data-markdown><script type="text/template">
+### Multi device registration
+
+![assets/XiXVXmKMSV.png](assets/XiXVXmKMSV.png)
+</script></section><section  data-markdown><script type="text/template">
+## Closing notes
+
+* FIDO2 is a standard!
+* <i class="fab fa-chrome"></i> <i class="fab fa-edge"></i> <i class="fab fa-safari"></i> <i class="fab fa-firefox"></i>
+* Decentralized
+* Safe for data at rest (GDPR)
+* Respects user privacy
+* https://vertx.io makes it trivial to adopt
+</script></section><section  data-markdown><script type="text/template">
+![undraw/undraw_Questions_re_1fy7.png](undraw/undraw_Questions_re_1fy7.png)
+</script></section><section  data-markdown><script type="text/template">
+# Thank you
+
+* <i class="fab fa-twitter"></i> <code>@pml0p35</code>
+* <i class="fab fa-github"></i> <code>pmlopes</code>
+* <i class="fab fa-linkedin"></i> https://www.linkedin.com/in/pmlopes
+* https://vertx.io
+</script></section></div>
+    </div>
+
+    <script src="./dist/reveal.js"></script>
+
+    <script src="./plugin/markdown/markdown.js"></script>
+    <script src="./plugin/highlight/highlight.js"></script>
+    <script src="./plugin/zoom/zoom.js"></script>
+    <script src="./plugin/notes/notes.js"></script>
+    <script src="./plugin/math/math.js"></script>
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath
+        ]
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {"transition":"fade"}, queryOptions);
+    </script>
+
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+</html>
