@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>Zero Trust</title>
+    <link rel="shortcut icon" href="./favicon.ico" />
+    <link rel="stylesheet" href="./dist/reset.css" />
+    <link rel="stylesheet" href="./dist/reveal.css" />
+    <link rel="stylesheet" href="./dist/theme/white.css" id="theme" />
+    <link rel="stylesheet" href="./css/highlight/base16/zenburn.css" />
+
+
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides"><section  data-markdown><script type="text/template">
+
+<!-- .slide: align="left" -->
+
+# Zero Trust
+
+&nbsp;
+
+*Paulo Lopes* <small>Principal Software Engineer Red Hat / W3 Webauthn WG</small>
+</script></section><section  data-markdown><script type="text/template">
+> The Zero&nbsp;Trust Commandments present a non-negotiable list of criteria for Zero&nbsp;Trust
+<small>OpenGroup.org</small>
+</script></section><section  data-markdown><script type="text/template">
+### Assume Failure and Assume Success
+
+![ying-yang](media/Ying_yang_sign.jpg) <!-- .element class="scale" -->
+</script></section><section  data-markdown><script type="text/template">
+### Advocate for Simplicity
+</script></section><section  data-markdown><script type="text/template">
+### View as a Continuous Journey
+</script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Validate Trust Explicitly
+
+<aside class="notes"><p>Security assurance shall rely on explicitly validating trust decisions using all relevant available information and telemetry.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Enable Modern Work
+
+<aside class="notes"><p>Security discipline shall enable productivity and manage risk as the organizational capabilities, goals, environment, and infrastructure continuously evolve.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Enable Pervasive Security
+
+<aside class="notes"><p>Security discipline shall be integrated into the culture, norms, and processes throughout the organization.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Secure Assets by Value
+
+<aside class="notes"><p>Security controls shall be designed to protect business assets appropriate to their business value and expected risk.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Implement Asset-Centric Controls
+
+<aside class="notes"><p>Asset-specific security controls (versus broad infrastructure controls) shall be implemented whenever available to minimize disruption of productivity and increase precision of security/business visibility.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Enable Simple and Sustainable Security
+
+<aside class="notes"><p>Security controls shall be as simple as possible while remaining practicable, scalable, and sustainable for the full lifecycle of the business asset.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Utilize Least Privilege
+
+<aside class="notes"><p>Access to systems and data shall be provided only as required, and access shall be removed when no longer required.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Improve Continuously
+
+<aside class="notes"><p>Security teams shall continuously evolve and improve to remain successful in an environment that constantly changes.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Commandments
+### Make Informed Decisions
+
+<aside class="notes"><p>Security teams shall make informed decisions based on the best information that can be made available.</p>
+</aside></script></section><section  data-markdown><script type="text/template">
+## Boring...
+### Show me some code...
+
+https://github.com/pmlopes/zero-trust
+</script></section><section  data-markdown><script type="text/template">
+## Thanks!
+
+* https://w3c.social/@pmlopes
+* https://www.linkedin.com/in/pmlopes/
+* https://github.com/pmlopes
+* https://www.jetdrone.xyz
+* `@pml0p35`
+</script></section></div>
+    </div>
+
+    <script src="./dist/reveal.js"></script>
+
+    <script src="./plugin/markdown/markdown.js"></script>
+    <script src="./plugin/highlight/highlight.js"></script>
+    <script src="./plugin/zoom/zoom.js"></script>
+    <script src="./plugin/notes/notes.js"></script>
+    <script src="./plugin/math/math.js"></script>
+    <script>
+      function extend() {
+        var target = {};
+        for (var i = 0; i < arguments.length; i++) {
+          var source = arguments[i];
+          for (var key in source) {
+            if (source.hasOwnProperty(key)) {
+              target[key] = source[key];
+            }
+          }
+        }
+        return target;
+      }
+
+      // default options to init reveal.js
+      var defaultOptions = {
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'default', // none/fade/slide/convex/concave/zoom
+        slideNumber: true,
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealZoom,
+          RevealNotes,
+          RevealMath
+        ]
+      };
+
+      // options from URL query string
+      var queryOptions = Reveal().getQueryHash() || {};
+
+      var options = extend(defaultOptions, {}, queryOptions);
+    </script>
+
+
+    <script>
+      Reveal.initialize(options);
+    </script>
+  </body>
+</html>
